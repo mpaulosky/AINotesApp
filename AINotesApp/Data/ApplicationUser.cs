@@ -1,8 +1,14 @@
 using Microsoft.AspNetCore.Identity;
 
 namespace AINotesApp.Data;
-// Add profile data for application users by adding properties to the ApplicationUser class
+
+/// <summary>
+/// Application user with notes collection
+/// </summary>
 public class ApplicationUser : IdentityUser
 {
+    /// <summary>
+    /// Collection of notes owned by this user
+    /// </summary>
+    public ICollection<Note> Notes { get; set; } = new List<Note>();
 }
-
