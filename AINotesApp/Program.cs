@@ -1,6 +1,11 @@
 using AINotesApp.Components;
 using AINotesApp.Components.Account;
 using AINotesApp.Data;
+using AINotesApp.Features.Notes.CreateNote;
+using AINotesApp.Features.Notes.DeleteNote;
+using AINotesApp.Features.Notes.GetNoteDetails;
+using AINotesApp.Features.Notes.ListNotes;
+using AINotesApp.Features.Notes.UpdateNote;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +42,13 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
+// Register Note feature handlers
+builder.Services.AddScoped<CreateNoteHandler>();
+builder.Services.AddScoped<UpdateNoteHandler>();
+builder.Services.AddScoped<DeleteNoteHandler>();
+builder.Services.AddScoped<GetNoteDetailsHandler>();
+builder.Services.AddScoped<ListNotesHandler>();
 
 var app = builder.Build();
 
