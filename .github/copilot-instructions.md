@@ -7,6 +7,7 @@ AINotesApp is a personal notes application built with the following technology s
 ## Technology Stack
 
 ### Core Technologies
+
 - **.NET 10.0** - Latest .NET framework
 - **C# 14.0** - Latest C# language features
 - **Blazor Web App** - Interactive server-side rendering
@@ -15,6 +16,7 @@ AINotesApp is a personal notes application built with the following technology s
 - **SQL Server Express** - Local database
 
 ### NuGet Packages
+
 - `Microsoft.AspNetCore.Identity.EntityFrameworkCore` (10.0.0)
 - `Microsoft.EntityFrameworkCore.SqlServer` (10.0.0)
 - `Microsoft.EntityFrameworkCore.Tools` (10.0.0)
@@ -27,32 +29,35 @@ AINotesApp is a personal notes application built with the following technology s
 This project follows **Vertical Slice Architecture** where features are organized by business capability rather than technical concerns.
 
 #### Folder Structure
+
+Each feature operation is organized in its own folder with a **single consolidated file** containing the Command/Query, Response, and Handler:
+
 ```
 Features/
-??? [FeatureName]/
-?   ??? [Operation1]/
-?   ?   ??? [Operation1]Command.cs (or Query.cs)
-?   ?   ??? [Operation1]Handler.cs
-?   ?   ??? [Operation1]Response.cs
-?   ??? [Operation2]/
-?   ?   ??? [Operation2]Command.cs (or Query.cs)
-?   ?   ??? [Operation2]Handler.cs
-?   ?   ??? [Operation2]Response.cs
-?   ??? README.md
+└── [FeatureName]/
+    ├── [Operation1]/
+    │   └── [Operation1].cs          (Command/Query, Response, Handler)
+    ├── [Operation2]/
+    │   └── [Operation2].cs          (Command/Query, Response, Handler)
+    └── README.md
 ```
 
 #### Example: Notes Feature
+
 ```
 Features/
-??? Notes/
-?   ??? CreateNote/
-?   ?   ??? CreateNoteCommand.cs
-?   ?   ??? CreateNoteHandler.cs
-?   ?   ??? CreateNoteResponse.cs
-?   ??? UpdateNote/
-?   ??? DeleteNote/
-?   ??? GetNoteDetails/
-?   ??? ListNotes/
+└── Notes/
+    ├── CreateNote/
+    │   └── CreateNote.cs            (Command, Response, Handler)
+    ├── UpdateNote/
+    │   └── UpdateNote.cs            (Command, Response, Handler)
+    ├── DeleteNote/
+    │   └── DeleteNote.cs            (Command, Response, Handler)
+    ├── GetNoteDetails/
+    │   └── GetNoteDetails.cs        (Query, Response, Handler)
+    ├── ListNotes/
+    │   └── ListNotes.cs             (Query, Response, Handler)
+    └── README.md
 ```
 
 ### CQRS (Command Query Responsibility Segregation)
@@ -60,6 +65,7 @@ Features/
 Separate read and write operations:
 
 - **Commands**: Modify state (Create, Update, Delete)
+
   - Use `Command` suffix
   - Return response DTOs
   - May return `null` on failure
@@ -74,6 +80,7 @@ Separate read and write operations:
 ### 1. Use XML Documentation Comments
 
 **Always** add XML documentation comments to:
+
 - Public classes
 - Public methods
 - Public properties
@@ -82,6 +89,7 @@ Separate read and write operations:
 - Response DTOs
 
 #### Example:
+
 ```csharp
 /// <summary>
 /// Command to create a new note
@@ -92,7 +100,7 @@ public record CreateNoteCommand
     /// Title of the note
     /// </summary>
     public string Title { get; init; } = string.Empty;
-    
+
     /// <summary>
     /// Content of the note
     /// </summary>
@@ -111,7 +119,7 @@ public class CreateNoteHandler
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Response containing the created note details</returns>
     public async Task<CreateNoteResponse> HandleAsync(
-        CreateNoteCommand command, 
+        CreateNoteCommand command,
         CancellationToken cancellationToken = default)
     {
         // Implementation
@@ -122,6 +130,7 @@ public class CreateNoteHandler
 ### 2. Use Records for DTOs
 
 Use C# records for:
+
 - Commands
 - Queries
 - Response DTOs
@@ -141,6 +150,7 @@ public record CreateNoteCommand
 - **DbContext**: Inject `ApplicationDbContext` into handlers
 
 #### Handler Pattern:
+
 ```csharp
 public class SomeHandler
 {
@@ -152,7 +162,7 @@ public class SomeHandler
     }
 
     public async Task<SomeResponse> HandleAsync(
-        SomeCommand command, 
+        SomeCommand command,
         CancellationToken cancellationToken = default)
     {
         // Implementation
@@ -161,6 +171,7 @@ public class SomeHandler
 ```
 
 #### Registration in Program.cs:
+
 ```csharp
 // Register handlers
 builder.Services.AddScoped<CreateNoteHandler>();
@@ -170,6 +181,7 @@ builder.Services.AddScoped<UpdateNoteHandler>();
 ### 4. Entity Framework Core Best Practices
 
 #### Read Operations (Queries):
+
 - Use `AsNoTracking()` for read-only queries
 - Project to DTOs using `Select()`
 - Use `FirstOrDefaultAsync()` for single results
@@ -182,6 +194,7 @@ var note = await _context.Notes
 ```
 
 #### Write Operations (Commands):
+
 - Track entities for updates
 - Use `SaveChangesAsync()` with cancellation token
 - Set timestamps explicitly
@@ -208,7 +221,7 @@ await _context.SaveChangesAsync(cancellationToken);
 
 ```csharp
 public async Task<Response> HandleAsync(
-    Command command, 
+    Command command,
     CancellationToken cancellationToken = default)
 {
     // Async implementation
@@ -218,12 +231,13 @@ public async Task<Response> HandleAsync(
 ### 6. Security Patterns
 
 #### User Ownership Checks:
+
 Always verify that the current user owns the resource they're accessing:
 
 ```csharp
 var note = await _context.Notes
     .FirstOrDefaultAsync(
-        n => n.Id == command.Id && n.UserId == command.UserId, 
+        n => n.Id == command.Id && n.UserId == command.UserId,
         cancellationToken);
 
 if (note == null)
@@ -248,29 +262,34 @@ public ApplicationUser User { get; set; } = null!; // Navigation property
 ### 8. Naming Conventions
 
 #### Commands:
+
 - Use verb + noun: `CreateNote`, `UpdateNote`, `DeleteNote`
 - Suffix: `Command`
 - Example: `CreateNoteCommand`
 
 #### Queries:
+
 - Use verb + noun: `GetNoteDetails`, `ListNotes`
 - Suffix: `Query`
 - Example: `ListNotesQuery`
 
 #### Handlers:
+
 - Match command/query name + `Handler`
 - Example: `CreateNoteHandler`, `ListNotesHandler`
 
 #### Responses:
+
 - Match operation + `Response`
 - Example: `CreateNoteResponse`, `ListNotesResponse`
 
 ### 9. Error Handling
 
 #### Return null for not found:
+
 ```csharp
 public async Task<NoteDetailsResponse?> HandleAsync(
-    GetNoteDetailsQuery query, 
+    GetNoteDetailsQuery query,
     CancellationToken cancellationToken = default)
 {
     var note = await _context.Notes
@@ -286,6 +305,7 @@ public async Task<NoteDetailsResponse?> HandleAsync(
 ```
 
 #### Return success/failure in response:
+
 ```csharp
 public record DeleteNoteResponse
 {
@@ -297,6 +317,7 @@ public record DeleteNoteResponse
 ### 10. Database Indexes
 
 When configuring entities in `OnModelCreating`:
+
 - Add indexes on foreign keys
 - Add indexes on commonly queried fields
 - Add indexes on date fields for sorting
@@ -311,42 +332,52 @@ entity.HasIndex(n => n.CreatedAt);
 When implementing a new feature, follow these steps:
 
 ### 1. Create Feature Folder
+
 ```
 Features/[FeatureName]/
 ```
 
-### 2. Create Operations
-For each operation (Create, Update, Delete, Get, List):
+### 2. Create Operation File
 
-1. **Create Command/Query**
+For each operation (Create, Update, Delete, Get, List), create a **single consolidated file** containing:
+
+1. **Command/Query (record)**
+
    - Use `record` type
-   - Add XML documentation
+   - Add XML documentation to the record and all properties
    - Include required properties
 
-2. **Create Response DTO**
+2. **Response DTO (record)**
+
    - Use `record` type
-   - Add XML documentation
+   - Add XML documentation to the record and all properties
    - Include only necessary data
 
-3. **Create Handler**
+3. **Handler (class)**
    - Inject dependencies via constructor
-   - Add XML documentation
+   - Add XML documentation to class, constructor, and methods
    - Implement `HandleAsync` method
    - Use appropriate EF Core patterns
    - Add security checks
 
+**File Organization**: All three components in one file named `[OperationName].cs`
+
 ### 3. Register Handlers
+
 Add to `Program.cs`:
+
 ```csharp
 builder.Services.AddScoped<YourHandler>();
 ```
 
 ### 4. Create README
+
 Document the feature in `Features/[FeatureName]/README.md`
 
 ## Blazor Component Integration
 
 ### Injecting Handlers into Components:
+
 ```razor
 @page "/notes/create"
 @inject CreateNoteHandler CreateNoteHandler
@@ -368,7 +399,7 @@ Document the feature in `Features/[FeatureName]/README.md`
         };
 
         var response = await CreateNoteHandler.HandleAsync(command);
-        
+
         if (response != null)
         {
             Navigation.NavigateTo($"/notes/{response.Id}");
@@ -380,16 +411,19 @@ Document the feature in `Features/[FeatureName]/README.md`
 ## Database Migration Workflow
 
 ### Creating Migrations:
+
 ```bash
 dotnet ef migrations add [MigrationName] --project AINotesApp
 ```
 
 ### Updating Database:
+
 ```bash
 dotnet ef database update --project AINotesApp
 ```
 
 ### Listing Migrations:
+
 ```bash
 dotnet ef migrations list --project AINotesApp
 ```
@@ -397,6 +431,7 @@ dotnet ef migrations list --project AINotesApp
 ## Connection String Configuration
 
 Use `appsettings.json`:
+
 ```json
 {
   "ConnectionStrings": {
@@ -410,6 +445,7 @@ Use `appsettings.json`:
 ## Code Quality Standards
 
 ### General Principles:
+
 1. **Single Responsibility**: Each handler does one thing
 2. **DRY**: Don't repeat yourself
 3. **KISS**: Keep it simple
@@ -417,18 +453,21 @@ Use `appsettings.json`:
 5. **Explicit over Implicit**: Be clear in intent
 
 ### Performance:
+
 - Use `AsNoTracking()` for read-only queries
 - Use pagination for lists
 - Project to DTOs early using `Select()`
 - Use indexes appropriately
 
 ### Security:
+
 - Always validate user ownership
 - Use parameterized queries (EF Core does this)
 - Validate input data
 - Use HTTPS
 
 ### Testing:
+
 - Test handlers independently
 - Mock `ApplicationDbContext` using InMemory provider
 - Test security constraints
@@ -436,8 +475,12 @@ Use `appsettings.json`:
 
 ## Example: Complete Feature Implementation
 
-### Command:
+### Single Consolidated File: `CreateNote/CreateNote.cs`
+
 ```csharp
+using AINotesApp.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace AINotesApp.Features.Notes.CreateNote;
 
 /// <summary>
@@ -460,11 +503,6 @@ public record CreateNoteCommand
     /// </summary>
     public string UserId { get; init; } = string.Empty;
 }
-```
-
-### Response:
-```csharp
-namespace AINotesApp.Features.Notes.CreateNote;
 
 /// <summary>
 /// Response after creating a note
@@ -486,14 +524,6 @@ public record CreateNoteResponse
     /// </summary>
     public DateTimeOffset CreatedAt { get; init; }
 }
-```
-
-### Handler:
-```csharp
-using AINotesApp.Data;
-using Microsoft.EntityFrameworkCore;
-
-namespace AINotesApp.Features.Notes.CreateNote;
 
 /// <summary>
 /// Handler for creating a new note
@@ -518,7 +548,7 @@ public class CreateNoteHandler
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>Response containing the created note details</returns>
     public async Task<CreateNoteResponse> HandleAsync(
-        CreateNoteCommand command, 
+        CreateNoteCommand command,
         CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(command);
@@ -561,6 +591,14 @@ When implementing new features or modifying existing code:
 ? Use records for DTOs  
 ? Handle null cases appropriately  
 ? Add database indexes for performance  
-? Write clean, maintainable code  
+? Write clean, maintainable code
 
-**Remember**: Each vertical slice should be self-contained and implement a complete feature end-to-end.
+**Remember**: Each vertical slice should be self-contained with all related code (Command/Query, Response, Handler) in a single file, implementing a complete feature end-to-end.
+
+### Key Consolidation Benefits
+
+✅ **Single File per Feature**: Command/Query, Response, and Handler together  
+✅ **Better Cohesion**: Related code stays together  
+✅ **Easier Navigation**: One file to find everything  
+✅ **Reduced Context Switching**: Complete feature visible at once  
+✅ **Simpler File Structure**: Fewer files to manage

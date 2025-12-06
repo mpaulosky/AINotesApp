@@ -1,0 +1,284 @@
+@page "/notes/{NoteId:guid}"
+@rendermode InteractiveServer
+@using AINotesApp.Features.Notes.GetNoteDetails
+@using AINotesApp.Features.Notes.DeleteNote
+@using AINotesApp.Components.Shared
+@using MediatR
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.JSInterop
+@inject IMediator Mediator
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+@attribute [Authorize]
+
+<PageTitle>@(note?.Title ?? "View Note")</PageTitle>
+
+<div class="container mt-4">
+	<div class="row">
+		<div class="col-lg-8 mx-auto">
+			@if (isLoading)
+			{
+				<div class="text-center">
+					<div class="spinner-border" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+					<p class="mt-2">Loading note...</p>
+				</div>
+			}
+			else if (errorMessage != null)
+			{
+				<div class="alert alert-danger" role="alert">
+					@errorMessage
+				</div>
+				<button class="btn btn-secondary" @onclick="BackToList">
+					<i class="bi bi-arrow-left"></i> Back to Notes
+				</button>
+			}
+			else if (note != null)
+			{
+				<div class="d-flex justify-content-between align-items-center mb-4">
+					<h1>@note.Title</h1>
+					<div class="d-flex gap-2">
+						<div class="btn-group">
+							<button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+								<i class="bi bi-download"></i> Export
+							</button>
+							<ul class="dropdown-menu">
+								<li><button class="dropdown-item" @onclick="ExportAsMarkdown"><i class="bi bi-file-earmark-text"></i> Export as Markdown</button></li>
+								<li><button class="dropdown-item" @onclick="ExportAsText"><i class="bi bi-file-text"></i> Export as Text</button></li>
+							</ul>
+						</div>
+						<button class="btn btn-primary" @onclick="EditNote">
+							<i class="bi bi-pencil"></i> Edit
+						</button>
+						<button class="btn btn-danger" @onclick="ShowDeleteConfirmation">
+							<i class="bi bi-trash"></i> Delete
+						</button>
+						<button class="btn btn-outline-secondary" @onclick="BackToList">
+							<i class="bi bi-arrow-left"></i> Back
+						</button>
+					</div>
+				</div>
+
+				@if (!string.IsNullOrWhiteSpace(note.Summary))
+				{
+					<div class="alert alert-info">
+						<strong>Summary:</strong> @note.Summary
+					</div>
+				}
+
+				@if (!string.IsNullOrWhiteSpace(note.Tags))
+				{
+					<div class="mb-3">
+						@foreach (var tag in note.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+						{
+							<span class="badge bg-primary me-2">@tag</span>
+						}
+					</div>
+				}
+
+				<div class="card">
+					<div class="card-body">
+						<div class="note-content ql-editor">
+							@((MarkupString)note.Content)
+						</div>
+					</div>
+					<div class="card-footer bg-transparent">
+						<small class="text-muted">
+							Created: @note.CreatedAt.ToString("MMMM dd, yyyy h:mm tt")
+							<br />
+							Last Updated: @note.UpdatedAt.ToString("MMMM dd, yyyy h:mm tt")
+						</small>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+<ConfirmDialog 
+	IsVisible="showDeleteConfirmation"
+	Title="Delete Note"
+	Message="Are you sure you want to delete this note? This action cannot be undone."
+	ConfirmText="Delete"
+	CancelText="Cancel"
+	ConfirmButtonClass="btn-danger"
+	OnConfirm="DeleteNote"
+	OnCancel="HideDeleteConfirmation" />
+
+@code {
+	[Parameter]
+	public Guid NoteId { get; set; }
+
+	[CascadingParameter]
+	private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+	private GetNoteDetailsResponse? note;
+	private string userId = string.Empty;
+	private bool isLoading = true;
+	private string? errorMessage = null;
+	private bool showDeleteConfirmation = false;
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (AuthenticationStateTask != null)
+		{
+			var authState = await AuthenticationStateTask;
+			var user = authState.User;
+
+			if (user.Identity?.IsAuthenticated == true)
+			{
+				userId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+				await LoadNoteAsync();
+			}
+		}
+	}
+
+	private async Task LoadNoteAsync()
+	{
+		isLoading = true;
+		errorMessage = null;
+
+		try
+		{
+			var query = new GetNoteDetailsQuery
+			{
+				Id = NoteId,
+				UserId = userId
+			};
+
+			note = await Mediator.Send(query);
+
+			if (note == null)
+			{
+				errorMessage = "Note not found or you don't have permission to view it.";
+			}
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Error loading note: {ex.Message}";
+		}
+		finally
+		{
+			isLoading = false;
+		}
+	}
+
+	private void EditNote()
+	{
+		Navigation.NavigateTo($"/notes/edit/{NoteId}");
+	}
+
+	private void BackToList()
+	{
+		Navigation.NavigateTo("/notes");
+	}
+
+	private void ShowDeleteConfirmation()
+	{
+		showDeleteConfirmation = true;
+	}
+
+	private void HideDeleteConfirmation()
+	{
+		showDeleteConfirmation = false;
+	}
+
+	private async Task DeleteNote()
+	{
+		showDeleteConfirmation = false;
+		
+		try
+		{
+			var command = new DeleteNoteCommand
+			{
+				Id = NoteId,
+				UserId = userId
+			};
+
+			var response = await Mediator.Send(command);
+
+			if (response.Success)
+			{
+				Navigation.NavigateTo("/notes");
+			}
+			else
+			{
+				errorMessage = "Failed to delete note. It may have been already deleted.";
+			}
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Error deleting note: {ex.Message}";
+		}
+	}
+
+	private async Task ExportAsMarkdown()
+	{
+		if (note == null) return;
+
+		var markdown = $"# {note.Title}\n\n";
+		
+		if (!string.IsNullOrWhiteSpace(note.Tags))
+		{
+			markdown += $"**Tags:** {note.Tags}\n\n";
+		}
+		
+		markdown += $"**Created:** {note.CreatedAt:MMMM dd, yyyy h:mm tt}\n";
+		markdown += $"**Last Updated:** {note.UpdatedAt:MMMM dd, yyyy h:mm tt}\n\n";
+		markdown += "---\n\n";
+		
+		// Convert HTML to plain text for markdown export
+		var plainText = StripHtmlTags(note.Content);
+		markdown += plainText;
+
+		await DownloadFile($"{note.Title}.md", markdown, "text/markdown");
+	}
+
+	private async Task ExportAsText()
+	{
+		if (note == null) return;
+
+		var text = $"{note.Title}\n";
+		text += new string('=', note.Title.Length) + "\n\n";
+		
+		if (!string.IsNullOrWhiteSpace(note.Tags))
+		{
+			text += $"Tags: {note.Tags}\n\n";
+		}
+		
+		text += $"Created: {note.CreatedAt:MMMM dd, yyyy h:mm tt}\n";
+		text += $"Last Updated: {note.UpdatedAt:MMMM dd, yyyy h:mm tt}\n\n";
+		text += new string('-', 50) + "\n\n";
+		
+		// Convert HTML to plain text
+		var plainText = StripHtmlTags(note.Content);
+		text += plainText;
+
+		await DownloadFile($"{note.Title}.txt", text, "text/plain");
+	}
+
+	private string StripHtmlTags(string html)
+	{
+		if (string.IsNullOrWhiteSpace(html))
+			return string.Empty;
+			
+		// Simple HTML tag removal - for production, consider using HtmlAgilityPack
+		var text = System.Text.RegularExpressions.Regex.Replace(html, "<.*?>", string.Empty);
+		return System.Net.WebUtility.HtmlDecode(text);
+	}
+
+	private async Task DownloadFile(string filename, string content, string contentType)
+	{
+		var bytes = System.Text.Encoding.UTF8.GetBytes(content);
+		var base64 = Convert.ToBase64String(bytes);
+		var dataUrl = $"data:{contentType};base64,{base64}";
+		
+		await JS.InvokeVoidAsync("eval", $@"
+			const link = document.createElement('a');
+			link.href = '{dataUrl}';
+			link.download = '{filename}';
+			link.click();
+		");
+	}
+}
