@@ -4,46 +4,97 @@ This folder contains the Notes feature implemented using Vertical Slice Architec
 
 ## Structure
 
-Each slice is self-contained and includes:
-- **Command/Query**: The request object
-- **Handler**: The business logic to process the request
-- **Response**: The data returned to the caller
+Each feature slice is organized in its own folder with a single consolidated file containing:
+
+- **Command/Query**: The request object (record type)
+- **Response**: The data returned to the caller (record type)
+- **Handler**: The business logic to process the request (class)
+
+All three components reside in a single `.cs` file named after the feature (e.g., `CreateNote.cs`), making it easy to locate and maintain all related code together.
+
+### Folder Structure
+
+```text
+Features/Notes/
+├── CreateNote/
+│   └── CreateNote.cs          (Command, Response, Handler)
+├── UpdateNote/
+│   └── UpdateNote.cs          (Command, Response, Handler)
+├── DeleteNote/
+│   └── DeleteNote.cs          (Command, Response, Handler)
+├── GetNoteDetails/
+│   └── GetNoteDetails.cs      (Query, Response, Handler)
+├── ListNotes/
+│   └── ListNotes.cs           (Query, Response, Handler)
+└── README.md
+```
 
 ## Slices
 
 ### CreateNote
+
 Creates a new note for a user.
+
+**File**: `CreateNote/CreateNote.cs`
+
+Contains:
+
 - **Command**: `CreateNoteCommand`
-- **Handler**: `CreateNoteHandler`
 - **Response**: `CreateNoteResponse`
+- **Handler**: `CreateNoteHandler`
 
 ### UpdateNote
+
 Updates an existing note (user must own the note).
+
+**File**: `UpdateNote/UpdateNote.cs`
+
+Contains:
+
 - **Command**: `UpdateNoteCommand`
-- **Handler**: `UpdateNoteHandler`
 - **Response**: `UpdateNoteResponse`
+- **Handler**: `UpdateNoteHandler`
 
 ### DeleteNote
+
 Deletes a note (user must own the note).
+
+**File**: `DeleteNote/DeleteNote.cs`
+
+Contains:
+
 - **Command**: `DeleteNoteCommand`
-- **Handler**: `DeleteNoteHandler`
 - **Response**: `DeleteNoteResponse`
+- **Handler**: `DeleteNoteHandler`
 
 ### GetNoteDetails
+
 Retrieves details of a specific note.
+
+**File**: `GetNoteDetails/GetNoteDetails.cs`
+
+Contains:
+
 - **Query**: `GetNoteDetailsQuery`
-- **Handler**: `GetNoteDetailsHandler`
 - **Response**: `NoteDetailsResponse`
+- **Handler**: `GetNoteDetailsHandler`
 
 ### ListNotes
+
 Lists all notes for a user with pagination and search.
+
+**File**: `ListNotes/ListNotes.cs`
+
+Contains:
+
 - **Query**: `ListNotesQuery`
+- **Response**: `ListNotesResponse` (includes `NoteListItem`)
 - **Handler**: `ListNotesHandler`
-- **Response**: `ListNotesResponse`
 
 ## Usage
 
 ### Registering Handlers
+
 Add the handlers to your dependency injection container in `Program.cs`:
 
 ```csharp
@@ -74,7 +125,7 @@ var listQuery = new ListNotesQuery
 {
     UserId = currentUserId,
     PageNumber = 1,
-    PageSize = 20,
+    ```csharp
     SearchTerm = "search term"
 };
 var listResponse = await listHandler.HandleAsync(listQuery);
@@ -112,7 +163,56 @@ var deleteResponse = await deleteHandler.HandleAsync(deleteCommand);
 ## Benefits of Vertical Slice Architecture
 
 1. **Feature-focused**: Each slice represents a complete feature
-2. **Easy to understand**: All related code is in one place
-3. **Easy to modify**: Changes are localized to a single slice
-4. **Easy to test**: Each slice can be tested independently
-5. **Minimal coupling**: Slices don't depend on each other
+2. **Cohesive**: All related code (Command/Query, Response, Handler) is in one file
+3. **Easy to navigate**: Single file per feature reduces context switching
+4. **Easy to understand**: Complete feature logic is visible at once
+5. **Easy to use
+6. **Easy to test**: Each slice can be tested independently
+7. **Minimal coupling**: Slices don't depend on each other
+
+## File Organization Pattern
+
+Each consolidated file follows this structure:
+
+```csharp
+using AINotesApp.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace AINotesApp.Features.Notes.[FeatureName];
+
+/// <summary>
+/// Command/Query documentation
+/// </summary>
+public record [FeatureName]Command  // or Query
+{
+    // Properties with XML documentation
+}
+
+/// <summary>
+/// Response documentation
+/// </summary>
+public record [FeatureName]Response
+{
+    // Properties with XML documentation
+}
+
+/// <summary>
+/// Handler documentation
+/// </summary>
+public class [FeatureName]Handler
+{
+    private readonly ApplicationDbContext _context;
+
+    public [FeatureName]Handler(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<[FeatureName]Response> HandleAsync(
+        [FeatureName]Command command,
+        CancellationToken cancellationToken = default)
+    {
+        // Implementation
+    }
+}
+```

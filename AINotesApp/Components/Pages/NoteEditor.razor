@@ -1,0 +1,284 @@
+@page "/notes/new"
+@page "/notes/edit/{NoteId:guid}"
+@rendermode InteractiveServer
+@using AINotesApp.Features.Notes.CreateNote
+@using AINotesApp.Features.Notes.UpdateNote
+@using AINotesApp.Features.Notes.GetNoteDetails
+@using MediatR
+@using Microsoft.AspNetCore.Authorization
+@inject IMediator Mediator
+@inject NavigationManager Navigation
+@attribute [Authorize]
+
+<PageTitle>@(IsEditMode ? "Edit Note" : "Create Note")</PageTitle>
+
+<div class="container mt-4">
+	<div class="row">
+		<div class="col-lg-8 mx-auto">
+			<div class="d-flex justify-content-between align-items-center mb-4">
+				<h1>@(IsEditMode ? "Edit Note" : "Create Note")</h1>
+				<button class="btn btn-outline-secondary" @onclick="Cancel">
+					<i class="bi bi-x-circle"></i> Cancel
+				</button>
+			</div>
+
+			@if (isLoading)
+			{
+				<div class="text-center">
+					<div class="spinner-border" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+					<p class="mt-2">Loading note...</p>
+				</div>
+			}
+			else if (errorMessage != null)
+			{
+				<div class="alert alert-danger" role="alert">
+					@errorMessage
+				</div>
+			}
+			else
+			{
+				<EditForm Model="@this" OnValidSubmit="SaveNote">
+					<DataAnnotationsValidator />
+
+					<div class="mb-3">
+						<label for="title" class="form-label">Title</label>
+						<InputText id="title" class="form-control" @bind-Value="title" placeholder="Enter note title..." />
+						<ValidationMessage For="@(() => title)" />
+					</div>
+
+					<div class="mb-3">
+						<label for="content" class="form-label">Content</label>
+						<BlazoredTextEditor @ref="quillEditor" Placeholder="Enter note content...">
+							<ToolbarContent>
+								<select class="ql-header">
+									<option selected=""></option>
+									<option value="1"></option>
+									<option value="2"></option>
+									<option value="3"></option>
+									<option value="4"></option>
+									<option value="5"></option>
+								</select>
+								<span class="ql-formats">
+									<button class="ql-bold"></button>
+									<button class="ql-italic"></button>
+									<button class="ql-underline"></button>
+									<button class="ql-strike"></button>
+								</span>
+								<span class="ql-formats">
+									<select class="ql-color"></select>
+									<select class="ql-background"></select>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-list" value="ordered"></button>
+									<button class="ql-list" value="bullet"></button>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-link"></button>
+									<button class="ql-image"></button>
+									<button class="ql-video"></button>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-code-block"></button>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-clean"></button>
+								</span>
+							</ToolbarContent>
+							<EditorContent>
+								@((MarkupString)content)
+							</EditorContent>
+						</BlazoredTextEditor>
+					</div>
+
+					<div class="mb-3">
+						<label for="tags" class="form-label">Tags</label>
+						<small class="form-text text-muted">Separate tags with commas</small>
+					</div>
+
+					<div class="d-flex gap-2">
+						<button type="submit" class="btn btn-primary" disabled="@isSaving">
+							@if (isSaving)
+							{
+								<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+								<span>Saving...</span>
+							}
+							else
+							{
+								<i class="bi bi-save"></i>
+								<span> Save</span>
+							}
+						</button>
+						<button type="button" class="btn btn-outline-secondary" @onclick="Cancel" disabled="@isSaving">
+							Cancel
+						</button>
+					</div>
+				</EditForm>
+
+				@if (IsEditMode)
+				{
+					<div class="mt-4 pt-4 border-top">
+						<p class="text-muted">
+							<small>
+								Created: @createdAt?.ToString("MMMM dd, yyyy h:mm tt")<br />
+								Last Updated: @updatedAt?.ToString("MMMM dd, yyyy h:mm tt")
+							</small>
+						</p>
+					</div>
+				}
+			}
+		</div>
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public Guid? NoteId { get; set; }
+
+	[CascadingParameter]
+	private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+	private string title = string.Empty;
+	private string content = string.Empty;
+	private string tags = string.Empty;
+	private DateTimeOffset? createdAt;
+	private DateTimeOffset? updatedAt;
+	private string userId = string.Empty;
+	private bool isLoading = false;
+	private bool isSaving = false;
+	private string? errorMessage = null;
+	private BlazoredTextEditor? quillEditor;
+
+	private bool IsEditMode => NoteId.HasValue && NoteId.Value != Guid.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (AuthenticationStateTask != null)
+		{
+			var authState = await AuthenticationStateTask;
+			var user = authState.User;
+
+			if (user.Identity?.IsAuthenticated == true)
+			{
+				userId = user.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+
+				if (IsEditMode)
+				{
+					await LoadNoteAsync();
+				}
+			}
+		}
+	}
+
+	private async Task LoadNoteAsync()
+	{
+		if (!NoteId.HasValue)
+			return;
+
+		isLoading = true;
+		errorMessage = null;
+
+		try
+		{
+			var query = new GetNoteDetailsQuery
+			{
+				Id = NoteId.Value,
+				UserId = userId
+			};
+
+			var response = await Mediator.Send(query);
+
+			if (response == null)
+			{
+				errorMessage = "Note not found or you don't have permission to edit it.";
+				return;
+			}
+
+			title = response.Title;
+			content = response.Content;
+			tags = response.Tags ?? string.Empty;
+			createdAt = response.CreatedAt;
+			updatedAt = response.UpdatedAt;
+
+			// Load content into editor after component is rendered
+			if (quillEditor != null)
+			{
+				await quillEditor.LoadHTMLContent(content);
+			}
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Error loading note: {ex.Message}";
+		}
+		finally
+		{
+			isLoading = false;
+		}
+	}
+
+	private async Task SaveNote()
+	{
+		isSaving = true;
+		errorMessage = null;
+
+		try
+		{
+			// Get HTML content from the editor
+			if (quillEditor != null)
+			{
+				content = await quillEditor.GetHTML();
+			}
+
+			if (IsEditMode)
+			{
+				// Update existing note
+				var command = new UpdateNoterequest
+				{
+					Id = NoteId!.Value,
+					Title = title,
+					Content = content,
+					Tags = string.IsNullOrWhiteSpace(tags) ? null : tags,
+					UserId = userId
+				};
+
+				var response = await Mediator.Send(command);
+
+				if (response == null)
+				{
+					errorMessage = "Failed to update note. It may have been deleted or you don't have permission.";
+					return;
+				}
+
+				Navigation.NavigateTo("/notes");
+			}
+			else
+			{
+				// Create new note
+				var command = new CreateNote.Command
+				{
+					Title = title,
+					Content = content,
+					Tags = string.IsNullOrWhiteSpace(tags) ? null : tags,
+					UserId = userId
+				};
+
+				var response = await Mediator.Send(command);
+				Navigation.NavigateTo("/notes");
+			}
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Error saving note: {ex.Message}";
+		}
+		finally
+		{
+			isSaving = false;
+		}
+	}
+
+	private void Cancel()
+	{
+		Navigation.NavigateTo("/notes");
+	}
+}
