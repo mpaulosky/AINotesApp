@@ -1,0 +1,118 @@
+@using AINotesApp.Features.Notes.GetRelatedNotes
+@using MediatR
+@inject IMediator Mediator
+
+@if (isLoading)
+{
+    <div class="text-center py-3">
+        <div class="spinner-border spinner-border-sm text-primary" role="status">
+            <span class="visually-hidden">Loading related notes...</span>
+        </div>
+    </div>
+}
+else if (relatedNotes.Any())
+{
+    <div class="card mt-4">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">
+                <i class="bi bi-link-45deg"></i> Related Notes
+            </h5>
+        </div>
+        <div class="list-group list-group-flush">
+            @foreach (var note in relatedNotes)
+            {
+                <a href="/notes/@note.Id" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between align-items-start">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">@note.Title</h6>
+                            @if (!string.IsNullOrEmpty(note.AiSummary))
+                            {
+                                <p class="mb-1 text-muted small">@note.AiSummary</p>
+                            }
+                        </div>
+                        <small class="text-muted ms-2">
+                            @note.UpdatedAt.ToLocalTime().ToString("MMM d")
+                        </small>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+}
+else if (!isLoading && relatedNotes.Count == 0 && HasEmbedding)
+{
+    <div class="card mt-4">
+        <div class="card-body text-center text-muted">
+            <i class="bi bi-info-circle"></i>
+            <p class="mb-0">No related notes found.</p>
+        </div>
+    </div>
+}
+
+@code {
+    /// <summary>
+    /// Gets or sets the current note ID to find related notes for.
+    /// </summary>
+    [Parameter]
+    public Guid NoteId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the user ID for authorization.
+    /// </summary>
+    [Parameter]
+    public string UserId { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets whether the note has an embedding.
+    /// </summary>
+    [Parameter]
+    public bool HasEmbedding { get; set; }
+
+    /// <summary>
+    /// Gets or sets the number of related notes to display.
+    /// </summary>
+    [Parameter]
+    public int TopN { get; set; } = 5;
+
+    private List<RelatedNoteItem> relatedNotes = new();
+    private bool isLoading = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadRelatedNotesAsync();
+    }
+
+    private async Task LoadRelatedNotesAsync()
+    {
+        if (NoteId == Guid.Empty || string.IsNullOrEmpty(UserId) || !HasEmbedding)
+        {
+            isLoading = false;
+            return;
+        }
+
+        try
+        {
+            isLoading = true;
+
+            var query = new GetRelatedNotesQuery
+            {
+                NoteId = NoteId,
+                UserId = UserId,
+                TopN = TopN
+            };
+
+            var response = await Mediator.Send(query);
+            relatedNotes = response.RelatedNotes;
+        }
+        catch (Exception ex)
+        {
+            // Log error in production
+            Console.WriteLine($"Error loading related notes: {ex.Message}");
+            relatedNotes = new();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}

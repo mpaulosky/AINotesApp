@@ -13,31 +13,36 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
         builder.Entity<Note>(entity =>
         {
-            entity.HasKey(n => n.Id);
+            entity.HasKey(e => e.Id);
 
-            entity.Property(n => n.Title)
+            entity.Property(e => e.Title)
                 .IsRequired()
                 .HasMaxLength(200);
 
-            entity.Property(n => n.Content)
+            entity.Property(e => e.Content)
                 .IsRequired();
 
-            entity.Property(n => n.Summary)
+            entity.Property(e => e.AiSummary)
+                .HasMaxLength(1000);
+
+            entity.Property(e => e.Tags)
                 .HasMaxLength(500);
 
-            entity.Property(n => n.CreatedAt)
+            entity.Property(e => e.CreatedAt)
                 .IsRequired();
 
-            entity.Property(n => n.UpdatedAt)
+            entity.Property(e => e.UpdatedAt)
                 .IsRequired();
 
-            entity.HasOne(n => n.User)
+            // Configure the relationship
+            entity.HasOne(e => e.User)
                 .WithMany(u => u.Notes)
-                .HasForeignKey(n => n.UserId)
+                .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasIndex(n => n.UserId);
-            entity.HasIndex(n => n.CreatedAt);
+            // Index for better query performance
+            entity.HasIndex(e => e.UserId);
+            entity.HasIndex(e => e.CreatedAt);
         });
     }
 }

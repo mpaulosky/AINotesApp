@@ -1,109 +1,118 @@
 using AINotesApp.Data;
-
+using AINotesApp.Services.Ai;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
-namespace AINotesApp.Features.Notes.CreateNote;
-
-public static class CreateNote
+namespace AINotesApp.Features.Notes.CreateNote
 {
-
     /// <summary>
-    /// Command to create a new note
+    /// Command to create a new note.
     /// </summary>
-    public record Command : IRequest<Response>
+    public record CreateNoteCommand : IRequest<CreateNoteResponse>
     {
         /// <summary>
-        /// Title of the note
+        /// Gets the title of the note.
         /// </summary>
         public string Title { get; init; } = string.Empty;
 
         /// <summary>
-        /// Content of the note
+        /// Gets the content of the note.
         /// </summary>
         public string Content { get; init; } = string.Empty;
 
         /// <summary>
-        /// Tags for the note (comma-separated)
-        /// </summary>
-        public string? Tags { get; init; }
-
-        /// <summary>
-        /// ID of the user creating the note
+        /// Gets the user ID who owns the note.
         /// </summary>
         public string UserId { get; init; } = string.Empty;
     }
 
     /// <summary>
-    /// Response after creating a note
+    /// Handler for creating a new note with AI-generated summary, tags, and embeddings.
     /// </summary>
-    public record Response
-    {
-        /// <summary>
-        /// ID of the created note
-        /// </summary>
-        public Guid Id { get; init; }
-
-        /// <summary>
-        /// Title of the created note
-        /// </summary>
-        public string Title { get; init; } = string.Empty;
-
-        /// <summary>
-        /// Content of the created note
-        /// </summary>
-        public string Content { get; init; } = string.Empty;
-
-        /// <summary>
-        /// When the note was created
-        /// </summary>
-        public DateTimeOffset CreatedAt { get; init; }
-    }
-
-    /// <summary>
-    /// Handler for creating a new note
-    /// </summary>
-    public class Handler : IRequestHandler<Command, Response>
+    public class CreateNoteHandler : IRequestHandler<CreateNoteCommand, CreateNoteResponse>
     {
         private readonly ApplicationDbContext _context;
+        private readonly IAiService _aiService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Handler"/> class
-        /// </summary>
-        /// <param name="context">The database context</param>
-        public Handler(ApplicationDbContext context)
+        public CreateNoteHandler(ApplicationDbContext context, IAiService aiService)
         {
             _context = context;
+            _aiService = aiService;
         }
 
         /// <summary>
-        /// Handles the create note command
+        /// Handles the command to create a note.
         /// </summary>
-        /// <param name="reqeest">The command containing note details</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Response containing the created note details</returns>
-        public async Task<Response> Handle(Command request, CancellationToken cancellationToken = default)
+        public async Task<CreateNoteResponse> Handle(CreateNoteCommand request, CancellationToken cancellationToken)
         {
+            // Generate AI summary, tags, and embedding in parallel
+            var summaryTask = _aiService.GenerateSummaryAsync(request.Content, cancellationToken);
+            var tagsTask = _aiService.GenerateTagsAsync(request.Title, request.Content, cancellationToken);
+            var embeddingTask = _aiService.GenerateEmbeddingAsync(request.Content, cancellationToken);
+
+            await Task.WhenAll(summaryTask, tagsTask, embeddingTask);
+
             var note = new Note
             {
                 Id = Guid.NewGuid(),
                 Title = request.Title,
                 Content = request.Content,
-                Tags = request.Tags,
+                AiSummary = await summaryTask,
+                Tags = await tagsTask,
+                Embedding = await embeddingTask,
                 UserId = request.UserId,
-                CreatedAt = DateTimeOffset.UtcNow,
-                UpdatedAt = DateTimeOffset.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
             };
 
             _context.Notes.Add(note);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new Response
+            return new CreateNoteResponse
             {
                 Id = note.Id,
                 Title = note.Title,
                 Content = note.Content,
+                AiSummary = note.AiSummary,
+                Tags = note.Tags,
                 CreatedAt = note.CreatedAt
             };
         }
+    }
+
+    /// <summary>
+    /// Response after creating a note.
+    /// </summary>
+    public record CreateNoteResponse
+    {
+        /// <summary>
+        /// Gets the ID of the created note.
+        /// </summary>
+        public Guid Id { get; init; }
+
+        /// <summary>
+        /// Gets the title of the note.
+        /// </summary>
+        public string Title { get; init; } = string.Empty;
+
+        /// <summary>
+        /// Gets the content of the note.
+        /// </summary>
+        public string Content { get; init; } = string.Empty;
+
+        /// <summary>
+        /// Gets the AI-generated summary.
+        /// </summary>
+        public string? AiSummary { get; init; }
+
+        /// <summary>
+        /// Gets the AI-generated tags.
+        /// </summary>
+        public string? Tags { get; init; }
+
+        /// <summary>
+        /// Gets the creation timestamp.
+        /// </summary>
+        public DateTime CreatedAt { get; init; }
     }
 }

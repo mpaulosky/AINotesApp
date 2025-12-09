@@ -1,0 +1,371 @@
+@page "/notes"
+@using AINotesApp.Features.Notes.ListNotes
+@using AINotesApp.Features.Notes.SearchNotes
+@using AINotesApp.Features.Notes.DeleteNote
+@using MediatR
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@attribute [Authorize]
+@rendermode InteractiveServer
+@inject IMediator Mediator
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>My Notes</PageTitle>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>My Notes</h1>
+        <a href="/notes/new" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Create New Note
+        </a>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" 
+                       class="form-control" 
+                       placeholder="Search notes by title or content..." 
+                       @bind="searchTerm"
+                       @bind:event="oninput"
+                       @onkeyup="HandleSearchKeyUp" />
+                @if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    <button class="btn btn-outline-secondary" @onclick="ClearSearch" type="button">
+                        <i class="bi bi-x-circle"></i> Clear
+                    </button>
+                }
+            </div>
+            @if (!string.IsNullOrWhiteSpace(searchTerm) && response != null)
+            {
+                <small class="text-muted mt-2 d-block">
+                    Found @response.TotalCount note@(response.TotalCount != 1 ? "s" : "") matching "@searchTerm"
+                </small>
+            }
+        </div>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading your notes...</p>
+        </div>
+    }
+    else if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <div class="alert alert-danger" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @errorMessage
+        </div>
+    }
+    else if (response?.Notes.Count == 0)
+    {
+        <div class="alert alert-info" role="alert">
+            <i class="bi bi-info-circle"></i> 
+            @if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                <span>No notes found matching "@searchTerm". Try a different search term or <button class="btn btn-link p-0 align-baseline" @onclick="ClearSearch">clear search</button>.</span>
+            }
+            else
+            {
+                <span>You don't have any notes yet. Create your first note to get started!</span>
+            }
+        </div>
+    }
+    else if (response != null)
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Summary</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var note in response.Notes)
+                    {
+                        <tr>
+                            <td>
+                                <a href="/notes/@note.Id" class="text-decoration-none">
+                                    <strong>@note.Title</strong>
+                                </a>
+                                @if (!string.IsNullOrEmpty(note.Tags))
+                                {
+                                    <div class="mt-1">
+                                        @foreach (var tag in note.Tags.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+                                        {
+                                            <span class="badge bg-secondary me-1">@tag</span>
+                                        }
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(note.AiSummary))
+                                {
+                                    <small class="text-muted">@note.AiSummary</small>
+                                }
+                                else
+                                {
+                                    <small class="text-muted fst-italic">No summary</small>
+                                }
+                            </td>
+                            <td>
+                                <small>@note.CreatedAt.ToLocalTime().ToString("g")</small>
+                            </td>
+                            <td>
+                                <small>@note.UpdatedAt.ToLocalTime().ToString("g")</small>
+                            </td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="/notes/@note.Id" class="btn btn-sm btn-outline-primary" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a href="/notes/@note.Id/edit" class="btn btn-sm btn-outline-secondary" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <button class="btn btn-sm btn-outline-danger" 
+                                            @onclick="() => ShowDeleteConfirmation(note.Id, note.Title)" 
+                                            title="Delete"
+                                            disabled="@isDeleting">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (response.TotalPages > 1)
+        {
+            <nav aria-label="Notes pagination">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(response.PageNumber == 1 ? "disabled" : "")">
+                        <button class="page-link" @onclick="() => LoadPageAsync(response.PageNumber - 1)" disabled="@(response.PageNumber == 1)">
+                            Previous
+                        </button>
+                    </li>
+                    @for (int pageNum = 1; pageNum <= response.TotalPages; pageNum++)
+                    {
+                        var currentPageNum = pageNum;
+                        <li class="page-item @(response.PageNumber == currentPageNum ? "active" : "")">
+                            <button class="page-link" @onclick="() => LoadPageAsync(currentPageNum)">
+                                @currentPageNum
+                            </button>
+                        </li>
+                    }
+                    <li class="page-item @(response.PageNumber == response.TotalPages ? "disabled" : "")">
+                        <button class="page-link" @onclick="() => LoadPageAsync(response.PageNumber + 1)" disabled="@(response.PageNumber == response.TotalPages)">
+                            Next
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        }
+
+        <div class="text-muted text-center mt-3">
+            <small>Showing @response.Notes.Count of @response.TotalCount notes</small>
+        </div>
+    }
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade @(showDeleteModal ? "show d-block" : "")" tabindex="-1" style="@(showDeleteModal ? "background-color: rgba(0,0,0,0.5);" : "")">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle-fill text-warning"></i> Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" @onclick="HideDeleteConfirmation" disabled="@isDeleting"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this note?</p>
+                @if (!string.IsNullOrEmpty(noteToDeleteTitle))
+                {
+                    <div class="alert alert-light border">
+                        <strong>@noteToDeleteTitle</strong>
+                    </div>
+                }
+                <p class="text-muted mb-0">
+                    <small><i class="bi bi-info-circle"></i> This action cannot be undone.</small>
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="HideDeleteConfirmation" disabled="@isDeleting">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-danger" @onclick="ConfirmDeleteAsync" disabled="@isDeleting">
+                    @if (isDeleting)
+                    {
+                        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                        <span>Deleting...</span>
+                    }
+                    else
+                    {
+                        <i class="bi bi-trash me-2"></i>
+                        <span>Delete Note</span>
+                    }
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private SearchNotesResponse? response;
+    private bool isLoading = true;
+    private bool isDeleting = false;
+    private string? errorMessage;
+    private string userId = string.Empty;
+    private int currentPage = 1;
+    private string searchTerm = string.Empty;
+    private System.Threading.Timer? searchDebounceTimer;
+    
+    // Modal state
+    private bool showDeleteModal = false;
+    private Guid noteToDeleteId = Guid.Empty;
+    private string noteToDeleteTitle = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity?.IsAuthenticated == true)
+            {
+                userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+                await LoadNotesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading notes: {ex.Message}";
+            isLoading = false;
+        }
+    }
+
+    private async Task LoadNotesAsync()
+    {
+        try
+        {
+            isLoading = true;
+            errorMessage = null;
+
+            var query = new SearchNotesQuery
+            {
+                SearchTerm = searchTerm,
+                UserId = userId,
+                PageNumber = currentPage,
+                PageSize = 10
+            };
+
+            response = await Mediator.Send(query);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error loading notes: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void HandleSearchKeyUp(KeyboardEventArgs e)
+    {
+        // Debounce search to avoid too many requests while typing
+        searchDebounceTimer?.Dispose();
+        searchDebounceTimer = new System.Threading.Timer(async _ =>
+        {
+            currentPage = 1; // Reset to first page on new search
+            await InvokeAsync(async () =>
+            {
+                await LoadNotesAsync();
+                StateHasChanged();
+            });
+        }, null, 300, Timeout.Infinite);
+    }
+
+    private async Task ClearSearch()
+    {
+        searchTerm = string.Empty;
+        currentPage = 1;
+        await LoadNotesAsync();
+    }
+
+    private async Task LoadPageAsync(int pageNumber)
+    {
+        currentPage = pageNumber;
+        await LoadNotesAsync();
+    }
+
+    private void ShowDeleteConfirmation(Guid noteId, string noteTitle)
+    {
+        noteToDeleteId = noteId;
+        noteToDeleteTitle = noteTitle;
+        showDeleteModal = true;
+    }
+
+    private void HideDeleteConfirmation()
+    {
+        showDeleteModal = false;
+        noteToDeleteId = Guid.Empty;
+        noteToDeleteTitle = string.Empty;
+    }
+
+    private async Task ConfirmDeleteAsync()
+    {
+        try
+        {
+            isDeleting = true;
+
+            var command = new DeleteNoteCommand
+            {
+                Id = noteToDeleteId,
+                UserId = userId
+            };
+
+            var result = await Mediator.Send(command);
+
+            if (result.Success)
+            {
+                HideDeleteConfirmation();
+                await LoadNotesAsync();
+            }
+            else
+            {
+                errorMessage = result.Message;
+                HideDeleteConfirmation();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error deleting note: {ex.Message}";
+            HideDeleteConfirmation();
+        }
+        finally
+        {
+            isDeleting = false;
+        }
+    }
+
+    public void Dispose()
+    {
+        searchDebounceTimer?.Dispose();
+    }
+}
