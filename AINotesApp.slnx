@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="AINotesApp/AINotesApp.csproj" />
   <Project Path="tests/AINotesApp.Tests.Unit/AINotesApp.Tests.Unit.csproj" />
+  <Project Path="tests/AINotesApp.Tests.Integration/AINotesApp.Tests.Integration.csproj" />
 </Solution>
