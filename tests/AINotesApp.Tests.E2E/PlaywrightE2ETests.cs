@@ -28,17 +28,11 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
 
     public async Task InitializeAsync()
     {
-        // Ensure the factory is initialized (container started)
+        // Ensure the factory is initialized (container started and server running)
         await _factory.InitializeAsync();
 
-        // Create the client with WebApplicationFactoryClientOptions
-        var clientOptions = new WebApplicationFactoryClientOptions
-        {
-            BaseAddress = new Uri("http://localhost", UriKind.Absolute)
-        };
-        
-        var client = _factory.CreateClient(clientOptions);
-        _serverUrl = client.BaseAddress!.ToString().TrimEnd('/');
+        // Get the server URL from the factory
+        _serverUrl = _factory.ServerUrl;
 
         // Initialize Playwright
         _playwright = await Playwright.CreateAsync();
