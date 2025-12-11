@@ -46,7 +46,7 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
         // Create a new context
         _context = await _browser.NewContextAsync(new()
         {
-            IgnoreHTTPSErrors = true // Ignore certificate errors in test environment
+            // No need for IgnoreHTTPSErrors since we're using HTTP for local testing
         });
         
         // Create a new page
@@ -83,7 +83,7 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
         var baseUrl = _serverUrl;
 
         // When
-        await _page!.GotoAsync($"{baseUrl}/Account/Login");
+        await _page!.GotoAsync($"{baseUrl}Account/Login");
 
         // Then
         var heading = await _page.Locator("h1").TextContentAsync();
@@ -97,7 +97,7 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
         var baseUrl = _serverUrl;
 
         // When
-        await _page!.GotoAsync($"{baseUrl}/Account/Register");
+        await _page!.GotoAsync($"{baseUrl}Account/Register");
 
         // Then
         var heading = await _page.Locator("h1").TextContentAsync();
@@ -113,7 +113,7 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
         var password = "Test@123456";
 
         // When/Then - Register a new user
-        await _page!.GotoAsync($"{_serverUrl}/Account/Register");
+        await _page!.GotoAsync($"{_serverUrl}Account/Register");
         
         await _page.WaitForSelectorAsync("input[name='Input.Email']");
         await _page.FillAsync("input[name='Input.Email']", email);
@@ -123,13 +123,14 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
 
         // Wait for registration to complete (may redirect to confirm email or login)
         await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await _page.WaitForURLAsync(url => url.Contains("RegisterConfirmation") || url.Contains("Login"), new() { Timeout = 10000 });
         
         // Then - Verify registration succeeded
         var currentUrl = _page.Url;
         currentUrl.Should().Contain("RegisterConfirmation", "User should be redirected to confirmation page");
 
         // When - Navigate to login and authenticate
-        await _page.GotoAsync($"{_serverUrl}/Account/Login");
+        await _page.GotoAsync($"{_serverUrl}Account/Login");
         await _page.WaitForSelectorAsync("input[name='Input.Email']");
         await _page.FillAsync("input[name='Input.Email']", email);
         await _page.FillAsync("input[name='Input.Password']", password);
@@ -137,13 +138,14 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
         
         // Wait for login to complete
         await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await _page.WaitForURLAsync(url => !url.Contains("Login"), new() { Timeout = 10000 });
 
         // Then - Verify login succeeded (should redirect to home)
         currentUrl = _page.Url;
         currentUrl.Should().NotContain("Login", "User should be redirected away from login page");
 
         // When - Create a new note
-        await _page.GotoAsync($"{_serverUrl}/notes/create");
+        await _page.GotoAsync($"{_serverUrl}notes/create");
         await _page.WaitForSelectorAsync("input[name='Title']");
         
         var noteTitle = $"E2E Test Note {timestamp}";
@@ -155,6 +157,7 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
         
         // Wait for note creation
         await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await _page.WaitForURLAsync(url => url.Contains("/notes"), new() { Timeout = 10000 });
 
         // Then - Verify note was created (should redirect to notes list)
         currentUrl = _page.Url;
@@ -166,6 +169,7 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
         // When - Click on the note to view details
         await _page.ClickAsync($"text={noteTitle}");
         await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await _page.WaitForURLAsync(url => url.Contains("/notes/") && !url.EndsWith("/notes"), new() { Timeout = 10000 });
 
         // Then - Verify note details are displayed
         currentUrl = _page.Url;
@@ -189,6 +193,7 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
         
         // Wait for update to complete
         await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await _page.WaitForURLAsync(url => url.Contains("/notes/") && !url.EndsWith("/notes"), new() { Timeout = 10000 });
 
         // Then - Verify note was updated
         pageContent = await _page.ContentAsync();
@@ -196,13 +201,13 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
         pageContent.Should().Contain(updatedContent, "Updated content should be displayed");
 
         // When - Delete the note
-        await _page.ClickAsync("button:has-text('Delete')");
-        
-        // Confirm deletion if there's a confirmation dialog
+        // Attach dialog handler BEFORE clicking delete to avoid race condition
         _page.Dialog += async (_, dialog) => await dialog.AcceptAsync();
+        await _page.ClickAsync("button:has-text('Delete')");
         
         // Wait for deletion to complete
         await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
+        await _page.WaitForURLAsync(url => url.Contains("/notes") && !url.Contains("/notes/"), new() { Timeout = 10000 });
 
         // Then - Verify note was deleted (should redirect to notes list)
         currentUrl = _page.Url;
@@ -216,7 +221,7 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
     public async Task Registration_WithInvalidData_ShowsValidationErrors()
     {
         // Given
-        await _page!.GotoAsync($"{_serverUrl}/Account/Register");
+        await _page!.GotoAsync($"{_serverUrl}Account/Register");
         await _page.WaitForSelectorAsync("input[name='Input.Email']");
 
         // When - Submit with mismatched passwords
@@ -230,14 +235,14 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
 
         // Then - Verify validation error is shown
         var pageContent = await _page.ContentAsync();
-        pageContent.Should().Contain("password", "Should show password validation error");
+        pageContent.ToLowerInvariant().Should().Contain("password", "Should show password validation error");
     }
 
     [Fact]
     public async Task Login_WithInvalidCredentials_ShowsError()
     {
         // Given
-        await _page!.GotoAsync($"{_serverUrl}/Account/Login");
+        await _page!.GotoAsync($"{_serverUrl}Account/Login");
         await _page.WaitForSelectorAsync("input[name='Input.Email']");
 
         // When - Try to login with invalid credentials
@@ -257,7 +262,7 @@ public class PlaywrightE2ETests : IClassFixture<CustomWebApplicationFactory>, IA
     public async Task CreateNote_RequiresAuthentication()
     {
         // Given - Not authenticated
-        await _page!.GotoAsync($"{_serverUrl}/notes/create");
+        await _page!.GotoAsync($"{_serverUrl}notes/create");
 
         // Wait for redirect
         await _page.WaitForLoadStateAsync(LoadState.NetworkIdle);
