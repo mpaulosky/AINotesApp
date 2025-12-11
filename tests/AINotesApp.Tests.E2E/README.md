@@ -1,54 +1,81 @@
-# End-to-End Tests with Playwright
+# End-to-End Tests with Playwright and Testcontainers
 
-This project contains end-to-end tests using Microsoft Playwright for browser automation.
+This project contains end-to-end tests using Microsoft Playwright for browser automation with SQL Server Testcontainers for database isolation.
 
 ## Prerequisites
 
-1. Install Playwright browsers:
+1. **Docker Desktop** must be installed and running:
+   - Download from: <https://www.docker.com/products/docker-desktop>
+   - Ensure Docker is running before executing tests
+
+2. **Build the test project first** (required to generate Playwright scripts):
+
    ```bash
-   pwsh bin/Debug/net10.0/playwright.ps1 install
+   dotnet build tests/AINotesApp.Tests.E2E
    ```
 
-   Or on Linux/Mac:
+3. **Install Playwright browsers**:
+
+   On Windows (PowerShell):
+
+   ```powershell
+   pwsh tests/AINotesApp.Tests.E2E/bin/Debug/net10.0/playwright.ps1 install
+   ```
+
+   On Linux/Mac:
+
    ```bash
-   ./bin/Debug/net10.0/playwright.sh install
+   ./tests/AINotesApp.Tests.E2E/bin/Debug/net10.0/playwright.sh install
    ```
 
 ## Running the Tests
 
-### Step 1: Start the Application
+The tests automatically:
 
-Before running E2E tests, you need to start the AINotesApp application:
+- Start a SQL Server 2022 container using Testcontainers
+- Apply all EF Core migrations to create the database schema
+- Start the AINotesApp with the containerized database
+- Run Playwright browser tests
+- Clean up the container after completion
 
-```bash
-cd AINotesApp
-dotnet run
-```
-
-The application should be running at `https://localhost:5001` (or the configured port).
-
-### Step 2: Run the Tests
-
-In a separate terminal, run the E2E tests:
+Simply run:
 
 ```bash
-cd tests/AINotesApp.Tests.E2E
-dotnet test
+dotnet test tests/AINotesApp.Tests.E2E
 ```
 
-## Enabling Tests
+Or from the solution root:
 
-By default, E2E tests are skipped because they require the application to be running.
-
-To enable a test, remove the `Skip` parameter from the `[Fact]` attribute:
-
-```csharp
-// Before
-[Fact(Skip = "Requires application to be running")]
-
-// After
-[Fact]
+```bash
+dotnet test --filter "FullyQualifiedName~AINotesApp.Tests.E2E"
 ```
+
+## How It Works
+
+1. **Testcontainers.MsSql**:
+   - Automatically pulls and starts a SQL Server 2022 Docker container
+   - Provides an isolated database for each test run
+   - Connection string is dynamically generated
+
+2. **CustomWebApplicationFactory**:
+   - Implements `IAsyncLifetime` to manage container lifecycle
+   - Replaces production SQL Server connection with container connection
+   - Applies EF Core migrations via `Database.Migrate()`
+   - Provides a test server URL to Playwright
+
+3. **PlaywrightE2ETests**:
+   - Waits for container initialization before running tests
+   - Executes browser-based tests against the running application
+   - Automatically cleans up all resources after tests complete
+
+## Benefits of This Approach
+
+✅ **Real SQL Server database** (not in-memory mock)  
+✅ **Production-like environment** with actual migrations  
+✅ **Complete isolation** - each test run gets a fresh container  
+✅ **Automatic cleanup** - containers are removed after tests  
+✅ **CI/CD ready** - works anywhere Docker is available  
+✅ **No manual database setup required**  
 
 ## Writing New E2E Tests
 
@@ -59,10 +86,10 @@ Follow the Given-When-Then pattern:
 public async Task Example_Test_Scenario()
 {
     // Given - Setup preconditions
-    var baseUrl = "https://localhost:5001";
+    var baseUrl = _serverUrl;
     
     // When - Perform actions
-    await _page!.GotoAsync(baseUrl);
+    await _page!.GotoAsync(baseUrl!);
     await _page.ClickAsync("button[type='submit']");
     
     // Then - Assert expected outcomes
@@ -71,9 +98,34 @@ public async Task Example_Test_Scenario()
 }
 ```
 
-## Playwright Documentation
+## Troubleshooting
 
-For more information on using Playwright:
-- [Playwright for .NET Documentation](https://playwright.dev/dotnet/)
-- [Locators Guide](https://playwright.dev/dotnet/docs/locators)
-- [Assertions](https://playwright.dev/dotnet/docs/test-assertions)
+### Docker Not Running
+
+```text
+Error: Cannot connect to Docker daemon
+```
+
+**Solution**: Start Docker Desktop and wait for it to fully initialize.
+
+### Port Conflicts
+
+```text
+Error: Address already in use
+```
+
+**Solution**: Testcontainers automatically assigns random ports. If issues persist, restart Docker.
+
+### Container Pull Issuestext me
+
+```text
+Error: Failed to pull image
+```
+
+**Solution**: Ensure you have internet connectivity and Docker can pull from mcr.microsoft.com.
+
+## Documentation
+
+- [Playwright for .NET](https://playwright.dev/dotnet/)
+- [Testcontainers for .NET](https://dotnet.testcontainers.org/)
+- [WebApplicationFactory](https://learn.microsoft.com/en-us/aspnet/core/test/integration-tests)
