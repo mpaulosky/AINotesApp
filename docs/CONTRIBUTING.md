@@ -2,6 +2,10 @@
 
 Thank you for taking the time to consider contributing to our project.
 
+# Contributing to This Project
+
+Thank you for taking the time to consider contributing to our project.
+
 The following is a set of guidelines for contributing to the project. These are mostly guidelines, not rules, and can be
 changed in the future. Please submit your suggestions with a pull-request to this document.
 
@@ -17,9 +21,9 @@ changed in the future. Please submit your suggestions with a pull-request to thi
     - [Write code](#write-code)
     - [Write documentation](#write-documentation)
 
-## Welcome!
+## Welcome
 
-Thank you for your interest in contributing! We value all contributions and strive to make this project a welcoming,
+    Thank you for your interest in contributing! We value all contributions and strive to make this project a welcoming,
 inclusive space for everyone.
 
 Below are guidelines to help you get started. If you have suggestions, please submit a pull request to this document.
@@ -57,7 +61,7 @@ This project is a personal notes application built with Blazor Web App, ASP.NET 
 - Use EF Core best practices:
   - `AsNoTracking()` for read-only queries
   - `SaveChangesAsync()` with cancellation tokens
-- Write clear, descriptive commit messages:
+  - Write clear, descriptive commit messages:
   - Use present tense (e.g., "Add search feature")
   - Reference issues (e.g., `Fixes #123`)
 - See `.github/copilot-instructions.md` for comprehensive coding standards.
@@ -101,8 +105,6 @@ AINotesApp/                             -- Main application project
   Program.cs                            -- Application entry point
 
 tests/                                  -- Tests
-  AINotesApp.Tests.Architecture/        -- Architecture tests (NetArchTest)
-  AINotesApp.Tests.E2E/                 -- End-to-end tests (Playwright)
   AINotesApp.Tests.Integration/         -- Integration tests
   AINotesApp.Tests.Unit/                -- Unit tests
 

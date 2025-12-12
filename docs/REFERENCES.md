@@ -14,12 +14,13 @@
 
 ## Testing Tools
 
-- [xUnit](https://xunit.net/) – Unit, integration, and E2E test framework (`tests/`)
+- [xUnit](https://xunit.net/) – Unit and integration test framework (`tests/`)
 - [FluentAssertions](https://fluentassertions.com/) – Fluent assertion library for all tests
 - [NSubstitute](https://nsubstitute.github.io/) – Mocking library for unit tests
+- [BUnit](https://bunit.dev/) – Blazor component testing framework for rendering and interaction tests
+- [AngleSharp](https://anglesharp.github.io/) – HTML parser used by BUnit for DOM assertions
 - [NetArchTest.Rules](https://github.com/BenMorris/NetArchTest) – Architecture testing (`tests/AINotesApp.Tests.Architecture`)
-- [Microsoft.Playwright](https://playwright.dev/dotnet/) – E2E browser automation testing (`tests/AINotesApp.Tests.E2E`)
-- [Testcontainers.MsSql](https://dotnet.testcontainers.org/) – SQL Server containers for integration and E2E tests
+
 - [Microsoft.EntityFrameworkCore.InMemory](https://learn.microsoft.com/ef/core/providers/in-memory/) – In-memory database for unit tests
 - [Microsoft.AspNetCore.Mvc.Testing](https://learn.microsoft.com/aspnet/core/test/integration-tests) – Integration testing support
 - [Coverlet](https://github.com/coverlet-coverage/coverlet) – Code coverage collection
