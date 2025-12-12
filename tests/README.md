@@ -4,10 +4,28 @@ This directory contains comprehensive test coverage for the AINotesApp project, 
 
 ## Test Projects
 
-### 1. AINotesApp.Tests.Unit (35 tests) ✅
-Unit tests for individual components and handlers.
+### 1. AINotesApp.Tests.Unit (190 tests) ✅
+Unit tests for handlers, services, and Blazor component tests.
 
 **Coverage:**
+
+**Component Tests (155 tests)** - Blazor UI components using BUnit:
+- Layout components:
+  - MainLayout - 13 tests
+  - NavMenu - 15 tests
+  - ReconnectModal - 20 tests
+- Page components:
+  - Auth - 10 tests
+  - Home - 5 tests
+  - NotFound - 10 tests
+  - Weather - 10 tests
+- Notes feature components:
+  - NoteDetails - 13 tests
+  - NoteEditor - 19 tests
+  - NotesList - 19 tests
+  - RelatedNotes - 21 tests
+
+**Unit Tests (35 tests)** - Handlers and services:
 - Data models (Note) - 7 tests
 - Feature handlers:
   - CreateNote - 5 tests
@@ -18,8 +36,9 @@ Unit tests for individual components and handlers.
 
 **Technologies:**
 - XUnit v2.9.3
-- FluentAssertions v7.1.0
+- FluentAssertions v8.8.0
 - NSubstitute v5.3.0 (for mocking)
+- BUnit v2.x (for Blazor component testing)
 - Entity Framework Core InMemory
 
 **Run tests:**
@@ -69,34 +88,6 @@ Architecture tests to enforce coding standards and design patterns.
 dotnet test tests/AINotesApp.Tests.Architecture
 ```
 
-### 4. AINotesApp.Tests.E2E (3 tests - Skipped by default)
-End-to-end tests using Playwright for browser automation.
-
-**Status:** Tests are skipped by default as they require the application to be running.
-
-**Technologies:**
-- XUnit v2.9.3
-- FluentAssertions v7.1.0
-- Microsoft.Playwright v1.50.0
-
-**Setup Playwright:**
-```bash
-cd tests/AINotesApp.Tests.E2E
-pwsh bin/Debug/net10.0/playwright.ps1 install
-```
-
-**Run tests:**
-1. Start the application:
-   ```bash
-   cd AINotesApp
-   dotnet run
-   ```
-2. In a separate terminal:
-   ```bash
-   dotnet test tests/AINotesApp.Tests.E2E
-   ```
-
-See [E2E README](AINotesApp.Tests.E2E/README.md) for detailed instructions.
 
 ## Running All Tests
 
@@ -113,22 +104,29 @@ dotnet test --verbosity normal
 Run specific test project:
 ```bash
 dotnet test tests/AINotesApp.Tests.Unit
+dotnet test tests/AINotesApp.Tests.Integration
+dotnet test tests/AINotesApp.Tests.Architecture
 ```
 
-Run tests by category (if using traits):
+Run only component tests (BUnit):
 ```bash
-dotnet test --filter Category=Unit
+dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~Components"
+```
+
+Run specific component test file:
+```bash
+dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~NotesListTests"
 ```
 
 ## Test Summary
 
 | Test Type | Count | Status | Description |
 |-----------|-------|--------|-------------|
-| Unit | 35 | ✅ Passing | Fast, isolated tests for components |
+| Component | 155 | ✅ Passing | Blazor component rendering and interaction |
+| Unit | 35 | ✅ Passing | Fast, isolated tests for handlers/services |
 | Integration | 8 | ✅ Passing | Database and handler integration |
 | Architecture | 10 | ✅ Passing | Enforce design patterns and rules |
-| E2E | 3 | ⏭️ Skipped | Browser automation (optional) |
-| **Total** | **56** | **53 Passing** | **Comprehensive coverage** |
+| **Total** | **208** | **208 Passing** | **Comprehensive coverage** |
 
 ## Test Structure
 
@@ -173,7 +171,7 @@ The tests are written to be compatible with XUnit v2 and ready for v3:
 These tests are designed to run in CI/CD pipelines:
 - No external dependencies required
 - InMemory database for fast execution
-- E2E tests are skipped by default
+<!-- E2E tests were previously skipped by default; E2E tests are no longer present in this project. -->
 - All tests are deterministic and repeatable
 
 ## Code Coverage
@@ -187,17 +185,28 @@ dotnet test --collect:"XPlat Code Coverage"
 ## Contributing
 
 When adding new features:
-1. Add unit tests for new handlers
-2. Add integration tests for database operations
-3. Update architecture tests if introducing new patterns
-4. Consider E2E tests for critical user workflows
+1. **Add BUnit component tests** for new Blazor components
+2. Add unit tests for new handlers and services
+3. Add integration tests for database operations
+4. Update architecture tests if introducing new patterns
+
+### Component Testing with BUnit
+
+All Blazor components should have corresponding BUnit tests:
+- Test component rendering with various parameters
+- Test user interactions (clicks, form inputs)
+- Test authentication scenarios
+- Mock dependencies (IMediator, NavigationManager, etc.)
+- Use `WaitForAssertion()` for async rendering
+- Follow the pattern in existing component tests
 
 ## Dependencies
 
 - **.NET 10.0** - Target framework
-- **XUnit 2.9.3** - Test framework
-- **FluentAssertions 7.1.0** - Assertion library
+- **XUnit 2.9.3** - Test framework with VSTest Adapter v3.1.5
+- **FluentAssertions 8.8.0** - Assertion library
 - **NSubstitute 5.3.0** - Mocking framework
+- **BUnit 2.x** - Blazor component testing framework
 - **NetArchTest.Rules 1.3.2** - Architecture tests
-- **Microsoft.Playwright 1.50.0** - E2E browser automation
 - **EF Core InMemory 10.0.0** - In-memory database for tests
+- **Microsoft.AspNetCore.Components.Authorization** - Auth testing support
