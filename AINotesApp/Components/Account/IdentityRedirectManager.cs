@@ -1,4 +1,5 @@
 using AINotesApp.Data;
+
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Identity;
 
@@ -26,7 +27,9 @@ internal sealed class IdentityRedirectManager(NavigationManager navigationManage
             uri = navigationManager.ToBaseRelativePath(uri);
         }
 
-        navigationManager.NavigateTo(uri);
+        // Use forceLoad: true to ensure proper redirect after authentication
+        // This forces a full page reload which is necessary after sign-in operations
+        navigationManager.NavigateTo(uri, forceLoad: true);
     }
 
     public void RedirectTo(string uri, Dictionary<string, object?> queryParameters)

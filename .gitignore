@@ -121,6 +121,9 @@ ipch/
 # Visual Studio Trace Files
 *.e2e
 
+# Playwright test screenshots
+*.png
+
 # TFS 2012 Local Workspace
 $tf/
 
