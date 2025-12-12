@@ -149,9 +149,9 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           if [ "${{ steps.run-tests.outcome }}" == "success" ]; then
-            echo "### ? Tests Passed" >> $GITHUB_STEP_SUMMARY
+            echo "### ✅ Tests Passed" >> $GITHUB_STEP_SUMMARY
           else
-            echo "### ? Tests Failed" >> $GITHUB_STEP_SUMMARY
+            echo "### ❌ Tests Failed" >> $GITHUB_STEP_SUMMARY
           fi
 
           echo "" >> $GITHUB_STEP_SUMMARY
