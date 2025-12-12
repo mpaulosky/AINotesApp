@@ -20,10 +20,15 @@ on:
         required: true
         default: "Manual run"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-test:
     name: Build and Test on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
 
     strategy:
       matrix:
@@ -44,108 +49,110 @@ jobs:
         with:
           global-json-file: global.json
 
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v4.2.3
+        with:
+          versionSpec: "6.x"
+
+      - name: Use GitVersion
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v4.2.3
+
+      - name: Display GitVersion
+        run: |
+          echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
+          echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Build solution
         run: dotnet build AINotesApp.slnx --configuration Release --no-restore
 
-      - name: Check for test projects
-        id: check-tests
-        run: |
-          # Find all test projects recursively in tests folder only
-          test_projects=""
-          while IFS= read -r proj; do
-            if grep -q "<IsTestProject>true</IsTestProject>" "$proj" 2>/dev/null; then
-              test_projects="$test_projects $proj"
-            fi
-          done < <( find tests -type f -name "*.csproj" 2>/dev/null || true )
-
-          if [ -z "$test_projects" ]; then
-            echo "No test projects found in tests folder"
-            echo "has_tests=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "Found test projects: $test_projects"
-            echo "has_tests=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Run all tests in all test projects
+      - name: Run Tests
         id: run-tests
-        if: steps.check-tests.outputs.has_tests == 'true'
         run: |
-          # Ensure repository-level test-results exists
           mkdir -p "test-results"
-          timestamp=$(date +%s)
-
-          set -o pipefail
 
           overall_rc=0
 
-          # Find all test projects recursively in tests folder only
+          # Find all test projects and run each with unique result files
           while IFS= read -r proj; do
             if grep -q "<IsTestProject>true</IsTestProject>" "$proj" 2>/dev/null; then
               name=$(basename "$proj" .csproj)
-              echo "Running tests for: $proj -> test-results/${name}.trx (logs -> test-results/${name}.log)"
+              echo "Running tests for: $proj -> test-results/${name}.trx"
+              
               set +e
               dotnet test "$proj" \
-                --no-build --no-restore \
+                --configuration Release \
+                --no-build \
+                --no-restore \
                 --collect:"XPlat Code Coverage" \
                 --logger "trx;LogFileName=${name}.trx" \
-                --results-directory "test-results" 2>&1 | tee "test-results/${name}.log"
+                --results-directory "test-results"
               rc=$?
               set -e
-
+              
               if [ "$rc" -ne 0 ]; then
-                echo "dotnet test failed for $proj (exit code $rc)"
-                overall_rc=$rc
+                echo "::error::Tests failed for $proj (exit code $rc)"
+                overall_rc=1
+              else
+                echo "::notice::Tests passed for $proj"
               fi
-            else
-              echo "Skipping non-test project: $proj"
             fi
-            done < <( find tests -type f -name "*.csproj" 2>/dev/null || true )
+          done < <( find tests -type f -name "*.csproj" 2>/dev/null || true )
 
-            echo "tests_exit_code=$overall_rc" >> "$GITHUB_OUTPUT"
-            exit 0
+          # Fail the step if any tests failed
+          if [ "$overall_rc" -ne 0 ]; then
+            echo "::error::One or more test projects failed"
+            exit $overall_rc
+          fi
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v5
-        if: steps.check-tests.outputs.has_tests == 'true'
+        if: always() && (hashFiles('test-results/*') != '')
         with:
           name: Solution-Test-Results
           path: test-results
 
       - name: Codecov
-        uses: codecov/codecov-action@v5.5.2
-        if: steps.check-tests.outputs.has_tests == 'true'
+        uses: codecov/codecov-action@v5.5.3
+        if: always()
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
 
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
+        uses: EnricoMi/publish-unit-test-result-action@v2.19.0
         id: test-results
-        if: steps.check-tests.outputs.has_tests == 'true' && always()
+        if: always()
         with:
           files: |
             test-results/**/*.trx
 
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v4.2.0
-        with:
-          versionSpec: "6.3"
-
-      - name: Use GitVersion
-        id: gitversion # step id used as a reference for output values
-        uses: gittools/actions/gitversion/execute@v4.2.0
-
-      - run: |
-          echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
-          echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
-
-      - name: Fail on test failures
-        if: steps.check-tests.outputs.has_tests == 'true' && always()
+      - name: Generate Job Summary
+        if: always()
         run: |
-          # If the run-tests step exported a non-zero exit code, fail now
-          tests_exit_code=${{ steps.run-tests.outputs.tests_exit_code }}
-          echo "tests_exit_code=$tests_exit_code"
-          if [ "$tests_exit_code" != "0" ]; then
-            echo "Tests failed with exit code $tests_exit_code"
-            exit $tests_exit_code
+          echo "## Build and Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version:** ${{ steps.gitversion.outputs.fullSemVer }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ steps.run-tests.outcome }}" == "success" ]; then
+            echo "### ? Tests Passed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ? Tests Failed" >> $GITHUB_STEP_SUMMARY
           fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "See test results above for details." >> $GITHUB_STEP_SUMMARY
