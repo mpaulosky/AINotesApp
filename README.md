@@ -1,3 +1,9 @@
+| **Unit Tests** | 35 | Fast, isolated tests for handlers and services |
+| **Integration Tests** | 8 | Database operations and data persistence |
+| **Architecture Tests** | 10 | Enforce design patterns and coding standards |
+│   ├── AINotesApp.Tests.Unit/
+│   ├── AINotesApp.Tests.Integration/
+│   └── AINotesApp.Tests.Architecture/
 <div align="center">
 
 <img src="./AINotesApp/wwwroot/favicon.png" alt="AINotesApp" height="64" />
@@ -151,20 +157,21 @@ Configure OpenAI settings via User Secrets (recommended) or `appsettings.json`:
 
 ## Testing
 
-The project includes comprehensive test coverage (53 passing tests):
+The project includes comprehensive test coverage with **208 passing tests**:
 
 ### Test Projects
 
 | Test Type | Count | Description |
 |-----------|-------|-------------|
+| **Component Tests** | 155 | Blazor component rendering and interaction tests using BUnit |
 | **Unit Tests** | 35 | Fast, isolated tests for handlers and services |
 | **Integration Tests** | 8 | Database operations and data persistence |
 | **Architecture Tests** | 10 | Enforce design patterns and coding standards |
-| **E2E Tests** | 3 | Browser automation with Playwright (skipped by default) |
+├── tests/                        # Test projects
+│   ├── AINotesApp.Tests.Unit/           # Unit + Component tests
+│   ├── AINotesApp.Tests.Integration/    # Integration tests
+│   └── AINotesApp.Tests.Architecture/   # Architecture tests
 
-### Running Tests
-
-```bash
 # Run all tests
 dotnet test
 
@@ -172,6 +179,9 @@ dotnet test
 dotnet test tests/AINotesApp.Tests.Unit
 dotnet test tests/AINotesApp.Tests.Integration
 dotnet test tests/AINotesApp.Tests.Architecture
+
+# Run only component tests
+dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~Components"
 
 # Run with code coverage
 dotnet test --collect:"XPlat Code Coverage"
