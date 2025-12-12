@@ -1,0 +1,151 @@
+name: Build and Test
+
+permissions:
+  issues: write
+  checks: write
+  contents: read
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "**"
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "The reason for running the workflow"
+        required: true
+        default: "Manual run"
+
+jobs:
+  build-and-test:
+    name: Build and Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+      fail-fast: false
+
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build AINotesApp.slnx --configuration Release --no-restore
+
+      - name: Check for test projects
+        id: check-tests
+        run: |
+          # Find all test projects recursively in tests folder only
+          test_projects=""
+          while IFS= read -r proj; do
+            if grep -q "<IsTestProject>true</IsTestProject>" "$proj" 2>/dev/null; then
+              test_projects="$test_projects $proj"
+            fi
+          done < <( find tests -type f -name "*.csproj" 2>/dev/null || true )
+
+          if [ -z "$test_projects" ]; then
+            echo "No test projects found in tests folder"
+            echo "has_tests=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Found test projects: $test_projects"
+            echo "has_tests=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run all tests in all test projects
+        id: run-tests
+        if: steps.check-tests.outputs.has_tests == 'true'
+        run: |
+          # Ensure repository-level test-results exists
+          mkdir -p "test-results"
+          timestamp=$(date +%s)
+
+          set -o pipefail
+
+          overall_rc=0
+
+          # Find all test projects recursively in tests folder only
+          while IFS= read -r proj; do
+            if grep -q "<IsTestProject>true</IsTestProject>" "$proj" 2>/dev/null; then
+              name=$(basename "$proj" .csproj)
+              echo "Running tests for: $proj -> test-results/${name}.trx (logs -> test-results/${name}.log)"
+              set +e
+              dotnet test "$proj" \
+                --no-build --no-restore \
+                --collect:"XPlat Code Coverage" \
+                --logger "trx;LogFileName=${name}.trx" \
+                --results-directory "test-results" 2>&1 | tee "test-results/${name}.log"
+              rc=$?
+              set -e
+
+              if [ "$rc" -ne 0 ]; then
+                echo "dotnet test failed for $proj (exit code $rc)"
+                overall_rc=$rc
+              fi
+            else
+              echo "Skipping non-test project: $proj"
+            fi
+            done < <( find tests -type f -name "*.csproj" 2>/dev/null || true )
+
+            echo "tests_exit_code=$overall_rc" >> "$GITHUB_OUTPUT"
+            exit 0
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v5
+        if: steps.check-tests.outputs.has_tests == 'true'
+        with:
+          name: Solution-Test-Results
+          path: test-results
+
+      - name: Codecov
+        uses: codecov/codecov-action@v5.5.2
+        if: steps.check-tests.outputs.has_tests == 'true'
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        id: test-results
+        if: steps.check-tests.outputs.has_tests == 'true' && always()
+        with:
+          files: |
+            test-results/**/*.trx
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v4.2.0
+        with:
+          versionSpec: "6.3"
+
+      - name: Use GitVersion
+        id: gitversion # step id used as a reference for output values
+        uses: gittools/actions/gitversion/execute@v4.2.0
+
+      - run: |
+          echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
+          echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+
+      - name: Fail on test failures
+        if: steps.check-tests.outputs.has_tests == 'true' && always()
+        run: |
+          # If the run-tests step exported a non-zero exit code, fail now
+          tests_exit_code=${{ steps.run-tests.outputs.tests_exit_code }}
+          echo "tests_exit_code=$tests_exit_code"
+          if [ "$tests_exit_code" != "0" ]; then
+            echo "Tests failed with exit code $tests_exit_code"
+            exit $tests_exit_code
+          fi
