@@ -58,13 +58,13 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v4.2.3
+        uses: gittools/actions/gitversion/setup@v4
         with:
           versionSpec: "6.3.0"
 
       - name: Use GitVersion
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v4.2.3
+        uses: gittools/actions/gitversion/execute@v4
 
       - name: Display GitVersion
         run: |
@@ -124,7 +124,7 @@ jobs:
           path: test-results
 
       - name: Codecov
-        uses: codecov/codecov-action@v5.5.3
+        uses: codecov/codecov-action@v5
         if: always()
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
