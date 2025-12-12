@@ -35,7 +35,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -115,7 +115,7 @@ jobs:
           path: test-results
 
       - name: Codecov
-        uses: codecov/codecov-action@v5.5.1
+        uses: codecov/codecov-action@v5.5.2
         if: steps.check-tests.outputs.has_tests == 'true'
 
       - name: Publish Test Results
