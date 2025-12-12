@@ -9,6 +9,7 @@
 **Solutions:**
 
 #### A. Use .NET CLI to Add Credentials (Recommended)
+
 ```powershell
 # Remove existing source
 dotnet nuget remove source github
@@ -22,12 +23,14 @@ dotnet nuget add source https://nuget.pkg.github.com/mpaulosky/index.json `
 ```
 
 #### B. Verify Your GitHub PAT
-1. Go to https://github.com/settings/tokens
+
+1. Go to <https://github.com/settings/tokens>
 2. Check your token has `read:packages` scope
 3. Verify token hasn't expired
 4. Try generating a new token if unsure
 
 #### C. Check Environment Variables (if using)
+
 ```powershell
 # Check if variables are set
 $env:GITHUB_USERNAME
@@ -45,6 +48,7 @@ $env:GITHUB_TOKEN
 **Problem:** Package exists on GitHub but isn't found
 
 **Check:**
+
 ```powershell
 # List all sources
 dotnet nuget list source
@@ -56,6 +60,7 @@ dotnet search YourPackage --source github
 ### 3. Clear NuGet Cache
 
 If you're having persistent issues:
+
 ```powershell
 # Clear all NuGet caches
 dotnet nuget locals all --clear
@@ -73,12 +78,14 @@ dotnet restore
 ### 5. Check NuGet Config Hierarchy
 
 NuGet reads from multiple config files in this order:
+
 1. Project-level: `E:\github\AINotesApp\nuget.config` ?
 2. Solution-level: (if exists)
 3. User-level: `%APPDATA%\NuGet\NuGet.Config`
 4. Computer-level: `%ProgramFiles(x86)%\NuGet\Config\`
 
 **View effective configuration:**
+
 ```powershell
 dotnet nuget list source
 ```
@@ -99,6 +106,7 @@ Invoke-RestMethod -Uri "https://nuget.pkg.github.com/mpaulosky/query?q=&prerelea
 ## Quick Setup Script
 
 Run the included setup script:
+
 ```powershell
 .\setup-github-nuget.ps1
 ```
@@ -106,19 +114,23 @@ Run the included setup script:
 ## Where Credentials Are Stored
 
 ### Option 1: Environment Variables
+
 - **Location:** User environment variables
 - **View:** System Properties ? Environment Variables
 - **Requires:** Restart Visual Studio after setting
 
 ### Option 2: .NET NuGet Config
+
 - **Location:** `%APPDATA%\NuGet\NuGet.Config`
 - **Advantage:** No restart needed
-- **View:** 
+- **View:**
+
   ```powershell
   notepad "$env:APPDATA\NuGet\NuGet.Config"
   ```
 
 ### Option 3: Project nuget.config
+
 - **Location:** `E:\github\AINotesApp\nuget.config`
 - **Warning:** Don't commit credentials to Git!
 - **Use:** Only with environment variables
@@ -143,12 +155,13 @@ dotnet search MyMediator --source github
    - Show output from: Package Manager
 
 2. **Enable Verbose Logging**
+
    ```powershell
    dotnet restore --verbosity diagnostic > restore-log.txt
    ```
 
 3. **Verify GitHub Status**
-   - Check https://www.githubstatus.com/
+   - Check <https://www.githubstatus.com/>
 
 ## Security Best Practices
 
@@ -162,6 +175,7 @@ dotnet search MyMediator --source github
 ## Contact
 
 If you continue to have issues:
+
 - Check package exists: `https://github.com/mpaulosky?tab=packages`
 - Verify repository access
 - Try with a fresh GitHub PAT
