@@ -1,9 +1,10 @@
 | **Unit Tests** | 35 | Fast, isolated tests for handlers and services |
 | **Integration Tests** | 8 | Database operations and data persistence |
 | **Architecture Tests** | 10 | Enforce design patterns and coding standards |
-│   ├── AINotesApp.Tests.Unit/
-│   ├── AINotesApp.Tests.Integration/
-│   └── AINotesApp.Tests.Architecture/
+│ ├── AINotesApp.Tests.Unit/
+│ ├── AINotesApp.Tests.Integration/
+│ └── AINotesApp.Tests.Architecture/
+
 <div align="center">
 
 <img src="./AINotesApp/wwwroot/favicon.png" alt="AINotesApp" height="64" />
@@ -97,12 +98,14 @@ Each operation contains its Command/Query, Response DTO, and Handler in a single
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/mpaulosky/AINotesApp.git
    cd AINotesApp
    ```
 
 2. Configure the database connection in `AINotesApp/appsettings.json`:
+
    ```json
    {
      "ConnectionStrings": {
@@ -112,6 +115,7 @@ Each operation contains its Command/Query, Response DTO, and Handler in a single
    ```
 
 3. Configure OpenAI (using User Secrets):
+
    ```bash
    cd AINotesApp
    dotnet user-secrets init
@@ -120,11 +124,13 @@ Each operation contains its Command/Query, Response DTO, and Handler in a single
    ```
 
 4. Apply database migrations:
+
    ```bash
    dotnet ef database update --project AINotesApp
    ```
 
 5. Run the application:
+
    ```bash
    cd AINotesApp
    dotnet run
@@ -161,30 +167,36 @@ The project includes comprehensive test coverage with **208 passing tests**:
 
 ### Test Projects
 
-| Test Type | Count | Description |
-|-----------|-------|-------------|
-| **Component Tests** | 155 | Blazor component rendering and interaction tests using BUnit |
-| **Unit Tests** | 35 | Fast, isolated tests for handlers and services |
-| **Integration Tests** | 8 | Database operations and data persistence |
-| **Architecture Tests** | 10 | Enforce design patterns and coding standards |
-├── tests/                        # Test projects
-│   ├── AINotesApp.Tests.Unit/           # Unit + Component tests
-│   ├── AINotesApp.Tests.Integration/    # Integration tests
-│   └── AINotesApp.Tests.Architecture/   # Architecture tests
+| Test Type              | Count | Description                                                  |
+| ---------------------- | ----- | ------------------------------------------------------------ |
+| **Component Tests**    | 155   | Blazor component rendering and interaction tests using BUnit |
+| **Unit Tests**         | 35    | Fast, isolated tests for handlers and services               |
+| **Integration Tests**  | 8     | Database operations and data persistence                     |
+| **Architecture Tests** | 10    | Enforce design patterns and coding standards                 |
+
+├── tests/ # Test projects
+│ ├── AINotesApp.Tests.Unit/ # Unit + Component tests
+│ ├── AINotesApp.Tests.Integration/ # Integration tests
+│ └── AINotesApp.Tests.Architecture/ # Architecture tests
 
 # Run all tests
+
 dotnet test
 
 # Run specific test project
+
 dotnet test tests/AINotesApp.Tests.Unit
 dotnet test tests/AINotesApp.Tests.Integration
 dotnet test tests/AINotesApp.Tests.Architecture
 
 # Run only component tests
+
 dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~Components"
 
 # Run with code coverage
+
 dotnet test --collect:"XPlat Code Coverage"
+
 ```
 
 For detailed test documentation, see [tests/README.md](tests/README.md).
@@ -192,24 +204,26 @@ For detailed test documentation, see [tests/README.md](tests/README.md).
 ## Project Structure
 
 ```
+
 AINotesApp/
-├── AINotesApp/                    # Main application
-│   ├── Components/                # Blazor components
-│   │   ├── Account/              # Authentication components
-│   │   ├── Layout/               # Layout components
-│   │   └── Pages/                # Page components
-│   ├── Data/                     # Entity models and DbContext
-│   ├── Features/                 # Vertical slices (CQRS)
-│   │   └── Notes/                # Note feature operations
-│   └── Services/                 # Application services
-│       └── Ai/                   # AI integration
-├── tests/                        # Test projects
-│   ├── AINotesApp.Tests.Unit/
-│   ├── AINotesApp.Tests.Integration/
-│   ├── AINotesApp.Tests.Architecture/
-│   └── AINotesApp.Tests.E2E/
-└── docs/                         # Documentation
-```
+├── AINotesApp/ # Main application
+│ ├── Components/ # Blazor components
+│ │ ├── Account/ # Authentication components
+│ │ ├── Layout/ # Layout components
+│ │ └── Pages/ # Page components
+│ ├── Data/ # Entity models and DbContext
+│ ├── Features/ # Vertical slices (CQRS)
+│ │ └── Notes/ # Note feature operations
+│ └── Services/ # Application services
+│ └── Ai/ # AI integration
+├── tests/ # Test projects
+│ ├── AINotesApp.Tests.Unit/
+│ ├── AINotesApp.Tests.Integration/
+│ ├── AINotesApp.Tests.Architecture/
+│ └── AINotesApp.Tests.E2E/
+└── docs/ # Documentation
+
+````
 
 ## Key Features Implementation
 
@@ -225,16 +239,17 @@ When creating or updating notes, the application automatically generates:
 Find related notes based on meaning rather than just keywords:
 ```csharp
 // Search for notes semantically related to a query
-var relatedNotes = await mediator.Send(new GetRelatedNotesQuery 
-{ 
+var relatedNotes = await mediator.Send(new GetRelatedNotesQuery
+{
     NoteId = noteId,
-    UserId = currentUserId 
+    UserId = currentUserId
 });
-```
+````
 
 ### User Isolation
 
 All notes are strictly isolated by user with security checks at the database level:
+
 ```csharp
 var note = await _context.Notes
     .FirstOrDefaultAsync(
@@ -269,6 +284,7 @@ This project follows strict coding standards and architectural patterns. For det
 ### Database Connection Issues
 
 If you encounter connection errors:
+
 1. Verify SQL Server Express is installed and running
 2. Check the connection string in `appsettings.json`
 3. Ensure `TrustServerCertificate=True` is included in the connection string
@@ -276,6 +292,7 @@ If you encounter connection errors:
 ### Migration Issues
 
 If migrations fail:
+
 ```bash
 # List existing migrations
 dotnet ef migrations list --project AINotesApp
