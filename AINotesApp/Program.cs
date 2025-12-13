@@ -1,6 +1,7 @@
 using AINotesApp.Components;
 using AINotesApp.Components.Account;
 using AINotesApp.Data;
+using AINotesApp.Features.Notes.SeedNotes;
 using AINotesApp.Services.Ai;
 
 using Microsoft.AspNetCore.Components.Authorization;
@@ -25,8 +26,10 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityCookies();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
@@ -64,6 +67,7 @@ else
     app.UseHsts();
 }
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
+
 app.UseHttpsRedirection();
 
 app.UseAntiforgery();
