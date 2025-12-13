@@ -18,7 +18,7 @@ public class ListNotesHandlerTests
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
-        
+
         _context = new ApplicationDbContext(options);
         _handler = new ListNotesHandler(_context);
     }
@@ -55,7 +55,7 @@ public class ListNotesHandlerTests
             new() { Id = Guid.NewGuid(), Title = "Note 2", UserId = userId, CreatedAt = DateTime.UtcNow.AddHours(-2), UpdatedAt = DateTime.UtcNow },
             new() { Id = Guid.NewGuid(), Title = "Note 3", UserId = userId, CreatedAt = DateTime.UtcNow.AddHours(-1), UpdatedAt = DateTime.UtcNow.AddHours(-2) }
         };
-        
+
         _context.Notes.AddRange(notes);
         await _context.SaveChangesAsync();
 
@@ -121,7 +121,7 @@ public class ListNotesHandlerTests
         // Given
         var userId1 = "user-1";
         var userId2 = "user-2";
-        
+
         _context.Notes.AddRange(
             new Note { Id = Guid.NewGuid(), Title = "User 1 Note", UserId = userId1, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
             new Note { Id = Guid.NewGuid(), Title = "User 2 Note", UserId = userId2, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow }
@@ -196,7 +196,7 @@ public class ListNotesHandlerTests
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         _context.Notes.Add(note);
         await _context.SaveChangesAsync();
 

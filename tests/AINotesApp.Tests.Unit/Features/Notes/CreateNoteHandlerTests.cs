@@ -22,7 +22,7 @@ public class CreateNoteHandlerTests
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
-        
+
         _context = new ApplicationDbContext(options);
         _aiService = Substitute.For<IAiService>();
         _handler = new CreateNoteHandler(_context, _aiService);
