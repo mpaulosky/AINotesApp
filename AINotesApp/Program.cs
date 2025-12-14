@@ -25,8 +25,10 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityCookies();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddIdentityCore<ApplicationUser>(options =>
@@ -48,7 +50,7 @@ builder.Services.Configure<AiServiceOptions>(
 builder.Services.AddScoped<IAiService, OpenAiService>();
 
 // Register MediatR
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AINotesApp.Program).Assembly));
 
 var app = builder.Build();
 
@@ -64,6 +66,7 @@ else
     app.UseHsts();
 }
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
+
 app.UseHttpsRedirection();
 
 app.UseAntiforgery();
@@ -78,4 +81,7 @@ app.MapAdditionalIdentityEndpoints();
 app.Run();
 
 // Make the implicit Program class accessible to tests
-public partial class Program { }
+namespace AINotesApp
+{
+    public partial class Program { }
+}

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Data;
 using AINotesApp.Features.Notes.UpdateNote;
 using AINotesApp.Services.Ai;
@@ -10,6 +11,7 @@ namespace AINotesApp.Tests.Unit.Features.Notes;
 /// <summary>
 /// Unit tests for UpdateNoteHandler.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class UpdateNoteHandlerTests
 {
     private readonly ApplicationDbContext _context;
@@ -21,7 +23,7 @@ public class UpdateNoteHandlerTests
         var options = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
-        
+
         _context = new ApplicationDbContext(options);
         _aiService = Substitute.For<IAiService>();
         _handler = new UpdateNoteHandler(_context, _aiService);
@@ -41,7 +43,7 @@ public class UpdateNoteHandlerTests
             CreatedAt = DateTime.UtcNow.AddDays(-1),
             UpdatedAt = DateTime.UtcNow.AddDays(-1)
         };
-        
+
         _context.Notes.Add(existingNote);
         await _context.SaveChangesAsync();
 
@@ -110,7 +112,7 @@ public class UpdateNoteHandlerTests
         // Given
         var correctUserId = "correct-user";
         var wrongUserId = "wrong-user";
-        
+
         var existingNote = new Note
         {
             Id = Guid.NewGuid(),
@@ -120,7 +122,7 @@ public class UpdateNoteHandlerTests
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         _context.Notes.Add(existingNote);
         await _context.SaveChangesAsync();
 
@@ -157,7 +159,7 @@ public class UpdateNoteHandlerTests
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         _context.Notes.Add(note);
         await _context.SaveChangesAsync();
 

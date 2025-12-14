@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using AINotesApp.Components.Pages.Notes;
 using AINotesApp.Features.Notes.GetNoteDetails;
@@ -15,6 +16,7 @@ namespace AINotesApp.Tests.Unit.Components.Pages.Notes;
 /// <summary>
 /// Unit tests for NoteDetails component using BUnit 2.x
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class NoteDetailsTests : BunitContext
 {
 	private readonly IMediator _mediator;

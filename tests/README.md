@@ -5,11 +5,13 @@ This directory contains comprehensive test coverage for the AINotesApp project, 
 ## Test Projects
 
 ### 1. AINotesApp.Tests.Unit (190 tests) ✅
+
 Unit tests for handlers, services, and Blazor component tests.
 
 **Coverage:**
 
 **Component Tests (155 tests)** - Blazor UI components using BUnit:
+
 - Layout components:
   - MainLayout - 13 tests
   - NavMenu - 15 tests
@@ -26,6 +28,7 @@ Unit tests for handlers, services, and Blazor component tests.
   - RelatedNotes - 21 tests
 
 **Unit Tests (35 tests)** - Handlers and services:
+
 - Data models (Note) - 7 tests
 - Feature handlers:
   - CreateNote - 5 tests
@@ -35,6 +38,7 @@ Unit tests for handlers, services, and Blazor component tests.
 - Additional handler tests - 3 tests
 
 **Technologies:**
+
 - XUnit v2.9.3
 - FluentAssertions v8.8.0
 - NSubstitute v5.3.0 (for mocking)
@@ -42,14 +46,17 @@ Unit tests for handlers, services, and Blazor component tests.
 - Entity Framework Core InMemory
 
 **Run tests:**
+
 ```bash
 dotnet test tests/AINotesApp.Tests.Unit
 ```
 
 ### 2. AINotesApp.Tests.Integration (8 tests) ✅
+
 Integration tests for database operations and data persistence.
 
 **Coverage:**
+
 - Note CRUD operations
 - User isolation (multi-user scenarios)
 - Embedding storage and retrieval
@@ -57,20 +64,24 @@ Integration tests for database operations and data persistence.
 - Ordering and pagination
 
 **Technologies:**
+
 - XUnit v2.9.3
 - FluentAssertions v7.1.0
 - Entity Framework Core InMemory
 - Microsoft.AspNetCore.Mvc.Testing
 
 **Run tests:**
+
 ```bash
 dotnet test tests/AINotesApp.Tests.Integration
 ```
 
 ### 3. AINotesApp.Tests.Architecture (10 tests) ✅
+
 Architecture tests to enforce coding standards and design patterns.
 
 **Coverage:**
+
 - Vertical Slice Architecture validation
 - CQRS pattern enforcement (Commands/Queries)
 - Dependency rules
@@ -79,29 +90,33 @@ Architecture tests to enforce coding standards and design patterns.
 - Service layering
 
 **Technologies:**
+
 - XUnit v2.9.3
 - FluentAssertions v7.1.0
 - NetArchTest.Rules v1.3.2
 
 **Run tests:**
+
 ```bash
 dotnet test tests/AINotesApp.Tests.Architecture
 ```
 
-
 ## Running All Tests
 
 Run all tests in the solution:
+
 ```bash
 dotnet test
 ```
 
 Run with detailed output:
+
 ```bash
 dotnet test --verbosity normal
 ```
 
 Run specific test project:
+
 ```bash
 dotnet test tests/AINotesApp.Tests.Unit
 dotnet test tests/AINotesApp.Tests.Integration
@@ -109,24 +124,26 @@ dotnet test tests/AINotesApp.Tests.Architecture
 ```
 
 Run only component tests (BUnit):
+
 ```bash
 dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~Components"
 ```
 
 Run specific component test file:
+
 ```bash
 dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~NotesListTests"
 ```
 
 ## Test Summary
 
-| Test Type | Count | Status | Description |
-|-----------|-------|--------|-------------|
-| Component | 155 | ✅ Passing | Blazor component rendering and interaction |
-| Unit | 35 | ✅ Passing | Fast, isolated tests for handlers/services |
-| Integration | 8 | ✅ Passing | Database and handler integration |
-| Architecture | 10 | ✅ Passing | Enforce design patterns and rules |
-| **Total** | **208** | **208 Passing** | **Comprehensive coverage** |
+| Test Type    | Count   | Status          | Description                                |
+| ------------ | ------- | --------------- | ------------------------------------------ |
+| Component    | 155     | ✅ Passing      | Blazor component rendering and interaction |
+| Unit         | 35      | ✅ Passing      | Fast, isolated tests for handlers/services |
+| Integration  | 8       | ✅ Passing      | Database and handler integration           |
+| Architecture | 10      | ✅ Passing      | Enforce design patterns and rules          |
+| **Total**    | **208** | **208 Passing** | **Comprehensive coverage**                 |
 
 ## Test Structure
 
@@ -161,6 +178,7 @@ public async Task MethodName_Scenario_ExpectedBehavior()
 ## XUnit v3 Features (When Available)
 
 The tests are written to be compatible with XUnit v2 and ready for v3:
+
 - Use `[Fact]` for simple tests
 - Use `[Theory]` for data-driven tests
 - Use `TestOutput` for test logging
@@ -169,6 +187,7 @@ The tests are written to be compatible with XUnit v2 and ready for v3:
 ## Continuous Integration
 
 These tests are designed to run in CI/CD pipelines:
+
 - No external dependencies required
 - InMemory database for fast execution
 <!-- E2E tests were previously skipped by default; E2E tests are no longer present in this project. -->
@@ -185,6 +204,7 @@ dotnet test --collect:"XPlat Code Coverage"
 ## Contributing
 
 When adding new features:
+
 1. **Add BUnit component tests** for new Blazor components
 2. Add unit tests for new handlers and services
 3. Add integration tests for database operations
@@ -193,6 +213,7 @@ When adding new features:
 ### Component Testing with BUnit
 
 All Blazor components should have corresponding BUnit tests:
+
 - Test component rendering with various parameters
 - Test user interactions (clicks, form inputs)
 - Test authentication scenarios

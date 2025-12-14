@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Data;
 using AINotesApp.Services.Ai;
 using FluentAssertions;
@@ -10,6 +11,7 @@ namespace AINotesApp.Tests.Unit.Services.Ai;
 /// Unit tests for OpenAiService - focusing on internal logic and edge cases.
 /// Note: These tests don't make actual API calls to OpenAI.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class OpenAiServiceTests
 {
     private readonly ApplicationDbContext _context;
@@ -20,9 +22,9 @@ public class OpenAiServiceTests
         var dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
-        
+
         _context = new ApplicationDbContext(dbOptions);
-        
+
         _options = new AiServiceOptions
         {
             ApiKey = "test-api-key",
@@ -85,7 +87,7 @@ public class OpenAiServiceTests
         // Given
         var userId = "user-123";
         var queryEmbedding = new float[] { 1.0f, 0.0f, 0.0f };
-        
+
         var note1 = new Note
         {
             Id = Guid.NewGuid(),
@@ -96,7 +98,7 @@ public class OpenAiServiceTests
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         var note2 = new Note
         {
             Id = Guid.NewGuid(),
@@ -107,7 +109,7 @@ public class OpenAiServiceTests
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         _context.Notes.AddRange(note1, note2);
         await _context.SaveChangesAsync();
 
@@ -128,7 +130,7 @@ public class OpenAiServiceTests
         var userId = "user-123";
         var currentNoteId = Guid.NewGuid();
         var queryEmbedding = new float[] { 1.0f, 0.0f };
-        
+
         var currentNote = new Note
         {
             Id = currentNoteId,
@@ -139,7 +141,7 @@ public class OpenAiServiceTests
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         var otherNote = new Note
         {
             Id = Guid.NewGuid(),
@@ -150,7 +152,7 @@ public class OpenAiServiceTests
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         _context.Notes.AddRange(currentNote, otherNote);
         await _context.SaveChangesAsync();
 
@@ -171,7 +173,7 @@ public class OpenAiServiceTests
         var userId1 = "user-1";
         var userId2 = "user-2";
         var queryEmbedding = new float[] { 1.0f, 0.0f };
-        
+
         var user1Note = new Note
         {
             Id = Guid.NewGuid(),
@@ -182,7 +184,7 @@ public class OpenAiServiceTests
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         var user2Note = new Note
         {
             Id = Guid.NewGuid(),
@@ -193,7 +195,7 @@ public class OpenAiServiceTests
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         _context.Notes.AddRange(user1Note, user2Note);
         await _context.SaveChangesAsync();
 
@@ -213,7 +215,7 @@ public class OpenAiServiceTests
         // Given
         var userId = "user-123";
         var queryEmbedding = new float[] { 1.0f };
-        
+
         // Add 10 notes with high similarity
         for (int i = 0; i < 10; i++)
         {
@@ -246,7 +248,7 @@ public class OpenAiServiceTests
         // Given
         var userId = "user-123";
         var queryEmbedding = new float[] { 1.0f };
-        
+
         var noteWithEmbedding = new Note
         {
             Id = Guid.NewGuid(),
@@ -257,7 +259,7 @@ public class OpenAiServiceTests
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         var noteWithoutEmbedding = new Note
         {
             Id = Guid.NewGuid(),
@@ -268,7 +270,7 @@ public class OpenAiServiceTests
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         _context.Notes.AddRange(noteWithEmbedding, noteWithoutEmbedding);
         await _context.SaveChangesAsync();
 

@@ -5,7 +5,7 @@
 The following versions of AINotesApp are currently supported with security updates:
 
 | Version | Supported          |
-|---------|--------------------|
+| ------- | ------------------ |
 | 0.1.x   | :white_check_mark: |
 | < 0.1   | :x:                |
 
@@ -16,23 +16,27 @@ The following versions of AINotesApp are currently supported with security updat
 AINotesApp implements the following security measures:
 
 ### Authentication & Authorization
+
 - **ASP.NET Core Identity** - User authentication and password management
 - **Per-user data isolation** - Users can only access their own notes
 - **Authorization checks** - All CQRS handlers verify user ownership
 - **Secure password storage** - Passwords are hashed using Identity's default algorithms
 
 ### Data Protection
+
 - **SQL injection protection** - Entity Framework Core parameterized queries
 - **XSS protection** - Blazor's automatic HTML encoding
 - **CSRF protection** - Built-in anti-forgery tokens
 - **HTTPS enforcement** - Recommended for production deployments
 
 ### API Security
+
 - **OpenAI API key protection** - Stored in user secrets or environment variables
 - **Input validation** - All commands validate user input
 - **Error handling** - Sensitive information not exposed in error messages
 
 ### Database Security
+
 - **User isolation** - Database queries filtered by UserId
 - **Migration safety** - Code-first migrations with version control
 - **Connection string security** - Stored in appsettings.json (excluded from source control for production)
@@ -63,7 +67,7 @@ When reporting a security vulnerability, please include:
 
 - **Initial Response:** Within 48 hours of report submission
 - **Status Update:** Within 7 days with assessment and timeline
-- **Fix Timeline:** 
+- **Fix Timeline:**
   - Critical vulnerabilities: Within 7 days
   - High severity: Within 14 days
   - Medium/Low severity: Within 30 days
@@ -78,6 +82,7 @@ When reporting a security vulnerability, please include:
 ### Security Advisories
 
 Security updates will be published:
+
 - In the [GitHub Security Advisories](https://github.com/mpaulosky/AINotesApp/security/advisories)
 - In the project [CHANGELOG.md](../CHANGELOG.md) (if one exists)
 - In release notes for security-related releases
@@ -87,27 +92,32 @@ Security updates will be published:
 When contributing to AINotesApp, please follow these security guidelines:
 
 ### Code Review
+
 - All code changes require review before merging
 - Security-sensitive changes require additional scrutiny
 - Never commit secrets, API keys, or passwords
 
 ### Testing
+
 - Add security-focused tests for authorization checks
 - Test boundary conditions and edge cases
 - Verify user isolation in integration tests
 
 ### Dependencies
+
 - Keep NuGet packages up to date
 - Review dependency security advisories
 - Use `dotnet list package --vulnerable` to check for known vulnerabilities
 
 ### Secrets Management
+
 - Use **User Secrets** for local development (`dotnet user-secrets`)
 - Use **Environment Variables** for production
 - Never commit `appsettings.Production.json` with secrets
 - Add sensitive files to `.gitignore`
 
 ### Data Validation
+
 - Validate all user input in CQRS handlers
 - Use parameterized queries (Entity Framework Core does this automatically)
 - Sanitize data before rendering in Blazor components (Blazor does this automatically)
@@ -115,12 +125,14 @@ When contributing to AINotesApp, please follow these security guidelines:
 ## Known Security Considerations
 
 ### Current Limitations
+
 - **OpenAI API calls** - Notes content is sent to OpenAI for AI features (embeddings, summaries, tags)
 - **Local development** - Uses SQL Server Express with Trusted Connection
 - **No rate limiting** - Consider implementing rate limiting for production
 - **No audit logging** - User actions are not currently logged
 
 ### Recommendations for Production
+
 1. **Use HTTPS** - Enable HTTPS and HSTS
 2. **Secure connection strings** - Use Azure Key Vault or similar
 3. **Enable logging** - Add security event logging
@@ -139,4 +151,3 @@ When contributing to AINotesApp, please follow these security guidelines:
 ---
 
 Thank you for helping keep AINotesApp secure!
-

@@ -1,18 +1,58 @@
-| **Unit Tests** | 35 | Fast, isolated tests for handlers and services |
-| **Integration Tests** | 8 | Database operations and data persistence |
-| **Architecture Tests** | 10 | Enforce design patterns and coding standards |
-│   ├── AINotesApp.Tests.Unit/
-│   ├── AINotesApp.Tests.Integration/
-│   └── AINotesApp.Tests.Architecture/
-<div align="center">
-
-<img src="./AINotesApp/wwwroot/favicon.png" alt="AINotesApp" height="64" />
-
 # AINotesApp
+
+## Testing
+
+To run all tests:
+
+```bash
+dotnet test
+```
+
+To run a specific test project:
+
+```bash
+dotnet test tests/AINotesApp.Tests.Unit
+```
+
+To run only component tests:
+
+```bash
+dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~Components"
+```
+
+To run with code coverage:
+
+```bash
+dotnet test --collect:"XPlat Code Coverage"
+```
+
+## Getting Started
+
+1. Configure the database connection in `AINotesApp/appsettings.json`.
+2. Configure OpenAI (using User Secrets).
+3. Apply database migrations.
+4. Run the application.
+5. Open your browser and navigate to `https://localhost:5001`.
+
+## User Isolation
+
+User strictly isolates all notes with security checks at the database level:
+
+| Category           | Count | Description                                    |
+|--------------------|------:|------------------------------------------------|
+| Unit Tests         |    35 | Fast, isolated tests for handlers and services |
+| Integration Tests  |     8 | Database operations and data persistence       |
+| Architecture Tests |    10 | Enforce design patterns and coding standards   |
+```text
+tests/
+├── AINotesApp.Tests.Unit/
+├── AINotesApp.Tests.Integration/
+└── AINotesApp.Tests.Architecture/
+```
 
 A modern, intelligent note-taking application powered by AI
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/mpaulosky/AINotesApp/dotnet.yml?style=flat-square&label=Build)](https://github.com/mpaulosky/AINotesApp/actions)
+[![Build and Test](https://github.com/mpaulosky/AINotesApp/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/mpaulosky/AINotesApp/actions/workflows/build-and-test.yml)
 [![codecov](https://img.shields.io/codecov/c/github/mpaulosky/AINotesApp?style=flat-square&logo=codecov)](https://codecov.io/gh/mpaulosky/AINotesApp)
 [![.NET Version](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat-square&logo=.net)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/github/license/mpaulosky/AINotesApp?style=flat-square)](LICENSE.txt)
@@ -24,7 +64,6 @@ A modern, intelligent note-taking application powered by AI
 
 [Overview](#overview) • [Features](#features) • [Architecture](#architecture) • [Getting Started](#getting-started) • [Testing](#testing)
 
-</div>
 
 ## Overview
 
@@ -46,12 +85,12 @@ The application showcases enterprise-level patterns including Vertical Slice Arc
 
 ### Technology Stack
 
-- **.NET 10.0** - Latest .NET framework with C# 14.0
+- **.NET 10.0** – Latest .NET Framework with C# 14.0
 - **Blazor Server** - Interactive server-side rendering
-- **ASP.NET Core Identity** - Authentication and authorization
-- **Entity Framework Core 10.0** - ORM with SQL Server
+- **ASP.NET Core Identity** – Authentication and authorization
+- **Entity Framework Core 10.0** – ORM with SQL Server
 - **MediatR** - Command/Query mediator pattern
-- **OpenAI API** - AI text generation and embeddings
+- **OpenAI API** – AI text generation and embeddings
 - **SQL Server Express** - Local database
 
 ### Design Patterns
@@ -60,7 +99,7 @@ The application showcases enterprise-level patterns including Vertical Slice Arc
 
 Features are organized by business capability rather than technical layers:
 
-```
+```text
 Features/
 └── Notes/
     ├── CreateNote/
@@ -97,12 +136,14 @@ Each operation contains its Command/Query, Response DTO, and Handler in a single
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/mpaulosky/AINotesApp.git
    cd AINotesApp
    ```
 
 2. Configure the database connection in `AINotesApp/appsettings.json`:
+
    ```json
    {
      "ConnectionStrings": {
@@ -112,6 +153,7 @@ Each operation contains its Command/Query, Response DTO, and Handler in a single
    ```
 
 3. Configure OpenAI (using User Secrets):
+
    ```bash
    cd AINotesApp
    dotnet user-secrets init
@@ -120,11 +162,13 @@ Each operation contains its Command/Query, Response DTO, and Handler in a single
    ```
 
 4. Apply database migrations:
+
    ```bash
    dotnet ef database update --project AINotesApp
    ```
 
 5. Run the application:
+
    ```bash
    cd AINotesApp
    dotnet run
@@ -161,61 +205,52 @@ The project includes comprehensive test coverage with **208 passing tests**:
 
 ### Test Projects
 
-| Test Type | Count | Description |
-|-----------|-------|-------------|
-| **Component Tests** | 155 | Blazor component rendering and interaction tests using BUnit |
-| **Unit Tests** | 35 | Fast, isolated tests for handlers and services |
-| **Integration Tests** | 8 | Database operations and data persistence |
-| **Architecture Tests** | 10 | Enforce design patterns and coding standards |
-├── tests/                        # Test projects
-│   ├── AINotesApp.Tests.Unit/           # Unit + Component tests
-│   ├── AINotesApp.Tests.Integration/    # Integration tests
-│   └── AINotesApp.Tests.Architecture/   # Architecture tests
+| Test Type              | Count | Description                                                  |
+|------------------------|-------|--------------------------------------------------------------|
+| **Component Tests**    | 155   | Blazor component rendering and interaction tests using BUnit |
+| **Unit Tests**         | 35    | Fast, isolated tests for handlers and services               |
+| **Integration Tests**  | 8     | Database operations and data persistence                     |
+| **Architecture Tests** | 10    | Enforce design patterns and coding standards                 |
 
-# Run all tests
-dotnet test
+├── tests/ # Test projects
+│ ├── AINotesApp.Tests.Unit/ # Unit + Component tests
+│ ├── AINotesApp.Tests.Integration/ # Integration tests
+│ └── AINotesApp.Tests.Architecture/ # Architecture tests
 
-# Run specific test project
-dotnet test tests/AINotesApp.Tests.Unit
-dotnet test tests/AINotesApp.Tests.Integration
-dotnet test tests/AINotesApp.Tests.Architecture
-
-# Run only component tests
-dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~Components"
-
-# Run with code coverage
-dotnet test --collect:"XPlat Code Coverage"
-```
+```text
 
 For detailed test documentation, see [tests/README.md](tests/README.md).
 
 ## Project Structure
 
-```
+```text
+
 AINotesApp/
-├── AINotesApp/                    # Main application
-│   ├── Components/                # Blazor components
-│   │   ├── Account/              # Authentication components
-│   │   ├── Layout/               # Layout components
-│   │   └── Pages/                # Page components
-│   ├── Data/                     # Entity models and DbContext
-│   ├── Features/                 # Vertical slices (CQRS)
-│   │   └── Notes/                # Note feature operations
-│   └── Services/                 # Application services
-│       └── Ai/                   # AI integration
-├── tests/                        # Test projects
-│   ├── AINotesApp.Tests.Unit/
-│   ├── AINotesApp.Tests.Integration/
-│   ├── AINotesApp.Tests.Architecture/
-│   └── AINotesApp.Tests.E2E/
-└── docs/                         # Documentation
-```
+├── AINotesApp/ # Main application
+│ ├── Components/ # Blazor components
+│ │ ├── Account/ # Authentication components
+│ │ ├── Layout/ # Layout components
+│ │ └── Pages/ # Page components
+│ ├── Data/ # Entity models and DbContext
+│ ├── Features/ # Vertical slices (CQRS)
+│ │ └── Notes/ # Note feature operations
+│ └── Services/ # Application services
+│ └── Ai/ # AI integration
+├── tests/ # Test projects
+│ ├── AINotesApp.Tests.Unit/
+│ ├── AINotesApp.Tests.Integration/
+│ ├── AINotesApp.Tests.Architecture/
+│ └── AINotesApp.Tests.E2E/
+└── docs/ # Documentation
+
+````
 
 ## Key Features Implementation
 
 ### AI-Powered Note Summarization
 
 When creating or updating notes, the application automatically generates:
+
 - Concise summaries using OpenAI
 - Relevant tags for organization
 - Vector embeddings for semantic search
@@ -223,18 +258,18 @@ When creating or updating notes, the application automatically generates:
 ### Semantic Search
 
 Find related notes based on meaning rather than just keywords:
+
 ```csharp
 // Search for notes semantically related to a query
-var relatedNotes = await mediator.Send(new GetRelatedNotesQuery 
-{ 
+var relatedNotes = await mediator.Send(new GetRelatedNotesQuery
+{
     NoteId = noteId,
-    UserId = currentUserId 
+    UserId = currentUserId
 });
-```
+````
 
-### User Isolation
+User strictly isolates all notes with security checks at the database level:
 
-All notes are strictly isolated by user with security checks at the database level:
 ```csharp
 var note = await _context.Notes
     .FirstOrDefaultAsync(
@@ -244,7 +279,7 @@ var note = await _context.Notes
 
 ## Development Guidelines
 
-This project follows strict coding standards and architectural patterns. For detailed development guidelines, see [.github/copilot-instructions.md](.github/copilot-instructions.md).
+This project follows strict coding standards and architectural patterns. For detailed development guidelines, see [.GitHub/copilot-instructions.md](.github/copilot-instructions.md).
 
 ### Key Principles
 
@@ -269,6 +304,7 @@ This project follows strict coding standards and architectural patterns. For det
 ### Database Connection Issues
 
 If you encounter connection errors:
+
 1. Verify SQL Server Express is installed and running
 2. Check the connection string in `appsettings.json`
 3. Ensure `TrustServerCertificate=True` is included in the connection string
@@ -276,6 +312,7 @@ If you encounter connection errors:
 ### Migration Issues
 
 If migrations fail:
+
 ```bash
 # List existing migrations
 dotnet ef migrations list --project AINotesApp
