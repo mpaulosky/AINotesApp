@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 using AINotesApp.Components.Pages;
 using Bunit;
@@ -12,6 +13,7 @@ namespace AINotesApp.Tests.Unit.Components.Pages;
 /// <summary>
 /// Unit tests for Auth component using BUnit 2.x
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class AuthTests : BunitContext
 {
 	private readonly TestAuthStateProvider _authProvider;

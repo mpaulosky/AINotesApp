@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Data;
 using AINotesApp.Services.Ai;
 using FluentAssertions;
@@ -10,6 +11,7 @@ namespace AINotesApp.Tests.Unit.Services.Ai;
 /// Unit tests for OpenAiService - focusing on internal logic and edge cases.
 /// Note: These tests don't make actual API calls to OpenAI.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class OpenAiServiceTests
 {
     private readonly ApplicationDbContext _context;

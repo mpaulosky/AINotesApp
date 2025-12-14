@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Data;
 using AINotesApp.Features.Notes.ListNotes;
 using FluentAssertions;
@@ -8,6 +9,7 @@ namespace AINotesApp.Tests.Unit.Features.Notes;
 /// <summary>
 /// Unit tests for ListNotesHandler.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class ListNotesHandlerTests
 {
     private readonly ApplicationDbContext _context;

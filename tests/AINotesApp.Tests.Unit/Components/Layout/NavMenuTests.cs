@@ -1,17 +1,23 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
+
 using AINotesApp.Components.Layout;
+
 using Bunit;
+
 using FluentAssertions;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AINotesApp.Tests.Unit.Components;
+namespace AINotesApp.Tests.Unit.Components.Layout;
 
 /// <summary>
 /// Unit tests for NavMenu component using BUnit 2.x
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class NavMenuTests : BunitContext
 {
 	private readonly TestAuthStateProvider _authProvider;

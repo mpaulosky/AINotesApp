@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Data;
 using AINotesApp.Tests.Integration.Database;
 using FluentAssertions;
@@ -8,6 +9,7 @@ namespace AINotesApp.Tests.Integration.Features;
 /// <summary>
 /// Integration tests for Note database operations.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
 {
     private readonly DatabaseFixture _fixture;

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,6 +7,7 @@ namespace AINotesApp.Tests.Integration.Database;
 /// <summary>
 /// Fixture for integration tests that provides an in-memory database context.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class DatabaseFixture : IDisposable
 {
     public ApplicationDbContext Context { get; private set; }

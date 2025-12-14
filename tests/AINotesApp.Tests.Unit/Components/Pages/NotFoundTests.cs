@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Components.Pages;
 using Bunit;
 using FluentAssertions;
@@ -7,6 +8,7 @@ namespace AINotesApp.Tests.Unit.Components.Pages;
 /// <summary>
 /// Unit tests for NotFound component using BUnit 2.x
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class NotFoundTests : BunitContext
 {
 	[Fact]

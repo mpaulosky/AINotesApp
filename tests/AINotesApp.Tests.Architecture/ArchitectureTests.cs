@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Data;
 using FluentAssertions;
 using NetArchTest.Rules;
@@ -7,6 +8,7 @@ namespace AINotesApp.Tests.Architecture;
 /// <summary>
 /// Architecture tests to enforce coding standards and dependency rules.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class ArchitectureTests
 {
     private const string DomainNamespace = "AINotesApp";

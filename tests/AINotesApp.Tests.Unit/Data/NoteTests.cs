@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Data;
 using FluentAssertions;
 
@@ -6,6 +7,7 @@ namespace AINotesApp.Tests.Unit.Data;
 /// <summary>
 /// Unit tests for Note entity.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class NoteTests
 {
     [Fact]

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Data;
 using AINotesApp.Features.Notes.UpdateNote;
 using AINotesApp.Services.Ai;
@@ -10,6 +11,7 @@ namespace AINotesApp.Tests.Unit.Features.Notes;
 /// <summary>
 /// Unit tests for UpdateNoteHandler.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class UpdateNoteHandlerTests
 {
     private readonly ApplicationDbContext _context;
