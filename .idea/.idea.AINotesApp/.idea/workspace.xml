@@ -9,14 +9,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="507721ca-0ec0-4ff1-8e76-4e073f2568c4" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/agents/4.1-Beast.agent.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/agents/4.1-Beast.agent.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityNoOpEmailSender.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityNoOpEmailSender.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityRedirectManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityRedirectManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/ListNotes/ListNotes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/ListNotes/ListNotes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AINotesApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Architecture/ArchitectureTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Architecture/ArchitectureTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Features/NotesDatabaseIntegrationTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Features/NotesDatabaseIntegrationTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Data/NoteTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Data/NoteTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/CONTRIBUTING.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/CONTRIBUTING.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/tests/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/TEST_COVERAGE_SUMMARY.md" beforeDir="false" afterPath="$PROJECT_DIR$/tests/TEST_COVERAGE_SUMMARY.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +31,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="remove-weather-page" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -83,31 +78,31 @@
     <option name="showLibraryContents" value="true" />
     <option name="sortKey" value="BY_TIME_DESCENDING" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature/fix-documentation&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.github.copilot.settings.customization.CustomizationConfigurable&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.github.copilot.settings.customization.CustomizationConfigurable",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="QodanaReportsService">
     <option name="descriptions">
       <ReportDescription localRun="true" path="C:\Users\teqsl\AppData\Local\Temp\qodana_output1\qodana.sarif.json" reportGuid="96f7f3e6-b75e-46a7-8856-bd09c28abf40" reportId="AINotesApp/qodana/2025-12-13" />
       <ReportDescription localRun="true" path="C:\Users\teqsl\AppData\Local\Temp\qodana_output\qodana.sarif.json" reportGuid="46ad522a-3f58-426d-828e-ab69f75f032f" reportId="AINotesApp/qodana/2025-12-13" />
     </option>
   </component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.AINotesApp: http">
+  <component name="RunManager" selected=".NET Launch Settings Profile.AINotesApp: https">
     <configuration name="AINotesApp: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/AINotesApp/AINotesApp.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net10.0" />

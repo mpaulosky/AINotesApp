@@ -4,23 +4,22 @@ This directory contains comprehensive test coverage for the AINotesApp project, 
 
 ## Test Projects
 
-### 1. AINotesApp.Tests.Unit (190 tests) ✅
+### 1. AINotesApp.Tests.Unit (179 tests) ✅
 
 Unit tests for handlers, services, and Blazor component tests.
 
 **Coverage:**
 
-**Component Tests (155 tests)** - Blazor UI components using BUnit:
+**Component Tests (144 tests)** - Blazor UI components using BUnit:
 
 - Layout components:
   - MainLayout - 13 tests
-  - NavMenu - 15 tests
+  - NavMenu - 14 tests
   - ReconnectModal - 20 tests
 - Page components:
   - Auth - 10 tests
   - Home - 5 tests
   - NotFound - 10 tests
-  - Weather - 10 tests
 - Notes feature components:
   - NoteDetails - 13 tests
   - NoteEditor - 19 tests
@@ -139,11 +138,11 @@ dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~NotesListTe
 
 | Test Type    | Count   | Status          | Description                                |
 | ------------ | ------- | --------------- | ------------------------------------------ |
-| Component    | 155     | ✅ Passing      | Blazor component rendering and interaction |
+| Component    | 144     | ✅ Passing      | Blazor component rendering and interaction |
 | Unit         | 35      | ✅ Passing      | Fast, isolated tests for handlers/services |
 | Integration  | 8       | ✅ Passing      | Database and handler integration           |
 | Architecture | 10      | ✅ Passing      | Enforce design patterns and rules          |
-| **Total**    | **208** | **208 Passing** | **Comprehensive coverage**                 |
+| **Total**    | **197** | **197 Passing** | **Comprehensive coverage**                 |
 
 ## Test Structure
 
