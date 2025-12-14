@@ -8,7 +8,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="507721ca-0ec0-4ff1-8e76-4e073f2568c4" name="Changes" comment="" />
+    <list default="true" id="507721ca-0ec0-4ff1-8e76-4e073f2568c4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.github/agents/4.1-Beast.agent.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/agents/4.1-Beast.agent.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityNoOpEmailSender.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityNoOpEmailSender.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityRedirectManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityRedirectManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/ListNotes/ListNotes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/ListNotes/ListNotes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Architecture/ArchitectureTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Architecture/ArchitectureTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Features/NotesDatabaseIntegrationTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Features/NotesDatabaseIntegrationTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Data/NoteTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Data/NoteTests.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,7 +36,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature/add-seeddata" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -38,22 +47,22 @@
     &quot;assignee&quot;: &quot;mpaulosky&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/mpaulosky/AINotesApp.git",
-    "accountId": "f433ebf4-4a3a-4904-aad9-23b2400aa3f6"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/mpaulosky/AINotesApp.git&quot;,
+    &quot;accountId&quot;: &quot;f433ebf4-4a3a-4904-aad9-23b2400aa3f6&quot;
   },
-  "recentNewPullRequestHead": {
-    "server": {
-      "useHttp": false,
-      "host": "github.com",
-      "port": null,
-      "suffix": null
+  &quot;recentNewPullRequestHead&quot;: {
+    &quot;server&quot;: {
+      &quot;useHttp&quot;: false,
+      &quot;host&quot;: &quot;github.com&quot;,
+      &quot;port&quot;: null,
+      &quot;suffix&quot;: null
     },
-    "owner": "mpaulosky",
-    "repository": "AINotesApp"
+    &quot;owner&quot;: &quot;mpaulosky&quot;,
+    &quot;repository&quot;: &quot;AINotesApp&quot;
   }
-}]]></component>
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock://E:/github/AINotesApp/AINotesApp/Components/Account/IdentityComponentsEndpointRouteBuilderExtensions.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://E:/github/AINotesApp/tests/AINotesApp.Tests.Architecture/ArchitectureTests.cs" root0="SKIP_HIGHLIGHTING" />
@@ -81,6 +90,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "feature/fix-documentation",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -91,18 +101,6 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="QodanaHighlightedReportService">
-    <option name="localRunNotPublishedPersistedInfo">
-      <LocalReportPersistedInfo>
-        <option name="path" value="C:\Users\teqsl\AppData\Local\Temp\qodana_output1\qodana.sarif.json" />
-        <option name="reportGuid" value="96f7f3e6-b75e-46a7-8856-bd09c28abf40" />
-        <option name="reportName" value="AINotesApp/qodana/2025-12-13" />
-      </LocalReportPersistedInfo>
-    </option>
-  </component>
-  <component name="QodanaIsSelectedPersistenceService">
-    <option name="selectedOrLoading" value="true" />
-  </component>
   <component name="QodanaReportsService">
     <option name="descriptions">
       <ReportDescription localRun="true" path="C:\Users\teqsl\AppData\Local\Temp\qodana_output1\qodana.sarif.json" reportGuid="96f7f3e6-b75e-46a7-8856-bd09c28abf40" reportId="AINotesApp/qodana/2025-12-13" />
@@ -153,6 +151,7 @@
       <workItem from="1765643688493" duration="2125000" />
       <workItem from="1765646721468" duration="2737000" />
       <workItem from="1765668183472" duration="4629000" />
+      <workItem from="1765678910954" duration="685000" />
     </task>
     <task id="LOCAL-00001" summary="Add initial project configuration files&#10;&#10;- Create .gitignore to exclude IDE and local files&#10;- Add XML files for migration state services&#10;- Include index layout and version control settings">
       <option name="closed" value="true" />

@@ -10,6 +10,9 @@ namespace AINotesApp.Tests.Unit.Data;
 [ExcludeFromCodeCoverage]
 public class NoteTests
 {
+    /// <summary>
+    /// Verifies that the default values of a new Note are set correctly.
+    /// </summary>
     [Fact]
     public void Note_DefaultValues_AreSetCorrectly()
     {
@@ -26,6 +29,9 @@ public class NoteTests
         note.UserId.Should().BeEmpty();
     }
 
+    /// <summary>
+    /// Verifies that setting properties on a Note works as expected.
+    /// </summary>
     [Fact]
     public void Note_SetProperties_WorksCorrectly()
     {

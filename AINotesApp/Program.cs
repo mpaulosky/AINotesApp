@@ -83,5 +83,8 @@ app.Run();
 // Make the implicit Program class accessible to tests
 namespace AINotesApp
 {
+    /// <summary>
+    /// Partial Program class to enable test accessibility for the application's entry point.
+    /// </summary>
     public partial class Program { }
 }
