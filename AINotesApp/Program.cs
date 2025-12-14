@@ -1,7 +1,6 @@
 using AINotesApp.Components;
 using AINotesApp.Components.Account;
 using AINotesApp.Data;
-using AINotesApp.Features.Notes.SeedNotes;
 using AINotesApp.Services.Ai;
 
 using Microsoft.AspNetCore.Components.Authorization;
@@ -51,7 +50,7 @@ builder.Services.Configure<AiServiceOptions>(
 builder.Services.AddScoped<IAiService, OpenAiService>();
 
 // Register MediatR
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AINotesApp.Program).Assembly));
 
 var app = builder.Build();
 
@@ -82,4 +81,7 @@ app.MapAdditionalIdentityEndpoints();
 app.Run();
 
 // Make the implicit Program class accessible to tests
-public partial class Program { }
+namespace AINotesApp
+{
+    public partial class Program { }
+}
