@@ -15,7 +15,8 @@
 <div class="alert alert-warning" role="alert">
     <p>
         <span class="glyphicon glyphicon-warning-sign"></span>
-        <strong>If you reset your authenticator key your authenticator app will not work until you reconfigure it.</strong>
+        <strong>If you reset your authenticator key your authenticator app will not work until you reconfigure
+            it.</strong>
     </p>
     <p>
         This process disables 2FA until you verify your authenticator app.
@@ -50,8 +51,8 @@
         await SignInManager.RefreshSignInAsync(user);
 
         RedirectManager.RedirectToWithStatus(
-            "Account/Manage/EnableAuthenticator",
-            "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.",
-            HttpContext);
+                    "Account/Manage/EnableAuthenticator",
+                    "Your authenticator app key has been reset, you will need to configure your authenticator app using the new key.",
+        HttpContext);
     }
 }

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Components.Pages.Notes;
 using AINotesApp.Features.Notes.GetRelatedNotes;
 using Bunit;
@@ -11,6 +12,7 @@ namespace AINotesApp.Tests.Unit.Components.Pages.Notes;
 /// <summary>
 /// Tests for the RelatedNotes component.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class RelatedNotesTests : BunitContext
 {
 	private readonly IMediator _mockMediator;

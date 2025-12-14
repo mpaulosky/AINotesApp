@@ -1,18 +1,23 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
+
 using AINotesApp.Components.Layout;
+
 using Bunit;
+
 using FluentAssertions;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace AINotesApp.Tests.Unit.Components;
+namespace AINotesApp.Tests.Unit.Components.Layout;
 
 /// <summary>
-/// Unit tests for MainLayout component using BUnit 2.x
+/// Unit tests for the MainLayout component using BUnit 2.x
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class MainLayoutTests : BunitContext
 {
 	private readonly TestAuthStateProvider _authProvider;

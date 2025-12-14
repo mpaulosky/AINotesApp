@@ -55,8 +55,8 @@ namespace AINotesApp.Features.Notes.SearchNotes
             if (!string.IsNullOrWhiteSpace(request.SearchTerm))
             {
                 var searchTerm = request.SearchTerm.ToLower();
-                query = query.Where(n => 
-                    n.Title.ToLower().Contains(searchTerm) || 
+                query = query.Where(n =>
+                    n.Title.ToLower().Contains(searchTerm) ||
                     n.Content.ToLower().Contains(searchTerm));
             }
 

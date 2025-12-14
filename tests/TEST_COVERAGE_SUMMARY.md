@@ -6,16 +6,20 @@
 ## Test Breakdown by Type
 
 ### Component Tests (155 tests) 🎨
+
 Blazor component rendering and interaction tests using **BUnit 2.x**
 
 #### Layout Components (48 tests)
+
 - **MainLayout** - 13 tests
+
   - Rendering with authenticated/anonymous users
   - Navigation menu integration
   - CSS class application
   - Error handling
 
 - **NavMenu** - 15 tests
+
   - Navigation link rendering
   - Active route highlighting
   - Authentication-based visibility
@@ -28,18 +32,22 @@ Blazor component rendering and interaction tests using **BUnit 2.x**
   - CSS animations and transitions
 
 #### Page Components (35 tests)
+
 - **Auth** - 10 tests
+
   - Login/Register form rendering
   - Authentication state changes
   - Redirect after login
   - Error handling
 
 - **Home** - 5 tests
+
   - Landing page rendering
   - Welcome message display
   - Navigation links
 
 - **NotFound** - 10 tests
+
   - 404 page rendering
   - Error message display
   - Return to home link
@@ -50,7 +58,9 @@ Blazor component rendering and interaction tests using **BUnit 2.x**
   - Forecast rendering
 
 #### Notes Feature Components (72 tests)
+
 - **NoteDetails** - 13 tests
+
   - Note content display
   - Tags and metadata
   - Edit/Delete actions
@@ -58,6 +68,7 @@ Blazor component rendering and interaction tests using **BUnit 2.x**
   - Authentication checks
 
 - **NoteEditor** - 19 tests
+
   - Create/Update forms
   - Title and content validation
   - Rich text editor integration
@@ -66,6 +77,7 @@ Blazor component rendering and interaction tests using **BUnit 2.x**
   - Save/Cancel actions
 
 - **NotesList** - 19 tests
+
   - Note list rendering
   - Sorting and filtering
   - Search functionality
@@ -83,9 +95,11 @@ Blazor component rendering and interaction tests using **BUnit 2.x**
   - Error handling
 
 ### Unit Tests (35 tests) ⚡
+
 Fast, isolated tests for handlers and services
 
 #### Data Models (7 tests)
+
 - **Note Model** - 7 tests
   - Property validation
   - Default values
@@ -93,13 +107,16 @@ Fast, isolated tests for handlers and services
   - Entity relationships
 
 #### Feature Handlers (27 tests)
+
 - **CreateNote Handler** - 5 tests
+
   - Note creation
   - User ownership
   - Timestamp generation
   - Database persistence
 
 - **UpdateNote Handler** - 5 tests
+
   - Note updates
   - User authorization
   - Timestamp updates
@@ -112,6 +129,7 @@ Fast, isolated tests for handlers and services
   - Empty results
 
 #### AI Services (8 tests)
+
 - **OpenAiService** - 8 tests
   - Embedding generation
   - Summary creation
@@ -120,9 +138,11 @@ Fast, isolated tests for handlers and services
   - Configuration validation
 
 ### Integration Tests (8 tests) 🔗
+
 Database operations and data persistence
 
 - **Notes CRUD Operations** - 5 tests
+
   - Create, Read, Update, Delete
   - Database transactions
   - Concurrency handling
@@ -133,14 +153,17 @@ Database operations and data persistence
   - Authorization checks
 
 ### Architecture Tests (10 tests) 🏗️
+
 Enforce design patterns and coding standards using **NetArchTest.Rules**
 
 - **Dependency Rules** - 3 tests
+
   - Layer dependencies
   - No circular references
   - Proper abstractions
 
 - **Naming Conventions** - 4 tests
+
   - Handler naming
   - Command/Query suffixes
   - Response DTO naming
@@ -154,6 +177,7 @@ Enforce design patterns and coding standards using **NetArchTest.Rules**
 ## Test Technologies
 
 ### Frameworks & Libraries
+
 - **xUnit 2.9.3** - Test framework with [Fact] and [Theory] attributes
 - **BUnit 2.x** - Blazor component testing with TestContext and Render<T>
 - **FluentAssertions 8.8.0** - Fluent assertion syntax for readable tests
@@ -164,6 +188,7 @@ Enforce design patterns and coding standards using **NetArchTest.Rules**
 - **AngleSharp** - HTML parser for DOM assertions (BUnit dependency)
 
 ### Test Patterns Used
+
 - **Arrange-Act-Assert (AAA)** - Standard test structure
 - **Mock injection** - NSubstitute for dependencies
 - **Async testing** - Proper async/await patterns with CancellationToken
@@ -174,11 +199,13 @@ Enforce design patterns and coding standards using **NetArchTest.Rules**
 ## Running Tests
 
 ### Run All Tests
+
 ```bash
 dotnet test
 ```
 
 ### Run Specific Test Project
+
 ```bash
 dotnet test tests/AINotesApp.Tests.Unit
 dotnet test tests/AINotesApp.Tests.Integration
@@ -186,17 +213,20 @@ dotnet test tests/AINotesApp.Tests.Architecture
 ```
 
 ### Run Only Component Tests
+
 ```bash
 dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~Components"
 ```
 
 ### Run Specific Component Test File
+
 ```bash
 dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~NotesListTests"
 dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~RelatedNotesTests"
 ```
 
 ### Run Tests with Coverage
+
 ```bash
 dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 ```
@@ -213,7 +243,9 @@ dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 ## Adding New Tests
 
 ### Component Tests (BUnit)
+
 When creating a new Blazor component, add corresponding BUnit tests:
+
 1. Create test file in `tests/AINotesApp.Tests.Unit/Components/`
 2. Use `TestContext` with `AddTestAuthorization()`
 3. Mock dependencies (IMediator, NavigationManager, etc.)
@@ -221,7 +253,9 @@ When creating a new Blazor component, add corresponding BUnit tests:
 5. Use `WaitForAssertion()` for async operations
 
 ### Unit Tests (Handlers/Services)
+
 When creating a new handler or service:
+
 1. Create test file in `tests/AINotesApp.Tests.Unit/Features/` or `Services/`
 2. Use EF Core InMemory for database operations
 3. Mock external dependencies (OpenAI, etc.)
@@ -229,14 +263,18 @@ When creating a new handler or service:
 5. Verify authorization checks
 
 ### Integration Tests
+
 When adding database operations:
+
 1. Create test file in `tests/AINotesApp.Tests.Integration/`
 2. Use real EF Core with InMemory provider
 3. Test full request/response cycle
 4. Verify data persistence
 
 ### Architecture Tests
+
 When adding new design rules:
+
 1. Update `tests/AINotesApp.Tests.Architecture/ArchitectureTests.cs`
 2. Use NetArchTest.Rules for constraint verification
 3. Ensure rules align with Vertical Slice Architecture
@@ -244,6 +282,7 @@ When adding new design rules:
 ## Recent Updates
 
 ### December 2024
+
 - ✅ Added comprehensive BUnit component tests (155 tests)
 - ✅ Added RelatedNotes component tests (21 tests)
 - ✅ Fixed BUnit 2.x API compatibility (Render<T> vs RenderComponent<T>)

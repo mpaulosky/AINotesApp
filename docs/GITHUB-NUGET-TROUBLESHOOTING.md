@@ -151,6 +151,7 @@ dotnet search MyMediator --source github
 ## Still Having Issues?
 
 1. **Check Visual Studio Output Window**
+
    - View ? Output
    - Show output from: Package Manager
 
@@ -170,7 +171,7 @@ dotnet search MyMediator --source github
 ? Set token expiration dates  
 ? Never commit tokens to source control  
 ? Use different tokens for different purposes  
-? Rotate tokens periodically  
+? Rotate tokens periodically
 
 ## Contact
 

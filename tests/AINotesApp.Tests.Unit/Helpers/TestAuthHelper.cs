@@ -1,8 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AINotesApp.Tests.Unit.Helpers;
 
+[ExcludeFromCodeCoverage]
 public static class TestAuthHelper
 {
     /// <summary>

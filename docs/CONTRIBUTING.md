@@ -24,6 +24,7 @@ changed in the future. Please submit your suggestions with a pull-request to thi
 ## Welcome
 
     Thank you for your interest in contributing! We value all contributions and strive to make this project a welcoming,
+
 inclusive space for everyone.
 
 Below are guidelines to help you get started. If you have suggestions, please submit a pull request to this document.

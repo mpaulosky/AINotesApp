@@ -1,16 +1,18 @@
+using System.Diagnostics.CodeAnalysis;
+using AINotesApp.Data;
 using FluentAssertions;
 using NetArchTest.Rules;
-using AINotesApp.Data;
 
 namespace AINotesApp.Tests.Architecture;
 
 /// <summary>
 /// Architecture tests to enforce coding standards and dependency rules.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class ArchitectureTests
 {
     private const string DomainNamespace = "AINotesApp";
-    
+
     [Fact]
     public void Handlers_ShouldBeInFeaturesNamespace()
     {
@@ -183,7 +185,7 @@ public class ArchitectureTests
         {
             var implementsIRequestHandler = handlerType.GetInterfaces()
                 .Any(i => i.Name.Contains("IRequestHandler"));
-            
+
             implementsIRequestHandler.Should().BeTrue(
                 because: $"{handlerType.Name} should implement IRequestHandler for MediatR");
         }
@@ -204,7 +206,7 @@ public class ArchitectureTests
         // Then
         featureTypes.Should().NotBeEmpty(
             because: "Features should be organized following Vertical Slice Architecture");
-        
+
         var featureNamespaces = featureTypes
             .Select(t => t.Namespace)
             .Distinct()

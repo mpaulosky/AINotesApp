@@ -17,7 +17,7 @@ All commit messages **must** follow this structure:
 - **feat**: A new feature
 - **fix**: A bug fix
 - **docs**: Documentation only changes
-- **style**: Changes that do not affect the meaning of the code (white-space, formatting, etc)
+- **style**: Changes that do not affect the meaning of the code (white-space, formatting, etc.)
 - **refactor**: A code change that neither fixes a bug nor adds a feature
 - **perf**: A code change that improves performance
 - **test**: Adding or correcting tests
@@ -33,8 +33,8 @@ The scope should be the name of the affected project, folder, or feature (e.g., 
 
 ### Short Summary
 
-- Use the imperative mood ("Add", "Fix", "Update", not "Added", "Fixed", "Updated").
-- Limit to 72 characters or less.
+- Use the imperative mood ("Add," "Fix,", "Update," not "Added," "Fixed," "Updated").
+- Limit to 72 characters or fewer.
 - Capitalize the first letter.
 - Do not end with a period.
 

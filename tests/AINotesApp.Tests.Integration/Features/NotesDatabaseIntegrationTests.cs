@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Data;
 using AINotesApp.Tests.Integration.Database;
 using FluentAssertions;
@@ -8,6 +9,7 @@ namespace AINotesApp.Tests.Integration.Features;
 /// <summary>
 /// Integration tests for Note database operations.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
 {
     private readonly DatabaseFixture _fixture;
@@ -58,10 +60,10 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         context.Notes.Add(note);
         await context.SaveChangesAsync();
-        
+
         // Detach to simulate a new request
         context.Entry(note).State = EntityState.Detached;
 
@@ -93,7 +95,7 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
-        
+
         context.Notes.Add(note);
         await context.SaveChangesAsync();
 
@@ -113,7 +115,7 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
         using var context = _fixture.CreateNewContext();
         var userId1 = "user-1";
         var userId2 = "user-2";
-        
+
         context.Notes.AddRange(
             new Note { Id = Guid.NewGuid(), Title = "User 1 Note 1", UserId = userId1, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
             new Note { Id = Guid.NewGuid(), Title = "User 1 Note 2", UserId = userId1, CreatedAt = DateTime.UtcNow, UpdatedAt = DateTime.UtcNow },
@@ -220,11 +222,11 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
         using var context = _fixture.CreateNewContext();
         var userId = "test-user";
         var now = DateTime.UtcNow;
-        
+
         var note1 = new Note { Id = Guid.NewGuid(), Title = "Oldest", UserId = userId, CreatedAt = now, UpdatedAt = now.AddHours(-3) };
         var note2 = new Note { Id = Guid.NewGuid(), Title = "Middle", UserId = userId, CreatedAt = now, UpdatedAt = now.AddHours(-2) };
         var note3 = new Note { Id = Guid.NewGuid(), Title = "Newest", UserId = userId, CreatedAt = now, UpdatedAt = now.AddHours(-1) };
-        
+
         context.Notes.AddRange(note1, note2, note3);
         await context.SaveChangesAsync();
 

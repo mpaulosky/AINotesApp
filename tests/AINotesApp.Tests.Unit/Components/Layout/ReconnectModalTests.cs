@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Components.Layout;
 using Bunit;
 using FluentAssertions;
@@ -7,6 +8,7 @@ namespace AINotesApp.Tests.Unit.Components.Layout;
 /// <summary>
 /// Unit tests for ReconnectModal component using BUnit 2.x
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class ReconnectModalTests : BunitContext
 {
 	[Fact]
