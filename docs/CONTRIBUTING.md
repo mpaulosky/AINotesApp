@@ -82,7 +82,7 @@ AINotesApp/                             -- Main application project
       Pages/                            -- Account pages (login, register, etc.)
       Shared/                           -- Shared account components
     Layout/                             -- Layout components (MainLayout, NavMenu)
-    Pages/                              -- Page components (Home, Weather, Notes)
+    Pages/                              -- Page components (Home, Notes)
   Data/                                 -- Data models and EF Core context
     ApplicationDbContext.cs             -- EF Core DbContext
     ApplicationUser.cs                  -- Identity user model
