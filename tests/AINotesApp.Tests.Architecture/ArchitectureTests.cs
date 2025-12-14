@@ -13,6 +13,9 @@ public class ArchitectureTests
 {
     private const string DomainNamespace = "AINotesApp";
 
+    /// <summary>
+    /// Ensures that all handler classes reside in the Features namespace as required by Vertical Slice Architecture.
+    /// </summary>
     [Fact]
     public void Handlers_ShouldBeInFeaturesNamespace()
     {
@@ -32,6 +35,9 @@ public class ArchitectureTests
             because: "All handlers should be in the Features namespace following Vertical Slice Architecture");
     }
 
+    /// <summary>
+    /// Ensures that all command types are implemented as records.
+    /// </summary>
     [Fact]
     public void Commands_ShouldBeRecords()
     {
@@ -53,6 +59,9 @@ public class ArchitectureTests
         }
     }
 
+    /// <summary>
+    /// Ensures that all query types are implemented as records.
+    /// </summary>
     [Fact]
     public void Queries_ShouldBeRecords()
     {
@@ -74,6 +83,9 @@ public class ArchitectureTests
         }
     }
 
+    /// <summary>
+    /// Ensures that all response types are implemented as records.
+    /// </summary>
     [Fact]
     public void Responses_ShouldBeRecords()
     {
@@ -95,6 +107,9 @@ public class ArchitectureTests
         }
     }
 
+    /// <summary>
+    /// Ensures that all service interfaces reside in the Services namespace.
+    /// </summary>
     [Fact]
     public void Services_ShouldBeInServicesNamespace()
     {
@@ -122,6 +137,9 @@ public class ArchitectureTests
             because: "Service interfaces should be in the Services namespace");
     }
 
+    /// <summary>
+    /// Verifies that handler classes do not have dependencies on UI components.
+    /// </summary>
     [Fact]
     public void Handlers_ShouldNotHaveDependencyOnComponents()
     {
@@ -141,6 +159,9 @@ public class ArchitectureTests
             because: "Handlers should not depend on UI components (Blazor)");
     }
 
+    /// <summary>
+    /// Ensures that data models are located in the Data namespace.
+    /// </summary>
     [Fact]
     public void DataModels_ShouldBeInDataNamespace()
     {
@@ -168,6 +189,9 @@ public class ArchitectureTests
             because: "Data models should be in the Data namespace");
     }
 
+    /// <summary>
+    /// Verifies that all handler classes implement the IRequestHandler interface from MediatR.
+    /// </summary>
     [Fact]
     public void Handlers_ShouldImplementIRequestHandler()
     {
@@ -191,6 +215,9 @@ public class ArchitectureTests
         }
     }
 
+    /// <summary>
+    /// Ensures that features are organized by business capability.
+    /// </summary>
     [Fact]
     public void Features_ShouldBeOrganizedByBusinessCapability()
     {
@@ -217,6 +244,9 @@ public class ArchitectureTests
             because: "Should have Notes feature organized by business capability");
     }
 
+    /// <summary>
+    /// Ensures that services do not depend on features to maintain proper layering.
+    /// </summary>
     [Fact]
     public void Services_ShouldNotDependOnFeatures()
     {

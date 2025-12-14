@@ -19,6 +19,9 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
         _fixture = fixture;
     }
 
+    /// <summary>
+    /// Verifies that a note can be created and saved to the database successfully.
+    /// </summary>
     [Fact]
     public async Task CreateNote_SavesSuccessfully_ToDatabase()
     {
@@ -46,6 +49,9 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
         savedNote.UserId.Should().Be("test-user-123");
     }
 
+    /// <summary>
+    /// Verifies that updating a note works correctly in the database.
+    /// </summary>
     [Fact]
     public async Task UpdateNote_UpdatesSuccessfully_InDatabase()
     {
@@ -81,6 +87,9 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
         updatedNote.Content.Should().Be("Updated Content");
     }
 
+    /// <summary>
+    /// Verifies that a note can be deleted from the database.
+    /// </summary>
     [Fact]
     public async Task DeleteNote_RemovesSuccessfully_FromDatabase()
     {
@@ -108,6 +117,9 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
         deletedNote.Should().BeNull();
     }
 
+    /// <summary>
+    /// Verifies that querying notes by user ID returns only the notes for that user.
+    /// </summary>
     [Fact]
     public async Task QueryNotes_ByUserId_ReturnsOnlyUserNotes()
     {
@@ -133,6 +145,9 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
         user1Notes.Should().AllSatisfy(n => n.UserId.Should().Be(userId1));
     }
 
+    /// <summary>
+    /// Verifies that a note with an embedding can be stored and retrieved correctly.
+    /// </summary>
     [Fact]
     public async Task Note_WithEmbedding_StoresAndRetrievesCorrectly()
     {
@@ -161,6 +176,9 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
         savedNote.Embedding.Should().BeEquivalentTo(embedding);
     }
 
+    /// <summary>
+    /// Verifies that a note with a null embedding can be stored correctly.
+    /// </summary>
     [Fact]
     public async Task Note_WithNullEmbedding_StoresCorrectly()
     {
@@ -187,6 +205,9 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
         savedNote!.Embedding.Should().BeNull();
     }
 
+    /// <summary>
+    /// Verifies that a note with AI-generated summary and tags can be stored correctly.
+    /// </summary>
     [Fact]
     public async Task Note_WithAiSummaryAndTags_StoresCorrectly()
     {
@@ -215,6 +236,9 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
         savedNote.Tags.Should().Be("ai, test, integration");
     }
 
+    /// <summary>
+    /// Verifies that notes are returned in the correct order when queried by updated date.
+    /// </summary>
     [Fact]
     public async Task QueryNotes_OrderedByUpdatedAt_ReturnsCorrectOrder()
     {

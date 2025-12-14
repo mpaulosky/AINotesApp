@@ -4,22 +4,47 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AINotesApp.Features.Notes.ListNotes
 {
+    /// <summary>
+    /// Query to list notes for a user with pagination.
+    /// </summary>
     public record ListNotesQuery : IRequest<ListNotesResponse>
     {
+        /// <summary>
+        /// Gets the user ID whose notes are being listed.
+        /// </summary>
         public string UserId { get; init; } = string.Empty;
+        /// <summary>
+        /// Gets the page number for pagination.
+        /// </summary>
         public int PageNumber { get; init; } = 1;
+        /// <summary>
+        /// Gets the page size for pagination.
+        /// </summary>
         public int PageSize { get; init; } = 10;
     }
 
+    /// <summary>
+    /// Handler for listing notes for a user with pagination.
+    /// </summary>
     public class ListNotesHandler : IRequestHandler<ListNotesQuery, ListNotesResponse>
     {
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListNotesHandler"/> class.
+        /// </summary>
+        /// <param name="context">The database context.</param>
         public ListNotesHandler(ApplicationDbContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Handles the query to list notes for a user.
+        /// </summary>
+        /// <param name="request">The query parameters.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>A response containing the list of notes and pagination info.</returns>
         public async Task<ListNotesResponse> Handle(ListNotesQuery request, CancellationToken cancellationToken)
         {
             var query = _context.Notes
