@@ -1,6 +1,10 @@
 <Solution>
-  <Project Path="AINotesApp/AINotesApp.csproj" />
-  <Project Path="tests/AINotesApp.Tests.Unit/AINotesApp.Tests.Unit.csproj" />
-  <Project Path="tests/AINotesApp.Tests.Integration/AINotesApp.Tests.Integration.csproj" />
-  <Project Path="tests/AINotesApp.Tests.Architecture/AINotesApp.Tests.Architecture.csproj" />
+  <Folder Name="/SRC/">
+    <Project Path="AINotesApp/AINotesApp.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="tests/AINotesApp.Tests.Architecture/AINotesApp.Tests.Architecture.csproj" />
+    <Project Path="tests/AINotesApp.Tests.Integration/AINotesApp.Tests.Integration.csproj" />
+    <Project Path="tests/AINotesApp.Tests.Unit/AINotesApp.Tests.Unit.csproj" />
+  </Folder>
 </Solution>
