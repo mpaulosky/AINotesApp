@@ -65,18 +65,6 @@ public class NavMenuTests : BunitContext
 	}
 
 	[Fact]
-	public void NavMenu_ShouldRender_WeatherLink()
-	{
-		// Arrange & Act
-		var cut = RenderWithAuth<NavMenu>();
-
-		// Assert
-		var navLinks = cut.FindAll(".nav-link");
-		var weatherLink = navLinks.FirstOrDefault(link => link.TextContent.Contains("Weather"));
-		weatherLink.Should().NotBeNull();
-	}
-
-	[Fact]
 	public void NavMenu_ShouldRender_AuthRequiredLink()
 	{
 		// Arrange & Act
