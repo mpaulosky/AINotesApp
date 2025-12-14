@@ -1,11 +1,11 @@
 # Test Coverage Summary
 
 **Last Updated:** December 2024  
-**Total Tests:** 208 ✅ All Passing
+**Total Tests:** 197 ✅ All Passing
 
 ## Test Breakdown by Type
 
-### Component Tests (155 tests) 🎨
+### Component Tests (144 tests) 🎨
 
 Blazor component rendering and interaction tests using **BUnit 2.x**
 
@@ -18,7 +18,7 @@ Blazor component rendering and interaction tests using **BUnit 2.x**
   - CSS class application
   - Error handling
 
-- **NavMenu** - 15 tests
+- **NavMenu** - 14 tests
 
   - Navigation link rendering
   - Active route highlighting
@@ -31,7 +31,7 @@ Blazor component rendering and interaction tests using **BUnit 2.x**
   - Reload functionality
   - CSS animations and transitions
 
-#### Page Components (35 tests)
+#### Page Components (25 tests)
 
 - **Auth** - 10 tests
 
@@ -51,11 +51,6 @@ Blazor component rendering and interaction tests using **BUnit 2.x**
   - 404 page rendering
   - Error message display
   - Return to home link
-
-- **Weather** - 10 tests
-  - Weather data display
-  - Loading states
-  - Forecast rendering
 
 #### Notes Feature Components (72 tests)
 
@@ -287,7 +282,7 @@ When adding new design rules:
 - ✅ Added RelatedNotes component tests (21 tests)
 - ✅ Fixed BUnit 2.x API compatibility (Render<T> vs RenderComponent<T>)
 - ✅ Updated all documentation with accurate test counts
-- ✅ All 208 tests passing ✅
+- ✅ All 197 tests passing ✅
 
 ---
 
