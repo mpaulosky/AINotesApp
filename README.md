@@ -43,6 +43,7 @@ User strictly isolates all notes with security checks at the database level:
 | Unit Tests         |    35 | Fast, isolated tests for handlers and services |
 | Integration Tests  |     8 | Database operations and data persistence       |
 | Architecture Tests |    10 | Enforce design patterns and coding standards   |
+
 ```text
 tests/
 ├── AINotesApp.Tests.Unit/
@@ -64,12 +65,14 @@ A modern, intelligent note-taking application powered by AI
 
 [Overview](#overview) • [Features](#features) • [Architecture](#architecture) • [Getting Started](#getting-started) • [Testing](#testing)
 
-
 ## Overview
 
-AINotesApp is a personal note-taking application that demonstrates modern software architecture and AI integration using the latest .NET technologies. Built with Blazor Server for interactive real-time UI and integrated with OpenAI for intelligent features like automatic summaries, tagging, and semantic search.
+AINotesApp is a personal note-taking application that demonstrates modern software architecture and AI integration using
+the latest .NET technologies. Built with Blazor Server for interactive real-time UI and integrated with OpenAI for
+intelligent features like automatic summaries, tagging, and semantic search.
 
-The application showcases enterprise-level patterns including Vertical Slice Architecture, CQRS, and MediatR, making it an excellent reference for building scalable .NET applications with AI capabilities.
+The application showcases enterprise-level patterns including Vertical Slice Architecture, CQRS, and MediatR, making it
+an excellent reference for building scalable .NET applications with AI capabilities.
 
 ## Features
 
@@ -180,7 +183,8 @@ Each operation contains its Command/Query, Response DTO, and Handler in a single
 
 #### Database
 
-The application uses SQL Server Express by default. Update the connection string in `appsettings.json` if using a different SQL Server instance.
+The application uses SQL Server Express by default. Update the connection string in `appsettings.json` if using a
+different SQL Server instance.
 
 #### AI Service
 
@@ -279,7 +283,8 @@ var note = await _context.Notes
 
 ## Development Guidelines
 
-This project follows strict coding standards and architectural patterns. For detailed development guidelines, see [.GitHub/copilot-instructions.md](.github/copilot-instructions.md).
+This project follows strict coding standards and architectural patterns. For detailed development guidelines,
+see [.GitHub/copilot-instructions.md](.github/copilot-instructions.md).
 
 ### Key Principles
 
