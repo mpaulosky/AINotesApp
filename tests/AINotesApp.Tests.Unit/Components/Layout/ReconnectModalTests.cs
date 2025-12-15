@@ -1,16 +1,29 @@
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     ReconnectModalTests.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp.Tests.Unit
+// =======================================================
+
 using System.Diagnostics.CodeAnalysis;
+
 using AINotesApp.Components.Layout;
+
 using Bunit;
+
 using FluentAssertions;
 
 namespace AINotesApp.Tests.Unit.Components.Layout;
 
 /// <summary>
-/// Unit tests for ReconnectModal component using BUnit 2.x
+///   Unit tests for ReconnectModal component using BUnit 2.x
 /// </summary>
 [ExcludeFromCodeCoverage]
 public class ReconnectModalTests : BunitContext
 {
+
 	[Fact]
 	public void ReconnectModal_ShouldRender_WithoutErrors()
 	{
@@ -268,4 +281,5 @@ public class ReconnectModalTests : BunitContext
 		cut.Find("#components-reconnect-button").Should().NotBeNull();
 		cut.Find("#components-resume-button").Should().NotBeNull();
 	}
+
 }

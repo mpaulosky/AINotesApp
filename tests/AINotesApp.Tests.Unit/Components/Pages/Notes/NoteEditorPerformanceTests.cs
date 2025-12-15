@@ -1,26 +1,43 @@
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     NoteEditorPerformanceTests.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp.Tests.Unit
+// =======================================================
+
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
+
 using AINotesApp.Components.Pages.Notes;
+
 using Bunit;
+
 using FluentAssertions;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+
 using NSubstitute;
-using Xunit;
 
 namespace AINotesApp.Tests.Unit.Components.Pages.Notes;
 
 /// <summary>
-/// Performance and edge case tests for NoteEditor component
+///   Performance and edge case tests for the NoteEditor component
 /// </summary>
 [ExcludeFromCodeCoverage]
 public class NoteEditorPerformanceTests : BunitContext
 {
-	private readonly IMediator _mediator;
+
 	private readonly TestAuthStateProvider _authProvider;
+
+	private readonly IMediator _mediator;
+
 	private readonly NavigationManager _navigation;
 
 	public NoteEditorPerformanceTests()
@@ -42,11 +59,12 @@ public class NoteEditorPerformanceTests : BunitContext
 	{
 		// Arrange & Act
 		var cut = RenderWithAuth(parameters => parameters
-				.Add(p => p.Id, (Guid?)null));
+				.Add(p => p.Id, null));
 
 		// Assert
 		cut.Should().NotBeNull();
-		// Should render empty form for new note
+
+		// Should render an empty form for a new note
 		cut.Markup.Should().NotBeNullOrEmpty();
 		cut.FindAll("form").Should().NotBeEmpty();
 	}
@@ -68,6 +86,7 @@ public class NoteEditorPerformanceTests : BunitContext
 		// Arrange & Act
 		var cut1 = RenderWithAuth(parameters => parameters
 				.Add(p => p.Id, Guid.NewGuid()));
+
 		var cut2 = RenderWithAuth(parameters => parameters
 				.Add(p => p.Id, Guid.NewGuid()));
 
@@ -87,7 +106,7 @@ public class NoteEditorPerformanceTests : BunitContext
 		cut.Dispose();
 
 		// Assert - Should dispose cleanly without errors
-		var act = () => cut.Dispose(); // Second dispose should be safe
+		var act = () => cut.Dispose(); // Second, dispose should be safe
 		act.Should().NotThrow();
 	}
 
@@ -107,11 +126,12 @@ public class NoteEditorPerformanceTests : BunitContext
 		// Arrange
 		var cuts = new List<IRenderedComponent<NoteEditor>>();
 
-		// Act - Create and dispose multiple instances
-		for (int i = 0; i < 10; i++)
+		// Act - Create and dispose of multiple instances
+		for (var i = 0; i < 10; i++)
 		{
 			var cut = RenderWithAuth(parameters => parameters
-					.Add(p => p.Id, (Guid?)null));
+					.Add(p => p.Id, null));
+
 			cuts.Add(cut);
 		}
 
@@ -144,6 +164,7 @@ public class NoteEditorPerformanceTests : BunitContext
 
 		// Assert - Should have basic form structure
 		cut.Should().NotBeNull();
+
 		// Component should have markup
 		cut.Markup.Length.Should().BeGreaterThan(0);
 	}
@@ -152,7 +173,7 @@ public class NoteEditorPerformanceTests : BunitContext
 	public void NoteEditor_CanBeRenderedMultipleTimes()
 	{
 		// Arrange & Act
-		for (int i = 0; i < 5; i++)
+		for (var i = 0; i < 5; i++)
 		{
 			using var cut = RenderWithAuth();
 			cut.Should().NotBeNull();
@@ -183,28 +204,32 @@ public class NoteEditorPerformanceTests : BunitContext
 			Action<ComponentParameterCollectionBuilder<NoteEditor>>? parameters = null)
 	{
 		var authStateTask = _authProvider.GetAuthenticationStateAsync();
+
 		return Render<NoteEditor>(ps =>
 		{
 			ps.AddCascadingValue(authStateTask);
 			parameters?.Invoke(ps);
 		});
 	}
+
 }
 
 /// <summary>
-/// Test authentication state provider
+///   Test authentication state provider
 /// </summary>
 public class TestAuthStateProvider : AuthenticationStateProvider
 {
+
 	private readonly ClaimsPrincipal _user;
 
 	public TestAuthStateProvider()
 	{
 		var claims = new[]
 		{
-						new Claim(ClaimTypes.NameIdentifier, "test-user-id"),
-						new Claim(ClaimTypes.Name, "test-user")
-				};
+				new Claim(ClaimTypes.NameIdentifier, "test-user-id"),
+				new Claim(ClaimTypes.Name, "test-user")
+		};
+
 		var identity = new ClaimsIdentity(claims, "Test");
 		_user = new ClaimsPrincipal(identity);
 	}
@@ -213,13 +238,15 @@ public class TestAuthStateProvider : AuthenticationStateProvider
 	{
 		return Task.FromResult(new AuthenticationState(_user));
 	}
+
 }
 
 /// <summary>
-/// Fake authorization service for testing
+///   Fake authorization service for testing
 /// </summary>
 public class FakeAuthorizationService : IAuthorizationService
 {
+
 	public Task<AuthorizationResult> AuthorizeAsync(
 			ClaimsPrincipal user,
 			object? resource,
@@ -235,18 +262,21 @@ public class FakeAuthorizationService : IAuthorizationService
 	{
 		return Task.FromResult(AuthorizationResult.Success());
 	}
+
 }
 
 /// <summary>
-/// Fake authorization policy provider for testing
+///   Fake authorization policy provider for testing
 /// </summary>
 public class FakeAuthorizationPolicyProvider : IAuthorizationPolicyProvider
 {
+
 	public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
 	{
 		var policy = new AuthorizationPolicyBuilder()
 				.RequireAuthenticatedUser()
 				.Build();
+
 		return Task.FromResult<AuthorizationPolicy?>(policy);
 	}
 
@@ -261,4 +291,5 @@ public class FakeAuthorizationPolicyProvider : IAuthorizationPolicyProvider
 	{
 		return Task.FromResult<AuthorizationPolicy?>(null);
 	}
+
 }
