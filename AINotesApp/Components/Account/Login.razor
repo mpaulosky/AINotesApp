@@ -1,0 +1,28 @@
+@inject NavigationManager Navigation
+
+<button class="btn btn-primary" @onclick="SignIn">Sign in</button>
+
+<button class="btn btn-link" @onclick="SignUp">Create account</button>
+
+@code {
+
+	private void SignIn()
+	{
+		NavigateToAuth0(null);
+	}
+
+	private void SignUp()
+	{
+		NavigateToAuth0("signup");
+	}
+
+	private void NavigateToAuth0(string? screenHint)
+	{
+		var destination = string.IsNullOrWhiteSpace(screenHint)
+			? "auth/login"
+			: $"auth/login?screen_hint={screenHint}";
+
+		Navigation.NavigateTo(destination, true);
+	}
+
+}
