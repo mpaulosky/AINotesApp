@@ -1,9 +1,7 @@
 @page "/admin/seed"
-@using AINotesApp.Features.Notes.SeedNotes
 @using AINotesApp.Features.Notes.BackfillTags
+@using AINotesApp.Features.Notes.SeedNotes
 @using MediatR
-@using Microsoft.AspNetCore.Authorization
-@using System.Security.Claims
 @attribute [Authorize]
 @rendermode InteractiveServer
 @inject IMediator Mediator
@@ -12,366 +10,378 @@
 <PageTitle>Seed Notes</PageTitle>
 
 <div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <!-- Seed Notes Card -->
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">
-                        <i class="bi bi-database-fill-add"></i> Seed Demo Notes
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle-fill"></i>
-                        <strong>About Seeding:</strong>
-                        <p class="mb-0 mt-2">
-                            This will create 50 diverse notes across topics like video games, movies, programming, and
-                            fantasy books.
-                            Each note will be processed through the OpenAI API to generate real AI summaries, tags, and
-                            embeddings.
-                            This may take several minutes to complete.
-                        </p>
-                    </div>
+	<div class="row justify-content-center">
+		<div class="col-lg-8">
+			<!-- Seed Notes Card -->
+			<div class="card">
+				<div class="card-header bg-primary text-white">
+					<h3 class="mb-0">
+						<i class="bi bi-database-fill-add"></i> Seed Demo Notes
+					</h3>
+				</div>
+				<div class="card-body">
+					<div class="alert alert-info">
+						<i class="bi bi-info-circle-fill"></i>
+						<strong>About Seeding:</strong>
+						<p class="mb-0 mt-2">
+							This will create 50 diverse notes across topics like video games, movies, programming, and
+							fantasy books.
+							Each note will be processed through the OpenAI API to generate real AI summaries, tags, and
+							embeddings.
+							This may take several minutes to complete.
+						</p>
+					</div>
 
-                    @if (isSeeding)
-                    {
-                        <div class="text-center py-5">
-                            <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
-                                <span class="visually-hidden">Seeding...</span>
-                            </div>
-                            <h4>Creating Notes with AI...</h4>
-                            <p class="text-muted">
-                                Processing notes through OpenAI API. This will take a few minutes.
-                                <br />
-                                <strong>Created: @createdCount / 50</strong>
-                            </p>
-                            <div class="progress" style="height: 25px;">
-                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                                    style="width: @((createdCount / 50.0 * 100))%" aria-valuenow="@createdCount"
-                                    aria-valuemin="0" aria-valuemax="50">
-                                    @createdCount / 50
-                                </div>
-                            </div>
-                        </div>
-                    }
-                    else if (!string.IsNullOrEmpty(successMessage))
-                    {
-                        <div class="alert alert-success">
-                            <i class="bi bi-check-circle-fill"></i> @successMessage
-                        </div>
+					@if (isSeeding)
+					{
+						<div class="text-center py-5">
+							<div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
+								<span class="visually-hidden">Seeding...</span>
+							</div>
+							<h4>Creating Notes with AI...</h4>
+							<p class="text-muted">
+								Processing notes through OpenAI API. This will take a few minutes.
+								<br/>
+								<strong>Created: @createdCount / 50</strong>
+							</p>
+							<div class="progress" style="height: 25px;">
+								<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+										 style="width: @(createdCount / 50.0 * 100)%" aria-valuenow="@createdCount"
+										 aria-valuemin="0" aria-valuemax="50">
+									@createdCount / 50
+								</div>
+							</div>
+						</div>
+					}
+					else if (!string.IsNullOrEmpty(successMessage))
+					{
+						<div class="alert alert-success">
+							<i class="bi bi-check-circle-fill"></i> @successMessage
+						</div>
 
-                        <div class="d-grid gap-2">
-                            <a href="/notes" class="btn btn-primary btn-lg">
-                                <i class="bi bi-journal-text"></i> View My Notes
-                            </a>
-                            <button class="btn btn-outline-secondary" @onclick="Reset">
-                                <i class="bi bi-arrow-clockwise"></i> Seed More Notes
-                            </button>
-                        </div>
-                    }
-                    else if (!string.IsNullOrEmpty(errorMessage))
-                    {
-                        <div class="alert alert-danger">
-                            <i class="bi bi-exclamation-triangle-fill"></i> @errorMessage
-                        </div>
-                        <button class="btn btn-outline-secondary" @onclick="Reset">
-                            <i class="bi bi-arrow-clockwise"></i> Try Again
-                        </button>
-                    }
-                    else
-                    {
-                        <div class="mb-3">
-                            <label for="noteCount" class="form-label">Number of Notes to Create</label>
-                            <input type="number" class="form-control" id="noteCount" @bind="noteCount" min="1" max="50" />
-                            <div class="form-text">Maximum: 50 notes (for API rate limiting)</div>
-                        </div>
+						<div class="d-grid gap-2">
+							<a href="/notes" class="btn btn-primary btn-lg">
+								<i class="bi bi-journal-text"></i> View My Notes
+							</a>
+							<button class="btn btn-outline-secondary" @onclick="Reset">
+								<i class="bi bi-arrow-clockwise"></i> Seed More Notes
+							</button>
+						</div>
+					}
+					else if (!string.IsNullOrEmpty(errorMessage))
+					{
+						<div class="alert alert-danger">
+							<i class="bi bi-exclamation-triangle-fill"></i> @errorMessage
+						</div>
+						<button class="btn btn-outline-secondary" @onclick="Reset">
+							<i class="bi bi-arrow-clockwise"></i> Try Again
+						</button>
+					}
+					else
+					{
+						<div class="mb-3">
+							<label for="noteCount" class="form-label">Number of Notes to Create</label>
+							<input type="number" class="form-control" id="noteCount" @bind="noteCount" min="1" max="50"/>
+							<div class="form-text">Maximum: 50 notes (for API rate limiting)</div>
+						</div>
 
-                        <div class="alert alert-warning">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                            <strong>Note:</strong> This will use your OpenAI API credits.
-                            50 notes will make approximately 150 API calls (summary + tags + embedding for each).
-                        </div>
+						<div class="alert alert-warning">
+							<i class="bi bi-exclamation-triangle-fill"></i>
+							<strong>Note:</strong> This will use your OpenAI API credits.
+							50 notes will make approximately 150 API calls (summary + tags + embedding for each).
+						</div>
 
-                        <div class="d-grid">
-                            <button class="btn btn-primary btn-lg" @onclick="StartSeeding">
-                                <i class="bi bi-play-fill"></i> Start Seeding Notes
-                            </button>
-                        </div>
-                    }
+						<div class="d-grid">
+							<button class="btn btn-primary btn-lg" @onclick="StartSeeding">
+								<i class="bi bi-play-fill"></i> Start Seeding Notes
+							</button>
+						</div>
+					}
 
-                    @if (errors.Any())
-                    {
-                        <div class="alert alert-warning mt-3">
-                            <strong>Some notes failed to create:</strong>
-                            <ul class="mb-0 mt-2">
-                                @foreach (var error in errors)
-                                {
-                                    <li><small>@error</small></li>
-                                }
-                            </ul>
-                        </div>
-                    }
-                </div>
-            </div>
+					@if (errors.Any())
+					{
+						<div class="alert alert-warning mt-3">
+							<strong>Some notes failed to create:</strong>
+							<ul class="mb-0 mt-2">
+								@foreach (var error in errors)
+								{
+									<li><small>@error</small></li>
+								}
+							</ul>
+						</div>
+					}
+				</div>
+			</div>
 
-            <!-- Backfill Tags Card -->
-            <div class="card mt-4">
-                <div class="card-header bg-success text-white">
-                    <h3 class="mb-0">
-                        <i class="bi bi-tags-fill"></i> Backfill Tags
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle-fill"></i>
-                        <strong>About Backfilling:</strong>
-                        <p class="mb-0 mt-2">
-                            Generate AI tags for existing notes that don't have them.
-                            This uses the OpenAI API to analyze each note and create relevant tags.
-                        </p>
-                    </div>
+			<!-- Backfill Tags Card -->
+			<div class="card mt-4">
+				<div class="card-header bg-success text-white">
+					<h3 class="mb-0">
+						<i class="bi bi-tags-fill"></i> Backfill Tags
+					</h3>
+				</div>
+				<div class="card-body">
+					<div class="alert alert-info">
+						<i class="bi bi-info-circle-fill"></i>
+						<strong>About Backfilling:</strong>
+						<p class="mb-0 mt-2">
+							Generate AI tags for existing notes that don't have them.
+							This uses the OpenAI API to analyze each note and create relevant tags.
+						</p>
+					</div>
 
-                    @if (isBackfilling)
-                    {
-                        <div class="text-center py-5">
-                            <div class="spinner-border text-success mb-3" style="width: 3rem; height: 3rem;" role="status">
-                                <span class="visually-hidden">Backfilling...</span>
-                            </div>
-                            <h4>Generating Tags...</h4>
-                            <p class="text-muted">Processing notes through OpenAI API...</p>
-                        </div>
-                    }
-                    else if (!string.IsNullOrEmpty(backfillSuccessMessage))
-                    {
-                        <div class="alert alert-success">
-                            <i class="bi bi-check-circle-fill"></i> @backfillSuccessMessage
-                        </div>
-                        <button class="btn btn-outline-secondary" @onclick="ResetBackfill">
-                            <i class="bi bi-arrow-clockwise"></i> Done
-                        </button>
-                    }
-                    else if (!string.IsNullOrEmpty(backfillErrorMessage))
-                    {
-                        <div class="alert alert-danger">
-                            <i class="bi bi-exclamation-triangle-fill"></i> @backfillErrorMessage
-                        </div>
-                        <button class="btn btn-outline-secondary" @onclick="ResetBackfill">
-                            <i class="bi bi-arrow-clockwise"></i> Try Again
-                        </button>
-                    }
-                    else
-                    {
-                        <div class="d-grid">
-                            <button class="btn btn-success btn-lg" @onclick="StartBackfilling">
-                                <i class="bi bi-tags"></i> Generate Tags for Existing Notes
-                            </button>
-                        </div>
-                    }
+					@if (isBackfilling)
+					{
+						<div class="text-center py-5">
+							<div class="spinner-border text-success mb-3" style="width: 3rem; height: 3rem;" role="status">
+								<span class="visually-hidden">Backfilling...</span>
+							</div>
+							<h4>Generating Tags...</h4>
+							<p class="text-muted">Processing notes through OpenAI API...</p>
+						</div>
+					}
+					else if (!string.IsNullOrEmpty(backfillSuccessMessage))
+					{
+						<div class="alert alert-success">
+							<i class="bi bi-check-circle-fill"></i> @backfillSuccessMessage
+						</div>
+						<button class="btn btn-outline-secondary" @onclick="ResetBackfill">
+							<i class="bi bi-arrow-clockwise"></i> Done
+						</button>
+					}
+					else if (!string.IsNullOrEmpty(backfillErrorMessage))
+					{
+						<div class="alert alert-danger">
+							<i class="bi bi-exclamation-triangle-fill"></i> @backfillErrorMessage
+						</div>
+						<button class="btn btn-outline-secondary" @onclick="ResetBackfill">
+							<i class="bi bi-arrow-clockwise"></i> Try Again
+						</button>
+					}
+					else
+					{
+						<div class="d-grid">
+							<button class="btn btn-success btn-lg" @onclick="StartBackfilling">
+								<i class="bi bi-tags"></i> Generate Tags for Existing Notes
+							</button>
+						</div>
+					}
 
-                    @if (backfillErrors.Any())
-                    {
-                        <div class="alert alert-warning mt-3">
-                            <strong>Some notes failed:</strong>
-                            <ul class="mb-0 mt-2">
-                                @foreach (var error in backfillErrors)
-                                {
-                                    <li><small>@error</small></li>
-                                }
-                            </ul>
-                        </div>
-                    }
-                </div>
-            </div>
+					@if (backfillErrors.Any())
+					{
+						<div class="alert alert-warning mt-3">
+							<strong>Some notes failed:</strong>
+							<ul class="mb-0 mt-2">
+								@foreach (var error in backfillErrors)
+								{
+									<li><small>@error</small></li>
+								}
+							</ul>
+						</div>
+					}
+				</div>
+			</div>
 
-            <!-- Sample Topics Card -->
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h5 class="mb-0">
-                        <i class="bi bi-list-ul"></i> Sample Topics Included
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6><i class="bi bi-controller"></i> Video Games (10)</h6>
-                            <ul class="small">
-                                <li>Zelda: Breath of the Wild</li>
-                                <li>Dark Souls</li>
-                                <li>Minecraft</li>
-                                <li>Elden Ring</li>
-                                <li>And more...</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h6><i class="bi bi-film"></i> Movies (10)</h6>
-                            <ul class="small">
-                                <li>Inception</li>
-                                <li>Blade Runner 2049</li>
-                                <li>Parasite</li>
-                                <li>The Matrix</li>
-                                <li>And more...</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h6><i class="bi bi-code-slash"></i> Programming (15)</h6>
-                            <ul class="small">
-                                <li>JavaScript Async/Await</li>
-                                <li>React Hooks</li>
-                                <li>Database Indexing</li>
-                                <li>Docker Optimization</li>
-                                <li>And more...</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h6><i class="bi bi-book"></i> Fantasy Books (15)</h6>
-                            <ul class="small">
-                                <li>Lord of the Rings</li>
-                                <li>Brandon Sanderson</li>
-                                <li>Game of Thrones</li>
-                                <li>The Wheel of Time</li>
-                                <li>And more...</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+			<!-- Sample Topics Card -->
+			<div class="card mt-3">
+				<div class="card-header">
+					<h5 class="mb-0">
+						<i class="bi bi-list-ul"></i> Sample Topics Included
+					</h5>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-6">
+							<h6><i class="bi bi-controller"></i> Video Games (10)</h6>
+							<ul class="small">
+								<li>Zelda: Breath of the Wild</li>
+								<li>Dark Souls</li>
+								<li>Minecraft</li>
+								<li>Elden Ring</li>
+								<li>And more...</li>
+							</ul>
+						</div>
+						<div class="col-md-6">
+							<h6><i class="bi bi-film"></i> Movies (10)</h6>
+							<ul class="small">
+								<li>Inception</li>
+								<li>Blade Runner 2049</li>
+								<li>Parasite</li>
+								<li>The Matrix</li>
+								<li>And more...</li>
+							</ul>
+						</div>
+						<div class="col-md-6">
+							<h6><i class="bi bi-code-slash"></i> Programming (15)</h6>
+							<ul class="small">
+								<li>JavaScript Async/Await</li>
+								<li>React Hooks</li>
+								<li>Database Indexing</li>
+								<li>Docker Optimization</li>
+								<li>And more...</li>
+							</ul>
+						</div>
+						<div class="col-md-6">
+							<h6><i class="bi bi-book"></i> Fantasy Books (15)</h6>
+							<ul class="small">
+								<li>Lord of the Rings</li>
+								<li>Brandon Sanderson</li>
+								<li>Game of Thrones</li>
+								<li>The Wheel of Time</li>
+								<li>And more...</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 @code {
-    // Seeding state
-    private bool isSeeding = false;
-    private int noteCount = 50;
-    private int createdCount = 0;
-    private string? successMessage;
-    private string? errorMessage;
-    private List<string> errors = new();
 
-    // Backfilling state
-    private bool isBackfilling = false;
-    private string? backfillSuccessMessage;
-    private string? backfillErrorMessage;
-    private List<string> backfillErrors = new();
+	// Seeding state
+	private bool isSeeding  ;
 
-    private string userId = string.Empty;
+	private int noteCount = 50;
 
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
+	private int createdCount  ;
 
-        if (user.Identity?.IsAuthenticated == true)
-        {
-            userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
-        }
-    }
+	private string? successMessage;
 
-    private async Task StartSeeding()
-    {
-        if (string.IsNullOrEmpty(userId))
-        {
-            errorMessage = "You must be logged in to seed notes.";
-            return;
-        }
+	private string? errorMessage;
 
-        isSeeding = true;
-        createdCount = 0;
-        successMessage = null;
-        errorMessage = null;
-        errors.Clear();
+	private List<string> errors = new();
 
-        try
-        {
-            var command = new SeedNotesCommand
-            {
-                UserId = userId,
-                Count = noteCount
-            };
+	// Backfilling state
+	private bool isBackfilling  ;
 
-            var response = await Mediator.Send(command);
+	private string? backfillSuccessMessage;
 
-            createdCount = response.CreatedCount;
-            errors = response.Errors;
+	private string? backfillErrorMessage;
 
-            if (response.CreatedCount > 0)
-            {
-                successMessage = $"Successfully created {response.CreatedCount} notes with AI summaries, tags, and embeddings!";
-            }
-            else
-            {
-                errorMessage = "Failed to create any notes. Please check your OpenAI API key.";
-            }
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Error seeding notes: {ex.Message}";
-        }
-        finally
-        {
-            isSeeding = false;
-        }
-    }
+	private List<string> backfillErrors = new();
 
-    private async Task StartBackfilling()
-    {
-        if (string.IsNullOrEmpty(userId))
-        {
-            backfillErrorMessage = "You must be logged in to backfill tags.";
-            return;
-        }
+	private string userSubject = string.Empty;
 
-        isBackfilling = true;
-        backfillSuccessMessage = null;
-        backfillErrorMessage = null;
-        backfillErrors.Clear();
+	protected override async Task OnInitializedAsync()
+	{
+		var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+		var user = authState.User;
 
-        try
-        {
-            var command = new BackfillTagsCommand
-            {
-                UserId = userId,
-                OnlyMissing = true
-            };
+		if (user.Identity?.IsAuthenticated == true)
+		{
+			userSubject = user.FindFirst("sub")?.Value ?? string.Empty;
+		}
+	}
 
-            var response = await Mediator.Send(command);
+	private async Task StartSeeding()
+	{
+		if (string.IsNullOrEmpty(userSubject))
+		{
+			errorMessage = "You must be logged in to seed notes.";
 
-            backfillErrors = response.Errors;
+			return;
+		}
 
-            if (response.ProcessedCount > 0)
-            {
-                backfillSuccessMessage = $"Successfully generated tags for {response.ProcessedCount} notes!";
-            }
-            else
-            {
-                backfillSuccessMessage = "All notes already have tags!";
-            }
-        }
-        catch (Exception ex)
-        {
-            backfillErrorMessage = $"Error backfilling tags: {ex.Message}";
-        }
-        finally
-        {
-            isBackfilling = false;
-        }
-    }
+		isSeeding = true;
+		createdCount = 0;
+		successMessage = null;
+		errorMessage = null;
+		errors.Clear();
 
-    private void Reset()
-    {
-        isSeeding = false;
-        createdCount = 0;
-        successMessage = null;
-        errorMessage = null;
-        errors.Clear();
-    }
+		try
+		{
+			var command = new SeedNotesCommand
+			{
+				UserSubject = userSubject,
+				Count = noteCount
+			};
 
-    private void ResetBackfill()
-    {
-        isBackfilling = false;
-        backfillSuccessMessage = null;
-        backfillErrorMessage = null;
-        backfillErrors.Clear();
-    }
+			var response = await Mediator.Send(command);
+
+			createdCount = response.CreatedCount;
+			errors = response.Errors;
+
+			if (response.CreatedCount > 0)
+			{
+				successMessage = $"Successfully created {response.CreatedCount} notes with AI summaries, tags, and embeddings!";
+			}
+			else
+			{
+				errorMessage = "Failed to create any notes. Please check your OpenAI API key.";
+			}
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Error seeding notes: {ex.Message}";
+		}
+		finally
+		{
+			isSeeding = false;
+		}
+	}
+
+	private async Task StartBackfilling()
+	{
+		if (string.IsNullOrEmpty(userSubject))
+		{
+			backfillErrorMessage = "You must be logged in to backfill tags.";
+
+			return;
+		}
+
+		isBackfilling = true;
+		backfillSuccessMessage = null;
+		backfillErrorMessage = null;
+		backfillErrors.Clear();
+
+		try
+		{
+			var command = new BackfillTagsCommand
+			{
+				UserSubject = userSubject,
+				OnlyMissing = true
+			};
+
+			var response = await Mediator.Send(command);
+
+			backfillErrors = response.Errors;
+
+			if (response.ProcessedCount > 0)
+			{
+				backfillSuccessMessage = $"Successfully generated tags for {response.ProcessedCount} notes!";
+			}
+			else
+			{
+				backfillSuccessMessage = "All notes already have tags!";
+			}
+		}
+		catch (Exception ex)
+		{
+			backfillErrorMessage = $"Error backfilling tags: {ex.Message}";
+		}
+		finally
+		{
+			isBackfilling = false;
+		}
+	}
+
+	private void Reset()
+	{
+		isSeeding = false;
+		createdCount = 0;
+		successMessage = null;
+		errorMessage = null;
+		errors.Clear();
+	}
+
+	private void ResetBackfill()
+	{
+		isBackfilling = false;
+		backfillSuccessMessage = null;
+		backfillErrorMessage = null;
+		backfillErrors.Clear();
+	}
+
 }

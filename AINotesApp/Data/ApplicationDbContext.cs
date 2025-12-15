@@ -1,48 +1,85 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     ApplicationDbContext.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp
+// =======================================================
+
 using Microsoft.EntityFrameworkCore;
 
 namespace AINotesApp.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : IdentityDbContext<ApplicationUser>(options)
+public class ApplicationDbContext
+(
+		DbContextOptions<ApplicationDbContext> options
+) : DbContext(options)
 {
-    public DbSet<Note> Notes => Set<Note>();
 
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
+	public DbSet<AppUser> AppUsers => Set<AppUser>();
 
-        builder.Entity<Note>(entity =>
-        {
-            entity.HasKey(e => e.Id);
+	public DbSet<Note> Notes => Set<Note>();
 
-            entity.Property(e => e.Title)
-                .IsRequired()
-                .HasMaxLength(200);
+	protected override void OnModelCreating(ModelBuilder builder)
+	{
+		builder.Entity<AppUser>(entity =>
+		{
+			entity.HasKey(u => u.Auth0Subject);
 
-            entity.Property(e => e.Content)
-                .IsRequired();
+			entity.Property(u => u.Auth0Subject)
+					.IsRequired()
+					.HasMaxLength(64);
 
-            entity.Property(e => e.AiSummary)
-                .HasMaxLength(1000);
+			entity.Property(u => u.Name)
+					.HasMaxLength(200);
 
-            entity.Property(e => e.Tags)
-                .HasMaxLength(500);
+			entity.Property(u => u.Email)
+					.HasMaxLength(256);
 
-            entity.Property(e => e.CreatedAt)
-                .IsRequired();
+			entity.Property(u => u.CreatedUtc)
+					.IsRequired();
 
-            entity.Property(e => e.UpdatedAt)
-                .IsRequired();
+			entity.HasIndex(u => u.Email);
+		});
 
-            // Configure the relationship
-            entity.HasOne(e => e.User)
-                .WithMany(u => u.Notes)
-                .HasForeignKey(e => e.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+		builder.Entity<Note>(entity =>
+		{
+			entity.HasKey(e => e.Id);
 
-            // Index for better query performance
-            entity.HasIndex(e => e.UserId);
-            entity.HasIndex(e => e.CreatedAt);
-        });
-    }
+			entity.Property(e => e.Title)
+					.IsRequired()
+					.HasMaxLength(200);
+
+			entity.Property(e => e.Content)
+					.IsRequired()
+					.HasMaxLength(2000);
+
+			entity.Property(e => e.AiSummary)
+					.HasMaxLength(1000);
+
+			entity.Property(e => e.Tags)
+					.HasMaxLength(500);
+
+			entity.Property(e => e.OwnerSubject)
+					.IsRequired()
+					.HasMaxLength(64);
+
+			entity.Property(e => e.CreatedAt)
+					.IsRequired();
+
+			entity.Property(e => e.UpdatedAt)
+					.IsRequired();
+
+			entity.HasOne(e => e.Owner)
+					.WithMany(u => u.Notes)
+					.HasForeignKey(e => e.OwnerSubject)
+					.HasPrincipalKey(u => u.Auth0Subject)
+					.OnDelete(DeleteBehavior.Cascade);
+
+			entity.HasIndex(e => e.OwnerSubject);
+			entity.HasIndex(e => e.CreatedAt);
+		});
+	}
+
 }

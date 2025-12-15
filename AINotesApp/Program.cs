@@ -1,50 +1,67 @@
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     Program.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp
+// =======================================================
+
+using System.Security.Claims;
+
 using AINotesApp.Components;
-using AINotesApp.Components.Account;
 using AINotesApp.Data;
 using AINotesApp.Services.Ai;
 
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
+using Auth0.AspNetCore.Authentication;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Get configuration
+IConfiguration configuration = builder.Configuration;
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+		.AddInteractiveServerComponents();
 
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddScoped<IdentityRedirectManager>();
-builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
-builder.Services.AddAuthentication(options =>
-    {
-        options.DefaultScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-    })
-    .AddIdentityCookies();
+builder.Services
+		.AddAuth0WebAppAuthentication(options =>
+		{
+			options.Domain = configuration["Auth0:Domain"] ?? string.Empty;
+			options.ClientId = configuration["Auth0:ClientId"] ?? string.Empty;
+			options.ClientSecret = configuration["Auth0:ClientSecret"] ?? string.Empty;
+			options.Scope = "openid profile email";
+			options.CallbackPath = configuration["Auth0:CallbackPath"] ?? "/auth/callback";
+		})
+		.WithAccessToken(options =>
+		{
+			var audience = configuration["Auth0:Audience"];
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+			if (!string.IsNullOrWhiteSpace(audience))
+			{
+				options.Audience = audience;
+			}
+		});
+
+builder.Services.AddAuthorizationBuilder()
+		.AddPolicy("NotesAdmin", policy =>
+				policy.RequireClaim(ClaimTypes.Role, "notes.admin"));
+
+var connectionString = configuration.GetConnectionString("DefaultConnection") ??
+											throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+		options.UseSqlServer(connectionString));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentityCore<ApplicationUser>(options =>
-    {
-        options.SignIn.RequireConfirmedAccount = true;
-        options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
-    })
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddSignInManager()
-    .AddDefaultTokenProviders();
-
-builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-
 // Configure OpenAI options
 builder.Services.Configure<AiServiceOptions>(
-    builder.Configuration.GetSection(AiServiceOptions.SectionName));
+		configuration.GetSection(AiServiceOptions.SectionName));
 
 // Register AI Service
 builder.Services.AddScoped<IAiService, OpenAiService>();
@@ -57,34 +74,37 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint();
+	app.UseMigrationsEndPoint();
 }
 else
 {
-    app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+	app.UseExceptionHandler("/Error", true);
+
+	// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+	app.UseHsts();
 }
+
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseAntiforgery();
 
 app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
 
-// Add additional endpoints required by the Identity /Account Razor components.
-app.MapAdditionalIdentityEndpoints();
+app.MapRazorComponents<App>()
+		.AddInteractiveServerRenderMode();
 
 app.Run();
 
 // Make the implicit Program class accessible to tests
 namespace AINotesApp
 {
-    /// <summary>
-    /// Partial Program class to enable test accessibility for the application's entry point.
-    /// </summary>
-    public partial class Program { }
+	/// <summary>
+	///   Partial Program class to enable test accessibility for the application's entry point.
+	/// </summary>
+	public  class Program { }
 }
