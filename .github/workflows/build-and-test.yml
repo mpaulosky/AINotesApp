@@ -32,7 +32,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ ubuntu-latest ]
       fail-fast: false
 
     env:
@@ -89,7 +89,7 @@ jobs:
             if grep -q "<IsTestProject>true</IsTestProject>" "$proj" 2>/dev/null; then
               name=$(basename "$proj" .csproj)
               echo "Running tests for: $proj -> test-results/${name}.trx"
-              
+          
               set +e
               dotnet test "$proj" \
                 --configuration Release \
@@ -100,7 +100,7 @@ jobs:
                 --results-directory "test-results"
               rc=$?
               set -e
-              
+          
               if [ "$rc" -ne 0 ]; then
                 echo "::error::Tests failed for $proj (exit code $rc)"
                 overall_rc=1
