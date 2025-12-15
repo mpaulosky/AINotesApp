@@ -9,7 +9,170 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="507721ca-0ec0-4ff1-8e76-4e073f2568c4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/AINotesApp/IAppMarker.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AINotesApp/Services/Auth0AuthenticationStateProvider.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AINotesApp/Services/AuthenticationServiceExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/agents/4.1-Beast.agent.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/agents/4.1-Beast.agent.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/agents/4.1-Beast.chatmode.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/dotnet.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/dotnet.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/git-commit-instructions.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/instructions/copilot-instructions.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/instructions/copilot-instructions.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/build-repair.prompt.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/prompts/build-repair.prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/copyright-header-update-prompt.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/prompts/copyright-header-update-prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/create-readme.prompt.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/prompts/create-readme.prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/csharp-docs.prompt.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/prompts/csharp-docs.prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/csharp-xunit.prompt.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/prompts/csharp-xunit.prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/editorconfig.prompt.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/prompts/editorconfig.prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/implementation-removeWeatherPage.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/plan-removeWeatherPage.prompt.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/structured-autonomy-generate.prompt.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/prompts/structured-autonomy-generate.prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/structured-autonomy-implement.prompt.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/prompts/structured-autonomy-implement.prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/structured-autonomy-plan.prompt.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/prompts/structured-autonomy-plan.prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/xunit-integration.prompt.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/prompts/xunit-integration.prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/prompts/xunit.prompt.md" beforeDir="false" afterPath="$PROJECT_DIR$/.github/prompts/xunit.prompt.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/build-and-test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/build-and-test.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.AINotesApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AINotesApp/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp.sln.DotSettings" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp.sln.DotSettings" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp.slnx" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp.slnx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/AINotesApp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/AINotesApp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityComponentsEndpointRouteBuilderExtensions.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityNoOpEmailSender.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityRedirectManager.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/IdentityRevalidatingAuthenticationStateProvider.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/AccessDenied.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/ConfirmEmail.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/ConfirmEmailChange.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/ExternalLogin.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/ForgotPassword.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/ForgotPasswordConfirmation.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/InvalidPasswordReset.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/InvalidUser.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Lockout.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Login.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/LoginWith2fa.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/LoginWithRecoveryCode.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/ChangePassword.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/DeletePersonalData.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/Disable2fa.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/Email.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/EnableAuthenticator.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/ExternalLogins.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/GenerateRecoveryCodes.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/Index.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/Passkeys.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/PersonalData.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/RenamePasskey.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/ResetAuthenticator.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/SetPassword.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/TwoFactorAuthentication.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Manage/_Imports.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/Register.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/RegisterConfirmation.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/ResendEmailConfirmation.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/ResetPassword.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/ResetPasswordConfirmation.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Pages/_Imports.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/PasskeyInputModel.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/PasskeyOperation.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Shared/ExternalLoginPicker.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Shared/ManageLayout.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Shared/ManageNavMenu.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Shared/PasskeySubmit.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Shared/PasskeySubmit.razor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Shared/RedirectToLogin.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Shared/ShowRecoveryCodes.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Account/Shared/StatusMessage.razor" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/App.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/App.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Layout/MainLayout.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Layout/MainLayout.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Layout/MainLayout.razor.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Layout/MainLayout.razor.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Layout/NavMenu.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Layout/NavMenu.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Layout/NavMenu.razor.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Layout/NavMenu.razor.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Layout/ReconnectModal.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Layout/ReconnectModal.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Layout/ReconnectModal.razor.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Layout/ReconnectModal.razor.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Pages/Admin/SeedNotes.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Pages/Admin/SeedNotes.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Pages/Auth.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Pages/Auth.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Pages/Error.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Pages/Error.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/NoteDetails.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/NoteDetails.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/NoteEditor.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/NoteEditor.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/NotesList.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/NotesList.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/RelatedNotes.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/RelatedNotes.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Routes.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Routes.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/_Imports.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/_Imports.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Data/ApplicationDbContext.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Data/ApplicationDbContext.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Data/ApplicationUser.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Data/Note.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Data/Note.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/BackfillTags/BackfillTags.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/BackfillTags/BackfillTags.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/CreateNote/CreateNote.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/CreateNote/CreateNote.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/DeleteNote/DeleteNote.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/DeleteNote/DeleteNote.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/GetNoteDetails/GetNoteDetails.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/GetNoteDetails/GetNoteDetails.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/GetRelatedNotes/GetRelatedNotes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/GetRelatedNotes/GetRelatedNotes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/ListNotes/ListNotes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/ListNotes/ListNotes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/SearchNotes/SearchNotes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/SearchNotes/SearchNotes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/SeedNotes/SeedNotes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/SeedNotes/SeedNotes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/UpdateNote/UpdateNote.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/UpdateNote/UpdateNote.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Services/Ai/AiServiceOptions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Services/Ai/AiServiceOptions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Services/Ai/IAiService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Services/Ai/IAiService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Services/Ai/OpenAiService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Services/Ai/OpenAiService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/appsettings.Development.json" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/appsettings.Development.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/app.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-grid.rtl.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.rtl.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap-utilities.rtl.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.css" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.js" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.js" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/js/bootstrap.esm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/js/bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/wwwroot/lib/bootstrap/dist/js/bootstrap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/docs/CONTRIBUTING.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/CONTRIBUTING.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/GITHUB-NUGET-TROUBLESHOOTING.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/GITHUB-NUGET-TROUBLESHOOTING.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/PLAYWRIGHT_SETUP_COMPLETE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/REFERENCES.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/REFERENCES.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/SECURITY.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/SECURITY.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/global.json" beforeDir="false" afterPath="$PROJECT_DIR$/global.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/nuget.config" beforeDir="false" afterPath="$PROJECT_DIR$/nuget.config" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup-github-nuget.ps1" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Architecture/AINotesApp.Tests.Architecture.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Architecture/AINotesApp.Tests.Architecture.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Architecture/ArchitectureTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Architecture/ArchitectureTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/AINotesApp.Tests.Integration.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/AINotesApp.Tests.Integration.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Database/DatabaseFixture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Database/DatabaseFixture.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Features/Notes/BackfillTagsIntegrationTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Features/Notes/BackfillTagsIntegrationTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Features/NotesCrudWorkflowTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Features/NotesCrudWorkflowTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Features/NotesDatabaseIntegrationTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Integration/Features/NotesDatabaseIntegrationTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/AINotesApp.Tests.Unit.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/AINotesApp.Tests.Unit.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Layout/MainLayoutTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Layout/MainLayoutTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Layout/NavMenuTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Layout/NavMenuTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Layout/ReconnectModalTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Layout/ReconnectModalTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Admin/SeedNotesTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Admin/SeedNotesTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/AuthTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/AuthTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/ErrorTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/ErrorTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/HomeTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/HomeTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/NotFoundTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/NotFoundTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NoteDetailsTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NoteDetailsTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NoteEditorPerformanceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NoteEditorPerformanceTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NoteEditorTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NoteEditorTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NotesListTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NotesListTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/RelatedNotesTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/RelatedNotesTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/RoutesTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/RoutesTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Data/NoteTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Data/NoteTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Fakes/FakeAuthenticationStateProvider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Fakes/FakeAuthenticationStateProvider.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/BackfillTagsHandlerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/BackfillTagsHandlerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/CreateNoteHandlerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/CreateNoteHandlerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/DeleteNoteHandlerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/DeleteNoteHandlerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/GetNoteDetailsHandlerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/GetNoteDetailsHandlerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/GetRelatedNotesHandlerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/GetRelatedNotesHandlerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/ListNotesHandlerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/ListNotesHandlerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/SearchNotesHandlerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/SearchNotesHandlerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/SeedNotesHandlerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/SeedNotesHandlerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/UpdateNoteHandlerTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Features/Notes/UpdateNoteHandlerTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Helpers/TestAuthHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Helpers/TestAuthHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Services/Ai/OpenAiServiceEdgeCasesTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Services/Ai/OpenAiServiceEdgeCasesTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Services/Ai/OpenAiServiceTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Services/Ai/OpenAiServiceTests.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/tests/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/TEST_COVERAGE_SUMMARY.md" beforeDir="false" afterPath="$PROJECT_DIR$/tests/TEST_COVERAGE_SUMMARY.md" afterDir="false" />
     </list>
@@ -25,13 +188,13 @@
     </option>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="6" />
+    <option name="cachedIndexableFilesCount" value="12" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="remove-weather-page" />
+        <entry key="$PROJECT_DIR$" value="wip/manage" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -59,13 +222,13 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://E:/github/AINotesApp/AINotesApp/Components/Account/IdentityComponentsEndpointRouteBuilderExtensions.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://E:/github/AINotesApp/tests/AINotesApp.Tests.Architecture/ArchitectureTests.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Local/JetBrains/Shared/vAny/SourcesCache/f9d49be92b3b88e740e4eee89510813725cedfc749b39af6cfc97a236eaa51/CascadingAuthenticationStateServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$USER_HOME$/AppData/Roaming/Microsoft/UserSecrets/aspnet-AINotesApp-41c588d7-01bb-4a12-8a64-3e6c8198e9a3/secrets.json" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../teqsl/.nuget/packages/microsoft.net.test.sdk/18.0.1/build/net8.0/Microsoft.NET.Test.Sdk.Program.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="Toolset" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 5
@@ -85,7 +248,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feature/convert-to-auth0",
     "junie.onboarding.icon.badge.shown": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -147,6 +310,7 @@
       <workItem from="1765646721468" duration="2737000" />
       <workItem from="1765668183472" duration="4629000" />
       <workItem from="1765678910954" duration="685000" />
+      <workItem from="1765820533903" duration="10830000" />
     </task>
     <task id="LOCAL-00001" summary="Add initial project configuration files&#10;&#10;- Create .gitignore to exclude IDE and local files&#10;- Add XML files for migration state services&#10;- Include index layout and version control settings">
       <option name="closed" value="true" />
@@ -324,6 +488,11 @@
           <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
           <option name="timeStamp" value="3" />
         </breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/AINotesApp/Components/Account/Logout.razor</url>
+          <line>3</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
