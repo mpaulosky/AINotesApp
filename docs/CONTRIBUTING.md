@@ -13,13 +13,13 @@ changed in the future. Please submit your suggestions with a pull-request to thi
 
 - [Code of Conduct](#code-of-conduct)
 - [What should I know before I get started](#what-should-i-know-before-i-get-started)
-  - [Project Folder Structure](#project-folder-structure)
-  - [Design Decisions](#design-decisions)
-  - [How can I contribute](#how-can-i-contribute)
-    - [Create an Issue](#create-an-issue)
-    - [Respond to an Issue](#respond-to-an-issue)
-    - [Write code](#write-code)
-    - [Write documentation](#write-documentation)
+    - [Project Folder Structure](#project-folder-structure)
+    - [Design Decisions](#design-decisions)
+    - [How can I contribute](#how-can-i-contribute)
+        - [Create an Issue](#create-an-issue)
+        - [Respond to an Issue](#respond-to-an-issue)
+        - [Write code](#write-code)
+        - [Write documentation](#write-documentation)
 
 ## Welcome
 
@@ -40,7 +40,8 @@ this code. Please report unwanted behavior to [Matthew Paulosky](mailto:matthew.
 2. Ensure you have .NET 10.0 SDK and SQL Server Express installed.
 3. Run database migrations: `dotnet ef database update --project AINotesApp`
 4. Create a branch from `main` (use a descriptive name, e.g. `feature/123-add-search`).
-5. Make your changes, following the code style and guidelines below (see `.github/copilot-instructions.md` for detailed patterns).
+5. Make your changes, following the code style and guidelines below (see `.github/copilot-instructions.md` for detailed
+   patterns).
 6. Add or update tests as needed.
 7. Commit with clear messages (see below).
 8. Push your branch and open a Pull Request to `main`.
@@ -48,23 +49,24 @@ this code. Please report unwanted behavior to [Matthew Paulosky](mailto:matthew.
 
 ## What should I know before I get started
 
-This project is a personal notes application built with Blazor Web App, ASP.NET Core Identity, Entity Framework Core, and SQL Server Express. It follows Vertical Slice Architecture with CQRS pattern for feature organization.
+This project is a personal notes application built with Blazor Web App, ASP.NET Core Identity, Entity Framework Core,
+and SQL Server Express. It follows Vertical Slice Architecture with CQRS pattern for feature organization.
 
 ### Code Style & Commit Messages
 
 - Use consistent formatting (C# conventions, .editorconfig if present).
 - **Always add XML documentation comments** to:
-  - Public classes, methods, and properties
-  - Commands, Queries, Response DTOs
-  - Handlers and their methods
+    - Public classes, methods, and properties
+    - Commands, Queries, Response DTOs
+    - Handlers and their methods
 - Use C# records for DTOs (Commands, Queries, Responses).
 - Follow async/await patterns with `CancellationToken` parameters.
 - Use EF Core best practices:
-  - `AsNoTracking()` for read-only queries
-  - `SaveChangesAsync()` with cancellation tokens
-  - Write clear, descriptive commit messages:
-  - Use present tense (e.g., "Add search feature")
-  - Reference issues (e.g., `Fixes #123`)
+    - `AsNoTracking()` for read-only queries
+    - `SaveChangesAsync()` with cancellation tokens
+    - Write clear, descriptive commit messages:
+    - Use present tense (e.g., "Add search feature")
+    - Reference issues (e.g., `Fixes #123`)
 - See `.github/copilot-instructions.md` for comprehensive coding standards.
 
 ### Project Folder Structure

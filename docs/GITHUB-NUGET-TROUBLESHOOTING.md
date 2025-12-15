@@ -152,8 +152,8 @@ dotnet search MyMediator --source github
 
 1. **Check Visual Studio Output Window**
 
-   - View ? Output
-   - Show output from: Package Manager
+    - View ? Output
+    - Show output from: Package Manager
 
 2. **Enable Verbose Logging**
 
@@ -162,7 +162,7 @@ dotnet search MyMediator --source github
    ```
 
 3. **Verify GitHub Status**
-   - Check <https://www.githubstatus.com/>
+    - Check <https://www.githubstatus.com/>
 
 ## Security Best Practices
 

@@ -5,11 +5,12 @@
 The following versions of AINotesApp are currently supported with security updates:
 
 | Version | Supported          |
-| ------- | ------------------ |
+|---------|--------------------|
 | 0.1.x   | :white_check_mark: |
 | < 0.1   | :x:                |
 
-**Note:** This is an early-stage project. Security updates will be provided for the latest 0.1.x release. Once the project reaches 1.0, we will maintain security support for the current major version and one previous major version.
+**Note:** This is an early-stage project. Security updates will be provided for the latest 0.1.x release. Once the
+project reaches 1.0, we will maintain security support for the current major version and one previous major version.
 
 ## Security Features
 
@@ -68,9 +69,9 @@ When reporting a security vulnerability, please include:
 - **Initial Response:** Within 48 hours of report submission
 - **Status Update:** Within 7 days with assessment and timeline
 - **Fix Timeline:**
-  - Critical vulnerabilities: Within 7 days
-  - High severity: Within 14 days
-  - Medium/Low severity: Within 30 days
+    - Critical vulnerabilities: Within 7 days
+    - High severity: Within 14 days
+    - Medium/Low severity: Within 30 days
 
 ### Disclosure Policy
 
