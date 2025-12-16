@@ -91,7 +91,7 @@
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
-}]]></component>
+}</component>
   <component name="QodanaReportsService">
     <option name="descriptions">
       <ReportDescription localRun="true" path="C:\Users\teqsl\AppData\Local\Temp\qodana_output1\qodana.sarif.json" reportGuid="96f7f3e6-b75e-46a7-8856-bd09c28abf40" reportId="AINotesApp/qodana/2025-12-13" />
