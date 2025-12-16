@@ -11,6 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using AINotesApp.Data;
 using AINotesApp.Tests.Integration.Database;
+using AINotesApp.Tests.Integration.Helpers;
 
 using FluentAssertions;
 
@@ -41,15 +42,11 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
 		// Given
 		await using var context = _fixture.CreateNewContext();
 
-		var note = new Note
-		{
-				Id = Guid.NewGuid(),
-				Title = "Integration Test Note",
-				Content = "Content for integration test",
-				OwnerSubject = "test-user-123",
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
-		};
+		var note = NoteTestDataBuilder.CreateDefault()
+			.WithTitle("Integration Test Note")
+			.WithContent("Content for integration test")
+			.WithOwnerSubject("test-user-123")
+			.Build();
 
 		// When
 		context.Notes.Add(note);
@@ -72,15 +69,10 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
 		// Given
 		await using var context = _fixture.CreateNewContext();
 
-		var note = new Note
-		{
-				Id = Guid.NewGuid(),
-				Title = "Original Title",
-				Content = "Original Content",
-				OwnerSubject = "test-user",
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
-		};
+		var note = NoteTestDataBuilder.CreateDefault()
+				.WithTitle("Original Title")
+				.WithContent("Original Content")
+				.Build();
 
 		context.Notes.Add(note);
 		await context.SaveChangesAsync();
@@ -111,15 +103,10 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
 		// Given
 		await using var context = _fixture.CreateNewContext();
 
-		var note = new Note
-		{
-				Id = Guid.NewGuid(),
-				Title = "Note to Delete",
-				Content = "Content",
-				OwnerSubject = "test-user",
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
-		};
+		var note = NoteTestDataBuilder.CreateDefault()
+				.WithTitle("Note to Delete")
+				.WithContent("Content")
+				.Build();
 
 		context.Notes.Add(note);
 		await context.SaveChangesAsync();
@@ -145,21 +132,9 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
 		var ownerSubject2 = "user-2";
 
 		context.Notes.AddRange(
-				new Note
-				{
-						Id = Guid.NewGuid(), Title = "User 1 Note 1", OwnerSubject = ownerSubject1, CreatedAt = DateTime.UtcNow,
-						UpdatedAt = DateTime.UtcNow
-				},
-				new Note
-				{
-						Id = Guid.NewGuid(), Title = "User 1 Note 2", OwnerSubject = ownerSubject1, CreatedAt = DateTime.UtcNow,
-						UpdatedAt = DateTime.UtcNow
-				},
-				new Note
-				{
-						Id = Guid.NewGuid(), Title = "User 2 Note 1", OwnerSubject = ownerSubject2, CreatedAt = DateTime.UtcNow,
-						UpdatedAt = DateTime.UtcNow
-				}
+				NoteTestDataBuilder.CreateDefault().WithTitle("User 1 Note 1").WithOwnerSubject(ownerSubject1).Build(),
+				NoteTestDataBuilder.CreateDefault().WithTitle("User 1 Note 2").WithOwnerSubject(ownerSubject1).Build(),
+				NoteTestDataBuilder.CreateDefault().WithTitle("User 2 Note 1").WithOwnerSubject(ownerSubject2).Build()
 		);
 
 		await context.SaveChangesAsync();
@@ -184,16 +159,11 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
 		await using var context = _fixture.CreateNewContext();
 		var embedding = new [] { 0.1f, 0.2f, 0.3f, 0.4f, 0.5f };
 
-		var note = new Note
-		{
-				Id = Guid.NewGuid(),
-				Title = "Note with Embedding",
-				Content = "Content",
-				OwnerSubject = "test-user",
-				Embedding = embedding,
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
-		};
+		var note = NoteTestDataBuilder.CreateDefault()
+				.WithTitle("Note with Embedding")
+				.WithContent("Content")
+				.WithEmbedding(embedding)
+				.Build();
 
 		// When
 		context.Notes.Add(note);
@@ -215,16 +185,10 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
 		// Given
 		await using var context = _fixture.CreateNewContext();
 
-		var note = new Note
-		{
-				Id = Guid.NewGuid(),
-				Title = "Note without Embedding",
-				Content = "Content",
-				OwnerSubject = "test-user",
-				Embedding = null,
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
-		};
+		var note = NoteTestDataBuilder.CreateDefault()
+				.WithTitle("Note without Embedding")
+				.WithContent("Content")
+				.Build();
 
 		// When
 		context.Notes.Add(note);
@@ -245,17 +209,12 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
 		// Given
 		await using var context = _fixture.CreateNewContext();
 
-		var note = new Note
-		{
-				Id = Guid.NewGuid(),
-				Title = "Note with AI content",
-				Content = "Content",
-				OwnerSubject = "test-user",
-				AiSummary = "This is an AI-generated summary",
-				Tags = "ai, test, integration",
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
-		};
+		var note = NoteTestDataBuilder.CreateDefault()
+				.WithTitle("Note with AI content")
+				.WithContent("Content")
+				.WithAiSummary("This is an AI-generated summary")
+				.WithTags("ai, test, integration")
+				.Build();
 
 		// When
 		context.Notes.Add(note);
@@ -279,23 +238,26 @@ public class NotesDatabaseIntegrationTests : IClassFixture<DatabaseFixture>
 		var ownerSubject = "test-user";
 		var now = DateTime.UtcNow;
 
-		var note1 = new Note
-		{
-				Id = Guid.NewGuid(), Title = "Oldest", OwnerSubject = ownerSubject, CreatedAt = now,
-				UpdatedAt = now.AddHours(-3)
-		};
+		var note1 = NoteTestDataBuilder.CreateDefault()
+				.WithTitle("Oldest")
+				.WithOwnerSubject(ownerSubject)
+				.WithCreatedAt(now)
+				.WithUpdatedAt(now.AddHours(-3))
+				.Build();
 
-		var note2 = new Note
-		{
-				Id = Guid.NewGuid(), Title = "Middle", OwnerSubject = ownerSubject, CreatedAt = now,
-				UpdatedAt = now.AddHours(-2)
-		};
+		var note2 = NoteTestDataBuilder.CreateDefault()
+				.WithTitle("Middle")
+				.WithOwnerSubject(ownerSubject)
+				.WithCreatedAt(now)
+				.WithUpdatedAt(now.AddHours(-2))
+				.Build();
 
-		var note3 = new Note
-		{
-				Id = Guid.NewGuid(), Title = "Newest", OwnerSubject = ownerSubject, CreatedAt = now,
-				UpdatedAt = now.AddHours(-1)
-		};
+		var note3 = NoteTestDataBuilder.CreateDefault()
+				.WithTitle("Newest")
+				.WithOwnerSubject(ownerSubject)
+				.WithCreatedAt(now)
+				.WithUpdatedAt(now.AddHours(-1))
+				.Build();
 
 		context.Notes.AddRange(note1, note2, note3);
 		await context.SaveChangesAsync();

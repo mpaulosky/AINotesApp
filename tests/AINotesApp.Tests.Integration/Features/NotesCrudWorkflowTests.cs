@@ -13,8 +13,9 @@ using AINotesApp.Features.Notes.CreateNote;
 using AINotesApp.Features.Notes.DeleteNote;
 using AINotesApp.Features.Notes.GetNoteDetails;
 using AINotesApp.Features.Notes.UpdateNote;
-using AINotesApp.Services.Ai;
+using AINotesApp.Services;
 using AINotesApp.Tests.Integration.Database;
+using AINotesApp.Tests.Integration.Helpers;
 
 using FluentAssertions;
 
@@ -45,7 +46,7 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	{
 		// Arrange
 		await using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 
 		// Create
 		var createHandler = new CreateNoteHandler(context, aiService);
@@ -107,7 +108,7 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	{
 		// Arrange
 		await using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 
 		// Create note
 		var createHandler = new CreateNoteHandler(context, aiService);
@@ -154,7 +155,7 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	{
 		// Arrange
 		await using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 		var createHandler = new CreateNoteHandler(context, aiService);
 
 		// Act - Create 5 notes
@@ -195,7 +196,7 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	{
 		// Arrange
 		await using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 		var updateHandler = new UpdateNoteHandler(context, aiService);
 		var nonExistentId = Guid.NewGuid();
 
@@ -238,7 +239,7 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	{
 		// Arrange
 		await using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 
 		// Create a note for one user
 		var createHandler = new CreateNoteHandler(context, aiService);
@@ -274,7 +275,7 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	{
 		// Arrange
 		await using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 
 		// Create note
 		var createHandler = new CreateNoteHandler(context, aiService);
@@ -317,7 +318,7 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	{
 		// Arrange
 		await using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 
 		// Create a note with AI enhancements
 		var createHandler = new CreateNoteHandler(context, aiService);
@@ -345,22 +346,6 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 		var note = await context.Notes.FindAsync(noteId);
 		note!.Embedding.Should().NotBeNull();
 		note.Embedding.Should().HaveCountGreaterThan(0);
-	}
-
-	private static IAiService CreateMockAiService()
-	{
-		var aiService = Substitute.For<IAiService>();
-
-		aiService.GenerateSummaryAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-				.Returns("Test summary");
-
-		aiService.GenerateTagsAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
-				.Returns("test,tag");
-
-		aiService.GenerateEmbeddingAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-				.Returns([ 0.1f, 0.2f, 0.3f, 0.4f, 0.5f ]);
-
-		return aiService;
 	}
 
 }
