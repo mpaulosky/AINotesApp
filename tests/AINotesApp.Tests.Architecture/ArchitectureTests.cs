@@ -8,6 +8,7 @@
 // =======================================================
 
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 using AINotesApp.Data;
 
@@ -26,17 +27,16 @@ public class ArchitectureTests
 
 	private const string _domainNamespace = "AINotesApp";
 
+	private static readonly Assembly ApplicationAssembly = typeof(ApplicationDbContext).Assembly;
+
 	/// <summary>
 	///   Ensures that all handler classes reside in the Features namespace as required by Vertical Slice Architecture.
 	/// </summary>
 	[Fact]
 	public void Handlers_ShouldBeInFeaturesNamespace()
 	{
-		// Given
-		var assembly = typeof(ApplicationDbContext).Assembly;
-
 		// When
-		var result = Types.InAssembly(assembly)
+		var result = Types.InAssembly(ApplicationAssembly)
 				.That()
 				.HaveNameEndingWith("Handler")
 				.Should()
@@ -54,11 +54,8 @@ public class ArchitectureTests
 	[Fact]
 	public void Commands_ShouldBeRecords()
 	{
-		// Given
-		var assembly = typeof(ApplicationDbContext).Assembly;
-
 		// When
-		var commandTypes = Types.InAssembly(assembly)
+		var commandTypes = Types.InAssembly(ApplicationAssembly)
 				.That()
 				.HaveNameEndingWith("Command")
 				.GetTypes();
@@ -79,11 +76,8 @@ public class ArchitectureTests
 	[Fact]
 	public void Queries_ShouldBeRecords()
 	{
-		// Given
-		var assembly = typeof(ApplicationDbContext).Assembly;
-
 		// When
-		var queryTypes = Types.InAssembly(assembly)
+		var queryTypes = Types.InAssembly(ApplicationAssembly)
 				.That()
 				.HaveNameEndingWith("Query")
 				.GetTypes();
@@ -104,11 +98,8 @@ public class ArchitectureTests
 	[Fact]
 	public void Responses_ShouldBeRecords()
 	{
-		// Given
-		var assembly = typeof(ApplicationDbContext).Assembly;
-
 		// When
-		var responseTypes = Types.InAssembly(assembly)
+		var responseTypes = Types.InAssembly(ApplicationAssembly)
 				.That()
 				.HaveNameEndingWith("Response")
 				.GetTypes();
@@ -129,11 +120,8 @@ public class ArchitectureTests
 	[Fact]
 	public void Services_ShouldBeInServicesNamespace()
 	{
-		// Given
-		var assembly = typeof(ApplicationDbContext).Assembly;
-
 		// When
-		var result = Types.InAssembly(assembly)
+		var result = Types.InAssembly(ApplicationAssembly)
 				.That()
 				.AreInterfaces()
 				.And()
@@ -142,6 +130,8 @@ public class ArchitectureTests
 				.DoNotHaveName("IAsyncDisposable")
 				.And()
 				.DoNotHaveName("IDisposable")
+				.And()
+				.DoNotHaveName("IAppMarker")
 				.Should()
 				.ResideInNamespace($"{_domainNamespace}.Services")
 				.Or()
@@ -159,11 +149,8 @@ public class ArchitectureTests
 	[Fact]
 	public void Handlers_ShouldNotHaveDependencyOnComponents()
 	{
-		// Given
-		var assembly = typeof(ApplicationDbContext).Assembly;
-
 		// When
-		var result = Types.InAssembly(assembly)
+		var result = Types.InAssembly(ApplicationAssembly)
 				.That()
 				.HaveNameEndingWith("Handler")
 				.ShouldNot()
@@ -181,11 +168,8 @@ public class ArchitectureTests
 	[Fact]
 	public void DataModels_ShouldBeInDataNamespace()
 	{
-		// Given
-		var assembly = typeof(ApplicationDbContext).Assembly;
-
 		// When
-		var result = Types.InAssembly(assembly)
+		var result = Types.InAssembly(ApplicationAssembly)
 				.That()
 				.AreClasses()
 				.And()
@@ -211,11 +195,8 @@ public class ArchitectureTests
 	[Fact]
 	public void Handlers_ShouldImplementIRequestHandler()
 	{
-		// Given
-		var assembly = typeof(ApplicationDbContext).Assembly;
-
 		// When
-		var handlerTypes = Types.InAssembly(assembly)
+		var handlerTypes = Types.InAssembly(ApplicationAssembly)
 				.That()
 				.HaveNameEndingWith("Handler")
 				.GetTypes();
@@ -237,11 +218,8 @@ public class ArchitectureTests
 	[Fact]
 	public void Features_ShouldBeOrganizedByBusinessCapability()
 	{
-		// Given
-		var assembly = typeof(ApplicationDbContext).Assembly;
-
 		// When
-		var featureTypes = Types.InAssembly(assembly)
+		var featureTypes = Types.InAssembly(ApplicationAssembly)
 				.That()
 				.ResideInNamespace($"{_domainNamespace}.Features")
 				.GetTypes();
@@ -266,11 +244,8 @@ public class ArchitectureTests
 	[Fact]
 	public void Services_ShouldNotDependOnFeatures()
 	{
-		// Given
-		var assembly = typeof(ApplicationDbContext).Assembly;
-
 		// When
-		var result = Types.InAssembly(assembly)
+		var result = Types.InAssembly(ApplicationAssembly)
 				.That()
 				.ResideInNamespace($"{_domainNamespace}.Services")
 				.ShouldNot()
