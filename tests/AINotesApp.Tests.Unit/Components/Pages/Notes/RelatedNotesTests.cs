@@ -1,22 +1,40 @@
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     RelatedNotesTests.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp.Tests.Unit
+// =======================================================
+
 using System.Diagnostics.CodeAnalysis;
+
 using AINotesApp.Components.Pages.Notes;
 using AINotesApp.Features.Notes.GetRelatedNotes;
+
 using Bunit;
+
 using FluentAssertions;
+
 using MediatR;
+
 using Microsoft.Extensions.DependencyInjection;
+
 using NSubstitute;
 
 namespace AINotesApp.Tests.Unit.Components.Pages.Notes;
 
 /// <summary>
-/// Tests for the RelatedNotes component.
+///   Tests for the RelatedNotes component.
 /// </summary>
 [ExcludeFromCodeCoverage]
 public class RelatedNotesTests : BunitContext
 {
+
 	private readonly IMediator _mockMediator;
+
 	private readonly Guid _testNoteId;
+
 	private readonly string _testUserId;
 
 	public RelatedNotesTests()
@@ -28,7 +46,45 @@ public class RelatedNotesTests : BunitContext
 		Services.AddSingleton(_mockMediator);
 	}
 
-	#region Initialization and Parameter Tests
+	[Fact]
+	public void RelatedNotes_HandlesException_GracefullyAndShowsEmptyList()
+	{
+		// Arrange
+		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
+				.Returns<GetRelatedNotesResponse>(_ => throw new Exception("Database error"));
+
+		// Act
+		var cut = Render<RelatedNotes>(parameters => parameters
+				.Add(p => p.NoteId, _testNoteId)
+				.Add(p => p.UserSubject, _testUserId)
+				.Add(p => p.HasEmbedding, true));
+
+		// Assert - component should not crash and show no results
+		cut.WaitForAssertion(() =>
+		{
+			cut.FindAll(".spinner-border").Should().BeEmpty();
+
+			// After an error, the component should show the "no results" state since it has embedding
+			var card = cut.Find(".card");
+			card.Should().NotBeNull();
+			var messageElement = cut.Find(".card-body.text-center.text-muted p");
+			messageElement.TextContent.Should().Contain("No related notes found.");
+		}, TimeSpan.FromSeconds(2));
+	}
+
+	/// <summary>
+	///   Helper method to create a RelatedNoteItem for testing.
+	/// </summary>
+	private RelatedNoteItem CreateRelatedNoteItem(string title, string? summary, DateTime updatedAt)
+	{
+		return new RelatedNoteItem
+		{
+				Id = Guid.NewGuid(),
+				Title = title,
+				AiSummary = summary,
+				UpdatedAt = updatedAt
+		};
+	}
 
 	[Fact]
 	public void RelatedNotes_RendersLoadingState_WhenInitializing()
@@ -42,17 +98,17 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
-		// Assert - immediately check for loading spinner before async completes
+		// Assert - immediately check for loading spinner before the async completes
 		var spinner = cut.Find(".spinner-border");
 		spinner.Should().NotBeNull();
 		spinner.ClassList.Should().Contain("spinner-border-sm");
 		spinner.ClassList.Should().Contain("text-primary");
 
 		// Complete the task
-		tcs.SetResult(new GetRelatedNotesResponse { RelatedNotes = new List<RelatedNoteItem>() });
+		tcs.SetResult(new GetRelatedNotesResponse { RelatedNotes = [] });
 	}
 
 	[Fact]
@@ -61,13 +117,14 @@ public class RelatedNotesTests : BunitContext
 		// Arrange & Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, Guid.Empty)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
 		cut.WaitForAssertion(() =>
 		{
 			cut.FindAll(".spinner-border").Should().BeEmpty();
+
 			// With HasEmbedding=true but invalid params, it shows the "no results" message
 			var card = cut.Find(".card");
 			card.Should().NotBeNull();
@@ -84,13 +141,14 @@ public class RelatedNotesTests : BunitContext
 		// Arrange & Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, string.Empty)
+				.Add(p => p.UserSubject, string.Empty)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
 		cut.WaitForAssertion(() =>
 		{
 			cut.FindAll(".spinner-border").Should().BeEmpty();
+
 			// With HasEmbedding=true but invalid params, it shows the "no results" message
 			var card = cut.Find(".card");
 			card.Should().NotBeNull();
@@ -107,7 +165,7 @@ public class RelatedNotesTests : BunitContext
 		// Arrange & Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, false));
 
 		// Assert
@@ -120,10 +178,6 @@ public class RelatedNotesTests : BunitContext
 		_mockMediator.DidNotReceive().Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>());
 	}
 
-	#endregion
-
-	#region Related Notes Display Tests
-
 	[Fact]
 	public void RelatedNotes_DisplaysRelatedNotes_WhenNotesExist()
 	{
@@ -133,7 +187,7 @@ public class RelatedNotesTests : BunitContext
 
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem> { relatedNote1, relatedNote2 }
+				RelatedNotes = [relatedNote1, relatedNote2]
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -142,7 +196,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -169,7 +223,7 @@ public class RelatedNotesTests : BunitContext
 
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem> { relatedNote }
+				RelatedNotes = [relatedNote]
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -178,7 +232,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -197,7 +251,7 @@ public class RelatedNotesTests : BunitContext
 
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem> { relatedNote }
+				RelatedNotes = [relatedNote]
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -206,7 +260,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -225,7 +279,7 @@ public class RelatedNotesTests : BunitContext
 
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem> { relatedNote }
+				RelatedNotes = [relatedNote]
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -234,7 +288,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -252,7 +306,7 @@ public class RelatedNotesTests : BunitContext
 
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem> { relatedNote }
+				RelatedNotes = [relatedNote]
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -261,7 +315,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -280,7 +334,7 @@ public class RelatedNotesTests : BunitContext
 
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem> { relatedNote }
+				RelatedNotes = [relatedNote]
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -289,7 +343,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -301,26 +355,23 @@ public class RelatedNotesTests : BunitContext
 		}, TimeSpan.FromSeconds(2));
 	}
 
-	#endregion
-
-	#region Navigation Tests
-
 	[Fact]
 	public void RelatedNotes_CreatesLinkToNoteDetails_ForEachRelatedNote()
 	{
 		// Arrange
 		var noteId = Guid.NewGuid();
+
 		var relatedNote = new RelatedNoteItem
 		{
-			Id = noteId,
-			Title = "Note Title",
-			AiSummary = "Summary",
-			UpdatedAt = DateTime.UtcNow
+				Id = noteId,
+				Title = "Note Title",
+				AiSummary = "Summary",
+				UpdatedAt = DateTime.UtcNow
 		};
 
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem> { relatedNote }
+				RelatedNotes = [relatedNote]
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -329,7 +380,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -348,7 +399,7 @@ public class RelatedNotesTests : BunitContext
 
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem> { relatedNote }
+				RelatedNotes = [relatedNote]
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -357,7 +408,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -369,17 +420,13 @@ public class RelatedNotesTests : BunitContext
 		}, TimeSpan.FromSeconds(2));
 	}
 
-	#endregion
-
-	#region Empty State Tests
-
 	[Fact]
 	public void RelatedNotes_ShowsNoResultsMessage_WhenNoRelatedNotesAndHasEmbedding()
 	{
 		// Arrange
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem>()
+				RelatedNotes = []
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -388,7 +435,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -408,7 +455,7 @@ public class RelatedNotesTests : BunitContext
 		// Arrange
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem>()
+				RelatedNotes = []
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -417,7 +464,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, false));
 
 		// Assert
@@ -435,7 +482,7 @@ public class RelatedNotesTests : BunitContext
 		// Arrange
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem>()
+				RelatedNotes = []
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -444,7 +491,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -455,17 +502,13 @@ public class RelatedNotesTests : BunitContext
 		}, TimeSpan.FromSeconds(2));
 	}
 
-	#endregion
-
-	#region MediatR Query Tests
-
 	[Fact]
 	public void RelatedNotes_SendsCorrectQuery_ToMediator()
 	{
 		// Arrange
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem>()
+				RelatedNotes = []
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -474,7 +517,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true)
 				.Add(p => p.TopN, 10));
 
@@ -482,11 +525,11 @@ public class RelatedNotesTests : BunitContext
 		cut.WaitForAssertion(() =>
 		{
 			_mockMediator.Received(1).Send(
-							Arg.Is<GetRelatedNotesQuery>(q =>
-									q.NoteId == _testNoteId &&
-									q.UserId == _testUserId &&
-									q.TopN == 10),
-							Arg.Any<CancellationToken>());
+					Arg.Is<GetRelatedNotesQuery>(q =>
+							q.NoteId == _testNoteId &&
+							q.UserSubject == _testUserId &&
+							q.TopN == 10),
+					Arg.Any<CancellationToken>());
 		}, TimeSpan.FromSeconds(2));
 	}
 
@@ -496,7 +539,7 @@ public class RelatedNotesTests : BunitContext
 		// Arrange
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem>()
+				RelatedNotes = []
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -505,50 +548,17 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
 		cut.WaitForAssertion(() =>
 		{
 			_mockMediator.Received(1).Send(
-							Arg.Is<GetRelatedNotesQuery>(q => q.TopN == 5),
-							Arg.Any<CancellationToken>());
+					Arg.Is<GetRelatedNotesQuery>(q => q.TopN == 5),
+					Arg.Any<CancellationToken>());
 		}, TimeSpan.FromSeconds(2));
 	}
-
-	#endregion
-
-	#region Error Handling Tests
-
-	[Fact]
-	public void RelatedNotes_HandlesException_GracefullyAndShowsEmptyList()
-	{
-		// Arrange
-		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
-				.Returns<GetRelatedNotesResponse>(_ => throw new Exception("Database error"));
-
-		// Act
-		var cut = Render<RelatedNotes>(parameters => parameters
-				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
-				.Add(p => p.HasEmbedding, true));
-
-		// Assert - component should not crash and show no results
-		cut.WaitForAssertion(() =>
-		{
-			cut.FindAll(".spinner-border").Should().BeEmpty();
-			// After error, the component should show the "no results" state since it has embedding
-			var card = cut.Find(".card");
-			card.Should().NotBeNull();
-			var messageElement = cut.Find(".card-body.text-center.text-muted p");
-			messageElement.TextContent.Should().Contain("No related notes found.");
-		}, TimeSpan.FromSeconds(2));
-	}
-
-	#endregion
-
-	#region UI Element Tests
 
 	[Fact]
 	public void RelatedNotes_DisplaysRelatedNotesIcon_InHeader()
@@ -558,7 +568,7 @@ public class RelatedNotesTests : BunitContext
 
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem> { relatedNote }
+				RelatedNotes = [relatedNote]
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -567,7 +577,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -586,7 +596,7 @@ public class RelatedNotesTests : BunitContext
 
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem> { relatedNote }
+				RelatedNotes = [relatedNote]
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -595,7 +605,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -622,7 +632,7 @@ public class RelatedNotesTests : BunitContext
 
 		var response = new GetRelatedNotesResponse
 		{
-			RelatedNotes = new List<RelatedNoteItem> { note1, note2, note3 }
+				RelatedNotes = [note1, note2, note3]
 		};
 
 		_mockMediator.Send(Arg.Any<GetRelatedNotesQuery>(), Arg.Any<CancellationToken>())
@@ -631,7 +641,7 @@ public class RelatedNotesTests : BunitContext
 		// Act
 		var cut = Render<RelatedNotes>(parameters => parameters
 				.Add(p => p.NoteId, _testNoteId)
-				.Add(p => p.UserId, _testUserId)
+				.Add(p => p.UserSubject, _testUserId)
 				.Add(p => p.HasEmbedding, true));
 
 		// Assert
@@ -647,23 +657,4 @@ public class RelatedNotesTests : BunitContext
 		}, TimeSpan.FromSeconds(2));
 	}
 
-	#endregion
-
-	#region Helper Methods
-
-	/// <summary>
-	/// Helper method to create a RelatedNoteItem for testing.
-	/// </summary>
-	private RelatedNoteItem CreateRelatedNoteItem(string title, string? summary, DateTime updatedAt)
-	{
-		return new RelatedNoteItem
-		{
-			Id = Guid.NewGuid(),
-			Title = title,
-			AiSummary = summary,
-			UpdatedAt = updatedAt
-		};
-	}
-
-	#endregion
 }

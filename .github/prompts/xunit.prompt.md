@@ -103,7 +103,8 @@ public class ArticleTests
 
 # Blazor Component and Page Testing with bUnit
 
-bUnit is the recommended library for unit testing Blazor components and pages. It integrates seamlessly with xUnit, NUnit, and MSTest, and runs tests in milliseconds. Key practices:
+bUnit is the recommended library for unit testing Blazor components and pages. It integrates seamlessly with xUnit,
+NUnit, and MSTest, and runs tests in milliseconds. Key practices:
 
 - Add the `bunit` NuGet package to your test project.
 - Use `BunitContext` to render and interact with components in tests.

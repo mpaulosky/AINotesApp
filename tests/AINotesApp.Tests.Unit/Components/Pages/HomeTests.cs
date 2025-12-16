@@ -1,3 +1,12 @@
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     HomeTests.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp.Tests.Unit
+// =======================================================
+
 using System.Diagnostics.CodeAnalysis;
 
 using AINotesApp.Components.Pages;
@@ -9,11 +18,12 @@ using FluentAssertions;
 namespace AINotesApp.Tests.Unit.Components.Pages;
 
 /// <summary>
-/// Unit tests for Home component using BUnit 2.x
+///   Unit tests for a Home component using BUnit 2.x
 /// </summary>
 [ExcludeFromCodeCoverage]
 public class HomeTests : BunitContext
 {
+
 	[Fact]
 	public void Home_ShouldRender_WithCorrectTitle()
 	{
@@ -41,7 +51,7 @@ public class HomeTests : BunitContext
 		var cut = Render<Home>();
 
 		// Assert - PageTitle is rendered by the framework, not in component markup
-		// Check that the component renders successfully with page title directive
+		// Check that the component renders successfully with the page title directive
 		cut.Markup.Should().NotBeNullOrEmpty();
 		cut.Markup.Should().Contain("Hello, world!");
 	}
@@ -68,4 +78,5 @@ public class HomeTests : BunitContext
 		h1.Should().NotBeNull();
 		h1.TextContent.Trim().Should().Be("Hello, world!");
 	}
+
 }

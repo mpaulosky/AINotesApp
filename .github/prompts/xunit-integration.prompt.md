@@ -71,14 +71,14 @@ public class TestAppFactory : WebApplicationFactory<Program>
 - Use real database instances running in containers for full fidelity and fewer surprises between test and production
   environments. Prefer `DotNet.Testcontainers` to spin up ephemeral containers during test setup.
 - Recommended approach:
-  - Spin up a database container (Postgres, SQL Server, MySQL) in a shared collection fixture using
-    `DotNet.Testcontainers`.
-  - Run EF Core migrations against the container database at fixture initialization.
-  - Use `Respawn` (or manual cleanup) between tests to ensure a clean state, or recreate the database/schema per test
-    collection if faster.
+    - Spin up a database container (Postgres, SQL Server, MySQL) in a shared collection fixture using
+      `DotNet.Testcontainers`.
+    - Run EF Core migrations against the container database at fixture initialization.
+    - Use `Respawn` (or manual cleanup) between tests to ensure a clean state, or recreate the database/schema per test
+      collection if faster.
 - Advantages:
-  - Tests run against a real engine, catching engine-specific behaviors (SQL nuances, collations, extensions).
-  - Works consistently in CI when Docker is available.
+    - Tests run against a real engine, catching engine-specific behaviors (SQL nuances, collations, extensions).
+    - Works consistently in CI when Docker is available.
 - CI notes: ensure the CI runner supports Docker or use a self-hosted runner; alternatively run the DB container as a
   service in the pipeline.
 
@@ -311,6 +311,7 @@ on:
 workflow_dispatch:
 push:
 paths:
+
 - 'tests/Web.Tests.Integration/**'
 - '.github/workflows/integration-tests.yml'
 
@@ -320,8 +321,9 @@ runs-on: ubuntu-latest
 env:
 DOTNET_CLI_TELEMETRY_OPTOUT: '1'
 steps:
+
 - name: Checkout repo
-uses: actions/checkout@v4
+  uses: actions/checkout@v4
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4

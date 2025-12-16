@@ -1,37 +1,53 @@
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     NoteEditorTests.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp.Tests.Unit
+// =======================================================
+
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Claims;
+
 using AINotesApp.Components.Pages.Notes;
-using AINotesApp.Features.Notes.CreateNote;
 using AINotesApp.Features.Notes.GetNoteDetails;
-using AINotesApp.Features.Notes.UpdateNote;
+using AINotesApp.Tests.Unit.Fakes;
+
 using Bunit;
+
 using FluentAssertions;
+
 using MediatR;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection;
+
 using NSubstitute;
 
 namespace AINotesApp.Tests.Unit.Components.Pages.Notes;
 
 /// <summary>
-/// Unit tests for NoteEditor component using BUnit 2.x
+///   Unit tests for NoteEditor component using BUnit 2.x
 /// </summary>
 [ExcludeFromCodeCoverage]
 public class NoteEditorTests : BunitContext
 {
+
+	private readonly FakeAuthenticationStateProvider _authProvider;
+
 	private readonly IMediator _mediator;
-	private readonly TestAuthStateProvider _authProvider;
+
 	private readonly NavigationManager _navigation;
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="NoteEditorTests"/> class
+	///   Initializes a new instance of the <see cref="NoteEditorTests" /> class
 	/// </summary>
 	public NoteEditorTests()
 	{
 		_mediator = Substitute.For<IMediator>();
-		_authProvider = new TestAuthStateProvider();
+		_authProvider = new FakeAuthenticationStateProvider();
 		_navigation = Substitute.For<NavigationManager>();
 
 		// Register services
@@ -43,11 +59,13 @@ public class NoteEditorTests : BunitContext
 	}
 
 	/// <summary>
-	/// Renders the component with authentication context
+	///   Renders the component with authentication context
 	/// </summary>
-	private IRenderedComponent<NoteEditor> RenderWithAuth(Action<ComponentParameterCollectionBuilder<NoteEditor>>? parameters = null)
+	private IRenderedComponent<NoteEditor> RenderWithAuth(
+			Action<ComponentParameterCollectionBuilder<NoteEditor>>? parameters = null)
 	{
 		var authStateTask = _authProvider.GetAuthenticationStateAsync();
+
 		return Render<NoteEditor>(ps =>
 		{
 			ps.AddCascadingValue(authStateTask);
@@ -66,7 +84,8 @@ public class NoteEditorTests : BunitContext
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			cut.Markup.Should().Contain("Create New Note");
 		}, TimeSpan.FromSeconds(2));
@@ -78,24 +97,26 @@ public class NoteEditorTests : BunitContext
 		// Arrange
 		_authProvider.SetAuthorized("TestUser");
 		var noteId = Guid.NewGuid();
+
 		var response = new GetNoteDetailsResponse
 		{
-			Id = noteId,
-			Title = "Test Note",
-			Content = "Test Content",
-			CreatedAt = DateTime.Now.AddDays(-1),
-			UpdatedAt = DateTime.Now
+				Id = noteId,
+				Title = "Test Note",
+				Content = "Test Content",
+				CreatedAt = DateTime.Now.AddDays(-1),
+				UpdatedAt = DateTime.Now
 		};
 
 		_mediator.Send(Arg.Any<GetNoteDetailsQuery>(), Arg.Any<CancellationToken>())
-			.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
+				.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
 
 		// Act
 		var cut = RenderWithAuth(ps => ps.Add(p => p.Id, noteId));
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			cut.Markup.Should().Contain("Edit Note");
 		}, TimeSpan.FromSeconds(2));
@@ -112,7 +133,8 @@ public class NoteEditorTests : BunitContext
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			var titleInput = cut.Find("#title");
 			titleInput.Should().NotBeNull();
@@ -131,7 +153,8 @@ public class NoteEditorTests : BunitContext
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			var contentInput = cut.Find("#content");
 			contentInput.Should().NotBeNull();
@@ -150,7 +173,8 @@ public class NoteEditorTests : BunitContext
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			var button = cut.Find("button[type='submit']");
 			button.Should().NotBeNull();
@@ -164,24 +188,26 @@ public class NoteEditorTests : BunitContext
 		// Arrange
 		_authProvider.SetAuthorized("TestUser");
 		var noteId = Guid.NewGuid();
+
 		var response = new GetNoteDetailsResponse
 		{
-			Id = noteId,
-			Title = "Test Note",
-			Content = "Test Content",
-			CreatedAt = DateTime.Now.AddDays(-1),
-			UpdatedAt = DateTime.Now
+				Id = noteId,
+				Title = "Test Note",
+				Content = "Test Content",
+				CreatedAt = DateTime.Now.AddDays(-1),
+				UpdatedAt = DateTime.Now
 		};
 
 		_mediator.Send(Arg.Any<GetNoteDetailsQuery>(), Arg.Any<CancellationToken>())
-			.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
+				.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
 
 		// Act
 		var cut = RenderWithAuth(ps => ps.Add(p => p.Id, noteId));
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			var button = cut.Find("button[type='submit']");
 			button.TextContent.Should().Contain("Update Note");
@@ -199,7 +225,8 @@ public class NoteEditorTests : BunitContext
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			cut.Markup.Should().Contain("Back to Notes");
 		}, TimeSpan.FromSeconds(2));
@@ -211,27 +238,30 @@ public class NoteEditorTests : BunitContext
 		// Arrange
 		_authProvider.SetAuthorized("TestUser", "user-123");
 		var noteId = Guid.NewGuid();
+
 		var response = new GetNoteDetailsResponse
 		{
-			Id = noteId,
-			Title = "Existing Note Title",
-			Content = "Existing note content",
-			CreatedAt = DateTime.Now.AddDays(-1),
-			UpdatedAt = DateTime.Now
+				Id = noteId,
+				Title = "Existing Note Title",
+				Content = "Existing note content",
+				CreatedAt = DateTime.Now.AddDays(-1),
+				UpdatedAt = DateTime.Now
 		};
 
 		_mediator.Send(Arg.Any<GetNoteDetailsQuery>(), Arg.Any<CancellationToken>())
-			.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
+				.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
 
 		// Act
 		var cut = RenderWithAuth(ps => ps.Add(p => p.Id, noteId));
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			var titleInput = cut.Find("#title");
 			titleInput.GetAttribute("value").Should().Be("Existing Note Title");
+
 			// TextArea content is loaded, verified by checking the form was rendered
 			cut.Markup.Should().Contain("Existing Note Title");
 		}, TimeSpan.FromSeconds(2));
@@ -243,25 +273,27 @@ public class NoteEditorTests : BunitContext
 		// Arrange
 		_authProvider.SetAuthorized("TestUser");
 		var noteId = Guid.NewGuid();
+
 		var response = new GetNoteDetailsResponse
 		{
-			Id = noteId,
-			Title = "Test Note",
-			Content = "Test Content",
-			AiSummary = "This is an AI-generated summary",
-			CreatedAt = DateTime.Now,
-			UpdatedAt = DateTime.Now
+				Id = noteId,
+				Title = "Test Note",
+				Content = "Test Content",
+				AiSummary = "This is an AI-generated summary",
+				CreatedAt = DateTime.Now,
+				UpdatedAt = DateTime.Now
 		};
 
 		_mediator.Send(Arg.Any<GetNoteDetailsQuery>(), Arg.Any<CancellationToken>())
-			.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
+				.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
 
 		// Act
 		var cut = RenderWithAuth(ps => ps.Add(p => p.Id, noteId));
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			cut.Markup.Should().Contain("AI Summary:");
 			cut.Markup.Should().Contain("This is an AI-generated summary");
@@ -274,25 +306,27 @@ public class NoteEditorTests : BunitContext
 		// Arrange
 		_authProvider.SetAuthorized("TestUser");
 		var noteId = Guid.NewGuid();
+
 		var response = new GetNoteDetailsResponse
 		{
-			Id = noteId,
-			Title = "Test Note",
-			Content = "Test Content",
-			Tags = "tag1, tag2, tag3",
-			CreatedAt = DateTime.Now,
-			UpdatedAt = DateTime.Now
+				Id = noteId,
+				Title = "Test Note",
+				Content = "Test Content",
+				Tags = "tag1, tag2, tag3",
+				CreatedAt = DateTime.Now,
+				UpdatedAt = DateTime.Now
 		};
 
 		_mediator.Send(Arg.Any<GetNoteDetailsQuery>(), Arg.Any<CancellationToken>())
-			.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
+				.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
 
 		// Act
 		var cut = RenderWithAuth(ps => ps.Add(p => p.Id, noteId));
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			cut.Markup.Should().Contain("Tags:");
 			cut.Markup.Should().Contain("tag1");
@@ -307,24 +341,26 @@ public class NoteEditorTests : BunitContext
 		// Arrange
 		_authProvider.SetAuthorized("TestUser");
 		var noteId = Guid.NewGuid();
+
 		var response = new GetNoteDetailsResponse
 		{
-			Id = noteId,
-			Title = "Test Note",
-			Content = "Test Content",
-			CreatedAt = DateTime.Now.AddDays(-2),
-			UpdatedAt = DateTime.Now.AddDays(-1)
+				Id = noteId,
+				Title = "Test Note",
+				Content = "Test Content",
+				CreatedAt = DateTime.Now.AddDays(-2),
+				UpdatedAt = DateTime.Now.AddDays(-1)
 		};
 
 		_mediator.Send(Arg.Any<GetNoteDetailsQuery>(), Arg.Any<CancellationToken>())
-			.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
+				.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
 
 		// Act
 		var cut = RenderWithAuth(ps => ps.Add(p => p.Id, noteId));
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			cut.Markup.Should().Contain("Created:");
 			cut.Markup.Should().Contain("Updated:");
@@ -339,14 +375,15 @@ public class NoteEditorTests : BunitContext
 		var noteId = Guid.NewGuid();
 
 		_mediator.Send(Arg.Any<GetNoteDetailsQuery>(), Arg.Any<CancellationToken>())
-			.Returns(Task.FromResult<GetNoteDetailsResponse?>(null));
+				.Returns(Task.FromResult<GetNoteDetailsResponse?>(null));
 
 		// Act
 		var cut = RenderWithAuth(ps => ps.Add(p => p.Id, noteId));
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			cut.Markup.Should().Contain("Note not found or access denied.");
 		}, TimeSpan.FromSeconds(2));
@@ -361,8 +398,9 @@ public class NoteEditorTests : BunitContext
 
 		// Setup mediator to delay response
 		var tcs = new TaskCompletionSource<GetNoteDetailsResponse?>();
+
 		_mediator.Send(Arg.Any<GetNoteDetailsQuery>(), Arg.Any<CancellationToken>())
-			.Returns(tcs.Task);
+				.Returns(tcs.Task);
 
 		// Act
 		var cut = RenderWithAuth(ps => ps.Add(p => p.Id, noteId));
@@ -371,7 +409,7 @@ public class NoteEditorTests : BunitContext
 		await Task.Delay(100);
 
 		// Assert
-		cut.WaitForAssertion(() =>
+		await cut.WaitForAssertionAsync(() =>
 		{
 			cut.Markup.Should().Contain("spinner-border");
 			cut.Markup.Should().Contain("Loading note...");
@@ -392,10 +430,12 @@ public class NoteEditorTests : BunitContext
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			var form = cut.Find("form");
 			form.Should().NotBeNull();
+
 			// Form has data annotations validator
 			cut.Markup.Should().Contain("form-control");
 		}, TimeSpan.FromSeconds(2));
@@ -412,7 +452,8 @@ public class NoteEditorTests : BunitContext
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			var contentInput = cut.Find("#content");
 			contentInput.Should().NotBeNull();
@@ -426,28 +467,30 @@ public class NoteEditorTests : BunitContext
 		// Arrange
 		_authProvider.SetAuthorized("TestUser", "user-123");
 		var noteId = Guid.NewGuid();
+
 		var response = new GetNoteDetailsResponse
 		{
-			Id = noteId,
-			Title = "Test Note",
-			Content = "Test Content",
-			CreatedAt = DateTime.Now,
-			UpdatedAt = DateTime.Now
+				Id = noteId,
+				Title = "Test Note",
+				Content = "Test Content",
+				CreatedAt = DateTime.Now,
+				UpdatedAt = DateTime.Now
 		};
 
 		_mediator.Send(Arg.Any<GetNoteDetailsQuery>(), Arg.Any<CancellationToken>())
-			.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
+				.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
 
 		// Act
 		var cut = RenderWithAuth(ps => ps.Add(p => p.Id, noteId));
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			_mediator.Received(1).Send(
-				Arg.Is<GetNoteDetailsQuery>(q => q.Id == noteId && q.UserId == "user-123"),
-				Arg.Any<CancellationToken>());
+					Arg.Is<GetNoteDetailsQuery>(q => q.Id == noteId && q.UserSubject == "user-123"),
+					Arg.Any<CancellationToken>());
 		}, TimeSpan.FromSeconds(2));
 	}
 
@@ -462,7 +505,8 @@ public class NoteEditorTests : BunitContext
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			cut.Markup.Should().Contain("Create New Note");
 		}, TimeSpan.FromSeconds(2));
@@ -474,24 +518,26 @@ public class NoteEditorTests : BunitContext
 		// Arrange
 		_authProvider.SetAuthorized("TestUser");
 		var noteId = Guid.NewGuid();
+
 		var response = new GetNoteDetailsResponse
 		{
-			Id = noteId,
-			Title = "Test Note",
-			Content = "Test Content",
-			CreatedAt = DateTime.Now,
-			UpdatedAt = DateTime.Now
+				Id = noteId,
+				Title = "Test Note",
+				Content = "Test Content",
+				CreatedAt = DateTime.Now,
+				UpdatedAt = DateTime.Now
 		};
 
 		_mediator.Send(Arg.Any<GetNoteDetailsQuery>(), Arg.Any<CancellationToken>())
-			.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
+				.Returns(Task.FromResult<GetNoteDetailsResponse?>(response));
 
 		// Act
 		var cut = RenderWithAuth(ps => ps.Add(p => p.Id, noteId));
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			cut.Markup.Should().Contain("Edit Note");
 		}, TimeSpan.FromSeconds(2));
@@ -508,112 +554,11 @@ public class NoteEditorTests : BunitContext
 
 		// Assert
 		await cut.InvokeAsync(() => { });
-		cut.WaitForAssertion(() =>
+
+		await cut.WaitForAssertionAsync(() =>
 		{
 			var form = cut.Find("form");
 			form.Should().NotBeNull();
 		}, TimeSpan.FromSeconds(2));
-	}
-
-	/// <summary>
-	/// Helper class for fake authentication state provider
-	/// </summary>
-	public class TestAuthStateProvider : AuthenticationStateProvider
-	{
-		private bool _isAuthenticated = false;
-		private string _userName = string.Empty;
-		private string _userId = string.Empty;
-
-		/// <summary>
-		/// Sets the authentication state to authorized with a user name
-		/// </summary>
-		public void SetAuthorized(string userName, string? userId = null)
-		{
-			_isAuthenticated = true;
-			_userName = userName;
-			_userId = userId ?? userName;
-			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-		}
-
-		/// <summary>
-		/// Sets the authentication state to not authorized
-		/// </summary>
-		public void SetNotAuthorized()
-		{
-			_isAuthenticated = false;
-			_userName = string.Empty;
-			_userId = string.Empty;
-			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-		}
-
-		/// <summary>
-		/// Gets the authentication state
-		/// </summary>
-		public override Task<AuthenticationState> GetAuthenticationStateAsync()
-		{
-			ClaimsIdentity identity;
-
-			if (_isAuthenticated)
-			{
-				var claims = new List<Claim>
-				{
-					new Claim(ClaimTypes.Name, _userName),
-					new Claim(ClaimTypes.NameIdentifier, _userId)
-				};
-				identity = new ClaimsIdentity(claims, "TestAuth");
-			}
-			else
-			{
-				identity = new ClaimsIdentity();
-			}
-
-			var user = new ClaimsPrincipal(identity);
-			return Task.FromResult(new AuthenticationState(user));
-		}
-	}
-
-	/// <summary>
-	/// Fake authorization service for testing
-	/// </summary>
-	private class FakeAuthorizationService : IAuthorizationService
-	{
-		public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object? resource, IEnumerable<IAuthorizationRequirement> requirements)
-		{
-			if (user?.Identity?.IsAuthenticated == true)
-			{
-				return Task.FromResult(AuthorizationResult.Success());
-			}
-			return Task.FromResult(AuthorizationResult.Failed());
-		}
-
-		public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object? resource, string policyName)
-		{
-			if (user?.Identity?.IsAuthenticated == true)
-			{
-				return Task.FromResult(AuthorizationResult.Success());
-			}
-			return Task.FromResult(AuthorizationResult.Failed());
-		}
-	}
-
-	/// <summary>
-	/// Fake authorization policy provider for testing
-	/// </summary>
-	private class FakeAuthorizationPolicyProvider : IAuthorizationPolicyProvider
-	{
-		public Task<AuthorizationPolicy> GetDefaultPolicyAsync()
-		{
-			return Task.FromResult(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
-		}
-
-		public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
-		{
-			return Task.FromResult<AuthorizationPolicy?>(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
-		}
-
-		public Task<AuthorizationPolicy?> GetFallbackPolicyAsync()
-		{
-			return Task.FromResult<AuthorizationPolicy?>(null);
-		}
 	}
 }

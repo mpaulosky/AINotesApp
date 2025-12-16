@@ -1,12 +1,10 @@
 @page "/notes/new"
 @page "/notes/{id:guid}/edit"
-@using AINotesApp.Features.Notes.CreateNote
-@using AINotesApp.Features.Notes.UpdateNote
-@using AINotesApp.Features.Notes.GetNoteDetails
-@using MediatR
-@using Microsoft.AspNetCore.Authorization
-@using System.Security.Claims
 @using System.ComponentModel.DataAnnotations
+@using AINotesApp.Features.Notes.CreateNote
+@using AINotesApp.Features.Notes.GetNoteDetails
+@using AINotesApp.Features.Notes.UpdateNote
+@using MediatR
 @attribute [Authorize]
 
 @inject IMediator Mediator
@@ -16,294 +14,306 @@
 <PageTitle>@(IsEditMode ? "Edit Note" : "Create Note")</PageTitle>
 
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-lg-8">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1>@(IsEditMode ? "Edit Note" : "Create New Note")</h1>
-                <a href="/notes" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left"></i> Back to Notes
-                </a>
-            </div>
+	<div class="row">
+		<div class="col-lg-8">
+			<div class="d-flex justify-content-between align-items-center mb-4">
+				<h1>@(IsEditMode ? "Edit Note" : "Create New Note")</h1>
+				<a href="/notes" class="btn btn-outline-secondary">
+					<i class="bi bi-arrow-left"></i> Back to Notes
+				</a>
+			</div>
 
-            @if (!string.IsNullOrEmpty(errorMessage))
-            {
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="bi bi-exclamation-triangle"></i> @errorMessage
-                    <button type="button" class="btn-close" @onclick="() => errorMessage = null"></button>
-                </div>
-            }
+			@if (!string.IsNullOrEmpty(errorMessage))
+			{
+				<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<i class="bi bi-exclamation-triangle"></i> @errorMessage
+					<button type="button" class="btn-close" @onclick="() => errorMessage = null"></button>
+				</div>
+			}
 
-            @if (!string.IsNullOrEmpty(successMessage))
-            {
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="bi bi-check-circle"></i> @successMessage
-                    <button type="button" class="btn-close" @onclick="() => successMessage = null"></button>
-                </div>
-            }
+			@if (!string.IsNullOrEmpty(successMessage))
+			{
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<i class="bi bi-check-circle"></i> @successMessage
+					<button type="button" class="btn-close" @onclick="() => successMessage = null"></button>
+				</div>
+			}
 
-            @if (isLoading)
-            {
-                <div class="text-center py-5">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                    <p class="mt-2">Loading note...</p>
-                </div>
-            }
-            else
-            {
-                <EditForm Model="@model" OnValidSubmit="HandleSubmitAsync" FormName="noteEditor">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary class="alert alert-danger" />
+			@if (isLoading)
+			{
+				<div class="text-center py-5">
+					<div class="spinner-border text-primary" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+					<p class="mt-2">Loading note...</p>
+				</div>
+			}
+			else
+			{
+				<EditForm Model="@model" OnValidSubmit="HandleSubmitAsync" FormName="noteEditor">
+					<DataAnnotationsValidator/>
+					<ValidationSummary class="alert alert-danger"/>
 
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Title</label>
-                        <InputText id="title" class="form-control" @bind-Value="model!.Title" placeholder="Enter note title"
-                            maxlength="200" />
-                        <ValidationMessage For="@(() => model.Title)" />
-                    </div>
+					<div class="mb-3">
+						<label for="title" class="form-label">Title</label>
+						<InputText id="title" class="form-control" @bind-Value="model!.Title" placeholder="Enter note title"
+											 maxlength="200"/>
+						<ValidationMessage For="@(() => model.Title)"/>
+					</div>
 
-                    <div class="mb-3">
-                        <label for="content" class="form-label">Content</label>
-                        <InputTextArea id="content" class="form-control" @bind-Value="model.Content" rows="15"
-                            placeholder="Write your note here..." />
-                        <ValidationMessage For="@(() => model.Content)" />
-                    </div>
+					<div class="mb-3">
+						<label for="content" class="form-label">Content</label>
+						<InputTextArea id="content" class="form-control" @bind-Value="model.Content" rows="15"
+													 placeholder="Write your note here..."/>
+						<ValidationMessage For="@(() => model.Content)"/>
+					</div>
 
-                    @if (!string.IsNullOrEmpty(aiSummary))
-                    {
-                        <div class="alert alert-info" role="alert">
-                            <strong><i class="bi bi-stars"></i> AI Summary:</strong>
-                            <p class="mb-0 mt-2">@aiSummary</p>
-                        </div>
-                    }
+					@if (!string.IsNullOrEmpty(aiSummary))
+					{
+						<div class="alert alert-info" role="alert">
+							<strong><i class="bi bi-stars"></i> AI Summary:</strong>
+							<p class="mb-0 mt-2">@aiSummary</p>
+						</div>
+					}
 
-                    @if (!string.IsNullOrEmpty(tags))
-                    {
-                        <div class="mb-3">
-                            <strong><i class="bi bi-tags-fill"></i> Tags:</strong>
-                            <div class="mt-2">
-                                @foreach (var tag in tags.Split(',', StringSplitOptions.RemoveEmptyEntries |
-                                                        StringSplitOptions.TrimEntries))
-                                {
-                                    <span class="badge bg-primary me-1 mb-1">@tag</span>
-                                }
-                            </div>
-                        </div>
-                    }
+					@if (!string.IsNullOrEmpty(tags))
+					{
+						<div class="mb-3">
+							<strong><i class="bi bi-tags-fill"></i> Tags:</strong>
+							<div class="mt-2">
+								@foreach (var tag in tags.Split(',', StringSplitOptions.RemoveEmptyEntries |
+																										 StringSplitOptions.TrimEntries))
+								{
+									<span class="badge bg-primary me-1 mb-1">@tag</span>
+								}
+							</div>
+						</div>
+					}
 
-                    <div class="d-flex justify-content-between align-items-center">
-                        <button type="submit" class="btn btn-primary" disabled="@isSaving">
-                            @if (isSaving)
-                            {
-                                <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-                                <span>Saving...</span>
-                            }
-                            else
-                            {
-                                <i class="bi bi-save me-2"></i>
-                                <span>@(IsEditMode ? "Update Note" : "Create Note")</span>
-                            }
-                        </button>
+					<div class="d-flex justify-content-between align-items-center">
+						<button type="submit" class="btn btn-primary" disabled="@isSaving">
+							@if (isSaving)
+							{
+								<span class="spinner-border spinner-border-sm me-2" role="status"></span>
+								<span>Saving...</span>
+							}
+							else
+							{
+								<i class="bi bi-save me-2"></i>
+								<span>@(IsEditMode ? "Update Note" : "Create Note")</span>
+							}
+						</button>
 
-                        @if (IsEditMode)
-                        {
-                            <div class="text-muted">
-                                <small>
-                                    Created: @createdAt.ToLocalTime().ToString("g")<br />
-                                    Updated: @updatedAt.ToLocalTime().ToString("g")
-                                </small>
-                            </div>
-                        }
-                    </div>
-                </EditForm>
-            }
-        </div>
+						@if (IsEditMode)
+						{
+							<div class="text-muted">
+								<small>
+									Created: @createdAt.ToLocalTime().ToString("g")<br/>
+									Updated: @updatedAt.ToLocalTime().ToString("g")
+								</small>
+							</div>
+						}
+					</div>
+				</EditForm>
+			}
+		</div>
 
-        <!-- Related Notes Sidebar (only in edit mode) -->
-        @if (IsEditMode && Id.HasValue && !isLoading)
-        {
-            <div class="col-lg-4">
-                <div class="sticky-top" style="top: 20px;">
-                    <RelatedNotes NoteId="@Id.Value" UserId="@userId" HasEmbedding="true" TopN="5" />
-                </div>
-            </div>
-        }
-    </div>
+		<!-- Related Notes Sidebar (only in edit mode) -->
+		@if (IsEditMode && Id.HasValue && !isLoading)
+		{
+			<div class="col-lg-4">
+				<div class="sticky-top" style="top: 20px;">
+					<RelatedNotes NoteId="@Id.Value" UserSubject="@userSubject" HasEmbedding="true" TopN="5"/>
+				</div>
+			</div>
+		}
+	</div>
 </div>
 
 @code {
-    [Parameter]
-    public Guid? Id { get; set; }
 
-    [SupplyParameterFromForm]
-    private NoteEditorModel? model { get; set; }
+	[Parameter] public Guid? Id { get; set; }
 
-    private bool isLoading = false;
-    private bool isSaving = false;
-    private string? errorMessage;
-    private string? successMessage;
-    private string userId = string.Empty;
-    private string? aiSummary;
-    private string? tags;
-    private DateTimeOffset createdAt;
-    private DateTimeOffset updatedAt;
+	[SupplyParameterFromForm] private NoteEditorModel? model { get; set; }
 
-    private bool IsEditMode => Id.HasValue && Id.Value != Guid.Empty;
+	private bool isLoading  ;
 
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
+	private bool isSaving  ;
 
-            if (user.Identity?.IsAuthenticated == true)
-            {
-                userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+	private string? errorMessage;
 
-                if (IsEditMode)
-                {
-                    await LoadNoteAsync();
-                }
-            }
-            // Ensure model is initialized if not set by form
-            if (model == null)
-            {
-                model = new NoteEditorModel();
-            }
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Error initializing: {ex.Message}";
-        }
-    }
+	private string? successMessage;
 
-    private async Task LoadNoteAsync()
-    {
-        if (!Id.HasValue)
-            return;
+	private string userSubject = string.Empty;
 
-        try
-        {
-            isLoading = true;
-            errorMessage = null;
+	private string? aiSummary;
 
-            var query = new GetNoteDetailsQuery
-            {
-                Id = Id.Value,
-                UserId = userId
-            };
+	private string? tags;
 
-            var response = await Mediator.Send(query);
+	private DateTimeOffset createdAt;
 
-            if (response == null)
-            {
-                errorMessage = "Note not found or access denied.";
-                return;
-            }
+	private DateTimeOffset updatedAt;
 
-            model = new NoteEditorModel
-            {
-                Title = response.Title,
-                Content = response.Content
-            };
+	private bool IsEditMode => Id.HasValue && Id.Value != Guid.Empty;
 
-            aiSummary = response.AiSummary;
-            tags = response.Tags;
-            createdAt = response.CreatedAt;
-            updatedAt = response.UpdatedAt;
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Error loading note: {ex.Message}";
-        }
-        finally
-        {
-            isLoading = false;
-        }
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		try
+		{
+			var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+			var user = authState.User;
 
-    private async Task HandleSubmitAsync()
-    {
-        try
-        {
-            isSaving = true;
-            errorMessage = null;
-            successMessage = null;
+			if (user.Identity?.IsAuthenticated == true)
+			{
+				userSubject = user.FindFirst("sub")?.Value ?? string.Empty;
 
-            if (IsEditMode)
-            {
-                await UpdateNoteAsync();
-            }
-            else
-            {
-                await CreateNoteAsync();
-            }
-        }
-        catch (Exception ex)
-        {
-            errorMessage = $"Error saving note: {ex.Message}";
-        }
-        finally
-        {
-            isSaving = false;
-        }
-    }
+				if (IsEditMode)
+				{
+					await LoadNoteAsync();
+				}
+			}
 
-    private async Task CreateNoteAsync()
-    {
-        var command = new CreateNoteCommand
-        {
-            Title = model!.Title,
-            Content = model!.Content,
-            UserId = userId
-        };
+			// Ensure model is initialized if not set by form
+			if (model == null)
+			{
+				model = new NoteEditorModel();
+			}
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Error initializing: {ex.Message}";
+		}
+	}
 
-        var response = await Mediator.Send(command);
+	private async Task LoadNoteAsync()
+	{
+		if (!Id.HasValue)
+			return;
 
-        successMessage = "Note created successfully!";
+		try
+		{
+			isLoading = true;
+			errorMessage = null;
 
-        // Navigate to the edit page of the newly created note
-        await Task.Delay(1000); // Brief delay to show success message
-        Navigation.NavigateTo($"/notes/{response.Id}/edit");
-    }
+			var query = new GetNoteDetailsQuery
+			{
+				Id = Id.Value,
+				UserSubject = userSubject
+			};
 
-    private async Task UpdateNoteAsync()
-    {
-        if (!Id.HasValue)
-            return;
+			var response = await Mediator.Send(query);
 
-        var command = new UpdateNoteCommand
-        {
-            Id = Id.Value,
-            Title = model!.Title,
-            Content = model!.Content,
-            UserId = userId
-        };
+			if (response == null)
+			{
+				errorMessage = "Note not found or access denied.";
 
-        var response = await Mediator.Send(command);
+				return;
+			}
 
-        if (response.Success)
-        {
-            successMessage = "Note updated successfully with AI summary and tags!";
-            aiSummary = response.AiSummary;
-            tags = response.Tags;
-            updatedAt = response.UpdatedAt;
-        }
-        else
-        {
-            errorMessage = response.Message;
-        }
-    }
+			model = new NoteEditorModel
+			{
+				Title = response.Title,
+				Content = response.Content
+			};
 
-    private class NoteEditorModel
-    {
-        [Required(ErrorMessage = "Title is required")]
-        [StringLength(200, ErrorMessage = "Title cannot exceed 200 characters")]
-        public string Title { get; set; } = string.Empty;
+			aiSummary = response.AiSummary;
+			tags = response.Tags;
+			createdAt = response.CreatedAt;
+			updatedAt = response.UpdatedAt;
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Error loading note: {ex.Message}";
+		}
+		finally
+		{
+			isLoading = false;
+		}
+	}
 
-        [Required(ErrorMessage = "Content is required")]
-        public string Content { get; set; } = string.Empty;
-    }
+	private async Task HandleSubmitAsync()
+	{
+		try
+		{
+			isSaving = true;
+			errorMessage = null;
+			successMessage = null;
+
+			if (IsEditMode)
+			{
+				await UpdateNoteAsync();
+			}
+			else
+			{
+				await CreateNoteAsync();
+			}
+		}
+		catch (Exception ex)
+		{
+			errorMessage = $"Error saving note: {ex.Message}";
+		}
+		finally
+		{
+			isSaving = false;
+		}
+	}
+
+	private async Task CreateNoteAsync()
+	{
+		var command = new CreateNoteCommand
+		{
+			Title = model!.Title,
+			Content = model!.Content,
+			UserSubject = userSubject
+		};
+
+		var response = await Mediator.Send(command);
+
+		successMessage = "Note created successfully!";
+
+		// Navigate to the edit page of the newly created note
+		await Task.Delay(1000); // Brief delay to show success message
+		Navigation.NavigateTo($"/notes/{response.Id}/edit");
+	}
+
+	private async Task UpdateNoteAsync()
+	{
+		if (!Id.HasValue)
+			return;
+
+		var command = new UpdateNoteCommand
+		{
+			Id = Id.Value,
+			Title = model!.Title,
+			Content = model!.Content,
+			UserSubject = userSubject
+		};
+
+		var response = await Mediator.Send(command);
+
+		if (response.Success)
+		{
+			successMessage = "Note updated successfully with AI summary and tags!";
+			aiSummary = response.AiSummary;
+			tags = response.Tags;
+			updatedAt = response.UpdatedAt;
+		}
+		else
+		{
+			errorMessage = response.Message;
+		}
+	}
+
+	private class NoteEditorModel
+	{
+
+		[Required(ErrorMessage = "Title is required")]
+		[StringLength(200, ErrorMessage = "Title cannot exceed 200 characters")]
+		public string Title { get; set; } = string.Empty;
+
+		[Required(ErrorMessage = "Content is required")]
+		public string Content { get; set; } = string.Empty;
+
+	}
+
 }

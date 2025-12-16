@@ -1,38 +1,52 @@
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     OpenAiServiceEdgeCasesTests.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp.Tests.Unit
+// =======================================================
+
 using System.Diagnostics.CodeAnalysis;
+
 using AINotesApp.Data;
+using AINotesApp.Services;
 using AINotesApp.Services.Ai;
+
 using FluentAssertions;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace AINotesApp.Tests.Unit.Services.Ai;
 
 /// <summary>
-/// Edge case and boundary tests for OpenAI service
+///   Edge case and boundary tests for OpenAI service
 /// </summary>
 [ExcludeFromCodeCoverage]
 public class OpenAiServiceEdgeCasesTests
 {
+
 	private readonly ApplicationDbContext _context;
+
 	private readonly AiServiceOptions _options;
 
 	public OpenAiServiceEdgeCasesTests()
 	{
 		var dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-				.UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+				.UseInMemoryDatabase(Guid.NewGuid().ToString())
 				.Options;
 
 		_context = new ApplicationDbContext(dbOptions);
 
 		_options = new AiServiceOptions
 		{
-			ApiKey = "test-api-key",
-			ChatModel = "gpt-4o-mini",
-			EmbeddingModel = "text-embedding-3-small",
-			MaxSummaryTokens = 150,
-			RelatedNotesCount = 5,
-			SimilarityThreshold = 0.7
+				ApiKey = "test-api-key",
+				ChatModel = "gpt-4o-mini",
+				EmbeddingModel = "text-embedding-3-small",
+				MaxSummaryTokens = 150,
+				RelatedNotesCount = 5,
+				SimilarityThreshold = 0.7
 		};
 	}
 
@@ -47,7 +61,7 @@ public class OpenAiServiceEdgeCasesTests
 		await SeedTestNotesAsync();
 
 		// Act
-		var result = await service.FindRelatedNotesAsync(zeroEmbedding, "user-id", null);
+		var result = await service.FindRelatedNotesAsync(zeroEmbedding, "user-id");
 
 		// Assert
 		result.Should().BeEmpty("zero embeddings have no meaningful similarity");
@@ -60,7 +74,7 @@ public class OpenAiServiceEdgeCasesTests
 		var service = new OpenAiService(Options.Create(_options), _context);
 
 		// Act
-		var result = await service.FindRelatedNotesAsync(null!, "user-id", null);
+		var result = await service.FindRelatedNotesAsync(null!, "user-id");
 
 		// Assert
 		result.Should().BeEmpty();
@@ -71,10 +85,10 @@ public class OpenAiServiceEdgeCasesTests
 	{
 		// Arrange
 		var service = new OpenAiService(Options.Create(_options), _context);
-		var embedding = new float[] { 0.1f, 0.2f, 0.3f };
+		var embedding = new [] { 0.1f, 0.2f, 0.3f };
 
 		// Act
-		var result = await service.FindRelatedNotesAsync(embedding, string.Empty, null);
+		var result = await service.FindRelatedNotesAsync(embedding, string.Empty);
 
 		// Assert
 		result.Should().BeEmpty();
@@ -142,7 +156,7 @@ public class OpenAiServiceEdgeCasesTests
 		// Assert
 		result.Should().NotBeEmpty();
 		var notes = await _context.Notes.Where(n => result.Contains(n.Id)).ToListAsync();
-		notes.Should().AllSatisfy(n => n.UserId.Should().Be("user-1"));
+		notes.Should().AllSatisfy(n => n.OwnerSubject.Should().Be("user-1"));
 	}
 
 	[Fact]
@@ -153,7 +167,7 @@ public class OpenAiServiceEdgeCasesTests
 		var embedding = CreateNormalizedEmbedding();
 
 		// Act
-		var result = await service.FindRelatedNotesAsync(embedding, "user-1", null);
+		var result = await service.FindRelatedNotesAsync(embedding, "user-1");
 
 		// Assert
 		result.Should().BeEmpty();
@@ -169,18 +183,19 @@ public class OpenAiServiceEdgeCasesTests
 		// Seed notes with null embeddings
 		_context.Notes.Add(new Note
 		{
-			Id = Guid.NewGuid(),
-			Title = "No Embedding",
-			Content = "Content",
-			UserId = "user-1",
-			Embedding = null,
-			CreatedAt = DateTime.UtcNow,
-			UpdatedAt = DateTime.UtcNow
+				Id = Guid.NewGuid(),
+				Title = "No Embedding",
+				Content = "Content",
+				OwnerSubject = "user-1",
+				Embedding = null,
+				CreatedAt = DateTime.UtcNow,
+				UpdatedAt = DateTime.UtcNow
 		});
+
 		await _context.SaveChangesAsync();
 
 		// Act
-		var result = await service.FindRelatedNotesAsync(embedding, "user-1", null);
+		var result = await service.FindRelatedNotesAsync(embedding, "user-1");
 
 		// Assert
 		result.Should().BeEmpty();
@@ -211,7 +226,7 @@ public class OpenAiServiceEdgeCasesTests
 	{
 		// Arrange
 		var service = new OpenAiService(Options.Create(_options), _context);
-		var searchEmbedding = new float[] { 1.0f, 0.0f, 0.0f };
+		var searchEmbedding = new [] { 1.0f, 0.0f, 0.0f };
 
 		// Seed notes with different embeddings
 		var note1Id = Guid.NewGuid();
@@ -221,35 +236,36 @@ public class OpenAiServiceEdgeCasesTests
 		_context.Notes.AddRange(
 				new Note
 				{
-					Id = note1Id,
-					Title = "Most Similar",
-					Content = "Content",
-					UserId = "user-1",
-					Embedding = new float[] { 0.9f, 0.1f, 0.0f }, // More similar
-					CreatedAt = DateTime.UtcNow,
-					UpdatedAt = DateTime.UtcNow
+						Id = note1Id,
+						Title = "Most Similar",
+						Content = "Content",
+						OwnerSubject = "user-1",
+						Embedding = [ 0.9f, 0.1f, 0.0f ], // More similar
+						CreatedAt = DateTime.UtcNow,
+						UpdatedAt = DateTime.UtcNow
 				},
 				new Note
 				{
-					Id = note2Id,
-					Title = "Less Similar",
-					Content = "Content",
-					UserId = "user-1",
-					Embedding = new float[] { 0.5f, 0.5f, 0.0f }, // Less similar
-					CreatedAt = DateTime.UtcNow,
-					UpdatedAt = DateTime.UtcNow
+						Id = note2Id,
+						Title = "Less Similar",
+						Content = "Content",
+						OwnerSubject = "user-1",
+						Embedding = [ 0.5f, 0.5f, 0.0f ], // Less similar
+						CreatedAt = DateTime.UtcNow,
+						UpdatedAt = DateTime.UtcNow
 				},
 				new Note
 				{
-					Id = note3Id,
-					Title = "Least Similar",
-					Content = "Content",
-					UserId = "user-1",
-					Embedding = new float[] { 0.0f, 1.0f, 0.0f }, // Least similar
-					CreatedAt = DateTime.UtcNow,
-					UpdatedAt = DateTime.UtcNow
+						Id = note3Id,
+						Title = "Least Similar",
+						Content = "Content",
+						OwnerSubject = "user-1",
+						Embedding = [ 0.0f, 1.0f, 0.0f ], // Least similar
+						CreatedAt = DateTime.UtcNow,
+						UpdatedAt = DateTime.UtcNow
 				}
 		);
+
 		await _context.SaveChangesAsync();
 
 		// Act
@@ -271,37 +287,37 @@ public class OpenAiServiceEdgeCasesTests
 
 		var notes = new[]
 		{
-						new Note
-						{
-								Id = Guid.NewGuid(),
-								Title = "Test Note 1",
-								Content = "Content 1",
-								UserId = "user-1",
-								Embedding = embedding1,
-								CreatedAt = DateTime.UtcNow,
-								UpdatedAt = DateTime.UtcNow
-						},
-						new Note
-						{
-								Id = Guid.NewGuid(),
-								Title = "Test Note 2",
-								Content = "Content 2",
-								UserId = "user-1",
-								Embedding = embedding2,
-								CreatedAt = DateTime.UtcNow,
-								UpdatedAt = DateTime.UtcNow
-						},
-						new Note
-						{
-								Id = Guid.NewGuid(),
-								Title = "Test Note 3",
-								Content = "Content 3",
-								UserId = "user-1",
-								Embedding = embedding3,
-								CreatedAt = DateTime.UtcNow,
-								UpdatedAt = DateTime.UtcNow
-						}
-				};
+				new Note
+				{
+						Id = Guid.NewGuid(),
+						Title = "Test Note 1",
+						Content = "Content 1",
+						OwnerSubject = "user-1",
+						Embedding = embedding1,
+						CreatedAt = DateTime.UtcNow,
+						UpdatedAt = DateTime.UtcNow
+				},
+				new Note
+				{
+						Id = Guid.NewGuid(),
+						Title = "Test Note 2",
+						Content = "Content 2",
+						OwnerSubject = "user-1",
+						Embedding = embedding2,
+						CreatedAt = DateTime.UtcNow,
+						UpdatedAt = DateTime.UtcNow
+				},
+				new Note
+				{
+						Id = Guid.NewGuid(),
+						Title = "Test Note 3",
+						Content = "Content 3",
+						OwnerSubject = "user-1",
+						Embedding = embedding3,
+						CreatedAt = DateTime.UtcNow,
+						UpdatedAt = DateTime.UtcNow
+				}
+		};
 
 		_context.Notes.AddRange(notes);
 		await _context.SaveChangesAsync();
@@ -316,42 +332,44 @@ public class OpenAiServiceEdgeCasesTests
 		_context.Notes.AddRange(
 				new Note
 				{
-					Id = Guid.NewGuid(),
-					Title = "User 1 Note",
-					Content = "Content",
-					UserId = "user-1",
-					Embedding = embedding,
-					CreatedAt = DateTime.UtcNow,
-					UpdatedAt = DateTime.UtcNow
+						Id = Guid.NewGuid(),
+						Title = "User 1 Note",
+						Content = "Content",
+						OwnerSubject = "user-1",
+						Embedding = embedding,
+						CreatedAt = DateTime.UtcNow,
+						UpdatedAt = DateTime.UtcNow
 				},
 				new Note
 				{
-					Id = Guid.NewGuid(),
-					Title = "User 2 Note",
-					Content = "Content",
-					UserId = "user-2",
-					Embedding = embedding,
-					CreatedAt = DateTime.UtcNow,
-					UpdatedAt = DateTime.UtcNow
+						Id = Guid.NewGuid(),
+						Title = "User 2 Note",
+						Content = "Content",
+						OwnerSubject = "user-2",
+						Embedding = embedding,
+						CreatedAt = DateTime.UtcNow,
+						UpdatedAt = DateTime.UtcNow
 				}
 		);
+
 		await _context.SaveChangesAsync();
 	}
 
 	private async Task SeedManyTestNotes(int count)
 	{
 		var notes = new List<Note>();
-		for (int i = 0; i < count; i++)
+
+		for (var i = 0; i < count; i++)
 		{
 			notes.Add(new Note
 			{
-				Id = Guid.NewGuid(),
-				Title = $"Test Note {i}",
-				Content = $"Content {i}",
-				UserId = "user-1",
-				Embedding = CreateNormalizedEmbedding(i * 0.01f, i * 0.02f),
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
+					Id = Guid.NewGuid(),
+					Title = $"Test Note {i}",
+					Content = $"Content {i}",
+					OwnerSubject = "user-1",
+					Embedding = CreateNormalizedEmbedding(i * 0.01f, i * 0.02f),
+					CreatedAt = DateTime.UtcNow,
+					UpdatedAt = DateTime.UtcNow
 			});
 		}
 
@@ -362,10 +380,13 @@ public class OpenAiServiceEdgeCasesTests
 	private static float[] CreateNormalizedEmbedding(float offset1 = 0.1f, float offset2 = 0.2f)
 	{
 		var embedding = new float[1536];
-		for (int i = 0; i < embedding.Length; i++)
+
+		for (var i = 0; i < embedding.Length; i++)
 		{
-			embedding[i] = (i % 2 == 0 ? offset1 : offset2) + (i * 0.001f);
+			embedding[i] = (i % 2 == 0 ? offset1 : offset2) + i * 0.001f;
 		}
+
 		return embedding;
 	}
+
 }

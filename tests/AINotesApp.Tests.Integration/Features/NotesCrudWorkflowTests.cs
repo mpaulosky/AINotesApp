@@ -1,26 +1,40 @@
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     NotesCrudWorkflowTests.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp.Tests.Integration
+// =======================================================
+
 using System.Diagnostics.CodeAnalysis;
-using AINotesApp.Data;
+
 using AINotesApp.Features.Notes.CreateNote;
 using AINotesApp.Features.Notes.DeleteNote;
 using AINotesApp.Features.Notes.GetNoteDetails;
 using AINotesApp.Features.Notes.UpdateNote;
-using AINotesApp.Services.Ai;
+using AINotesApp.Services;
 using AINotesApp.Tests.Integration.Database;
+using AINotesApp.Tests.Integration.Helpers;
+
 using FluentAssertions;
+
 using Microsoft.EntityFrameworkCore;
+
 using NSubstitute;
-using Xunit;
 
 namespace AINotesApp.Tests.Integration.Features;
 
 /// <summary>
-/// Integration tests for complete CRUD workflow
+///   Integration tests for complete CRUD workflow
 /// </summary>
 [ExcludeFromCodeCoverage]
 public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 {
+
+	private const string _testUserSubject = "integration-test-user";
+
 	private readonly DatabaseFixture _fixture;
-	private const string TestUserId = "integration-test-user";
 
 	public NotesCrudWorkflowTests(DatabaseFixture fixture)
 	{
@@ -31,17 +45,19 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	public async Task CompleteCrudWorkflow_CreateReadUpdateDelete_Succeeds()
 	{
 		// Arrange
-		using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		await using var context = _fixture.CreateNewContext();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 
 		// Create
 		var createHandler = new CreateNoteHandler(context, aiService);
+
 		var createCommand = new CreateNoteCommand
 		{
-			Title = "Integration Test Note",
-			Content = "Test content for integration",
-			UserId = TestUserId
+				Title = "Integration Test Note",
+				Content = "Test content for integration",
+				UserSubject = _testUserSubject
 		};
+
 		var createResult = await createHandler.Handle(createCommand, CancellationToken.None);
 		createResult.Should().NotBeNull();
 		var noteId = createResult.Id;
@@ -49,21 +65,23 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 
 		// Read
 		var readHandler = new GetNoteDetailsHandler(context);
-		var readQuery = new GetNoteDetailsQuery { Id = noteId, UserId = TestUserId };
+		var readQuery = new GetNoteDetailsQuery { Id = noteId, UserSubject = _testUserSubject };
 		var readResult = await readHandler.Handle(readQuery, CancellationToken.None);
 		readResult.Should().NotBeNull();
-		readResult!.Title.Should().Be("Integration Test Note");
+		readResult.Title.Should().Be("Integration Test Note");
 		readResult.Content.Should().Be("Test content for integration");
 
 		// Update
 		var updateHandler = new UpdateNoteHandler(context, aiService);
+
 		var updateCommand = new UpdateNoteCommand
 		{
-			Id = noteId,
-			Title = "Updated Title",
-			Content = "Updated content",
-			UserId = TestUserId
+				Id = noteId,
+				Title = "Updated Title",
+				Content = "Updated content",
+				UserSubject = _testUserSubject
 		};
+
 		var updateResult = await updateHandler.Handle(updateCommand, CancellationToken.None);
 		updateResult.Should().NotBeNull();
 		updateResult.Title.Should().Be("Updated Title");
@@ -77,7 +95,7 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 
 		// Delete
 		var deleteHandler = new DeleteNoteHandler(context);
-		var deleteCommand = new DeleteNoteCommand { Id = noteId, UserId = TestUserId };
+		var deleteCommand = new DeleteNoteCommand { Id = noteId, UserSubject = _testUserSubject };
 		await deleteHandler.Handle(deleteCommand, CancellationToken.None);
 
 		// Verify Deletion
@@ -89,17 +107,19 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	public async Task SequentialUpdates_LastWriteWins()
 	{
 		// Arrange
-		using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		await using var context = _fixture.CreateNewContext();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 
 		// Create note
 		var createHandler = new CreateNoteHandler(context, aiService);
+
 		var createCommand = new CreateNoteCommand
 		{
-			Title = "Sequential Test",
-			Content = "Initial content",
-			UserId = TestUserId
+				Title = "Sequential Test",
+				Content = "Initial content",
+				UserSubject = _testUserSubject
 		};
+
 		var createResult = await createHandler.Handle(createCommand, CancellationToken.None);
 		var noteId = createResult.Id;
 
@@ -108,25 +128,25 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 
 		await updateHandler.Handle(new UpdateNoteCommand
 		{
-			Id = noteId,
-			Title = "Update 1",
-			Content = "Content 1",
-			UserId = TestUserId
+				Id = noteId,
+				Title = "Update 1",
+				Content = "Content 1",
+				UserSubject = _testUserSubject
 		}, CancellationToken.None);
 
 		await updateHandler.Handle(new UpdateNoteCommand
 		{
-			Id = noteId,
-			Title = "Update 2",
-			Content = "Content 2",
-			UserId = TestUserId
+				Id = noteId,
+				Title = "Update 2",
+				Content = "Content 2",
+				UserSubject = _testUserSubject
 		}, CancellationToken.None);
 
-		// Verify final state
+		// Verify the final state
 		var note = await context.Notes.FindAsync(noteId);
 
 		note.Should().NotBeNull();
-		note!.Title.Should().Be("Update 2");
+		note.Title.Should().Be("Update 2");
 		note.Content.Should().Be("Content 2");
 	}
 
@@ -134,20 +154,22 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	public async Task CreateMultipleNotes_AllPersisted_WithCorrectData()
 	{
 		// Arrange
-		using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		await using var context = _fixture.CreateNewContext();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 		var createHandler = new CreateNoteHandler(context, aiService);
 
 		// Act - Create 5 notes
 		var noteIds = new List<Guid>();
-		for (int i = 1; i <= 5; i++)
+
+		for (var i = 1; i <= 5; i++)
 		{
 			var command = new CreateNoteCommand
 			{
-				Title = $"Test Note {i}",
-				Content = $"Content for note {i}",
-				UserId = TestUserId
+					Title = $"Test Note {i}",
+					Content = $"Content for note {i}",
+					UserSubject = _testUserSubject
 			};
+
 			var result = await createHandler.Handle(command, CancellationToken.None);
 			noteIds.Add(result.Id);
 		}
@@ -157,12 +179,13 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 		noteIds.Should().OnlyHaveUniqueItems();
 
 		var allNotes = await context.Notes
-				.Where(n => n.UserId == TestUserId)
+				.Where(n => n.OwnerSubject == _testUserSubject)
 				.OrderBy(n => n.Title)
 				.ToListAsync();
 
 		allNotes.Should().HaveCount(c => c >= 5);
-		for (int i = 1; i <= 5; i++)
+
+		for (var i = 1; i <= 5; i++)
 		{
 			allNotes.Should().Contain(n => n.Title == $"Test Note {i}");
 		}
@@ -172,18 +195,18 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	public async Task UpdateNote_ThatDoesNotExist_ReturnsNull()
 	{
 		// Arrange
-		using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		await using var context = _fixture.CreateNewContext();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 		var updateHandler = new UpdateNoteHandler(context, aiService);
 		var nonExistentId = Guid.NewGuid();
 
 		// Act
 		var result = await updateHandler.Handle(new UpdateNoteCommand
 		{
-			Id = nonExistentId,
-			Title = "Updated Title",
-			Content = "Updated Content",
-			UserId = TestUserId
+				Id = nonExistentId,
+				Title = "Updated Title",
+				Content = "Updated Content",
+				UserSubject = _testUserSubject
 		}, CancellationToken.None);
 
 		// Assert - Handler returns error response for non-existent note
@@ -196,15 +219,15 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	public async Task DeleteNote_ThatDoesNotExist_DoesNotThrow()
 	{
 		// Arrange
-		using var context = _fixture.CreateNewContext();
+		await using var context = _fixture.CreateNewContext();
 		var deleteHandler = new DeleteNoteHandler(context);
 		var nonExistentId = Guid.NewGuid();
 
 		// Act - Delete should be idempotent
 		var act = async () => await deleteHandler.Handle(new DeleteNoteCommand
 		{
-			Id = nonExistentId,
-			UserId = TestUserId
+				Id = nonExistentId,
+				UserSubject = _testUserSubject
 		}, CancellationToken.None);
 
 		// Assert - Should not throw
@@ -215,26 +238,29 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	public async Task ReadNote_WithWrongUserId_ReturnsNull()
 	{
 		// Arrange
-		using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		await using var context = _fixture.CreateNewContext();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 
-		// Create note for one user
+		// Create a note for one user
 		var createHandler = new CreateNoteHandler(context, aiService);
+
 		var createCommand = new CreateNoteCommand
 		{
-			Title = "User 1 Note",
-			Content = "Content",
-			UserId = "user-1"
+				Title = "User 1 Note",
+				Content = "Content",
+				UserSubject = "user-1"
 		};
+
 		var createResult = await createHandler.Handle(createCommand, CancellationToken.None);
 		var noteId = createResult.Id;
 
 		// Try to read with different user
 		var readHandler = new GetNoteDetailsHandler(context);
+
 		var readQuery = new GetNoteDetailsQuery
 		{
-			Id = noteId,
-			UserId = "user-2" // Different user
+				Id = noteId,
+				UserSubject = "user-2" // Different user
 		};
 
 		// Act
@@ -248,17 +274,19 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	public async Task UpdateNote_PreservesCreatedAt_UpdatesUpdatedAt()
 	{
 		// Arrange
-		using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		await using var context = _fixture.CreateNewContext();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 
 		// Create note
 		var createHandler = new CreateNoteHandler(context, aiService);
+
 		var createCommand = new CreateNoteCommand
 		{
-			Title = "Test Note",
-			Content = "Initial content",
-			UserId = TestUserId
+				Title = "Test Note",
+				Content = "Initial content",
+				UserSubject = _testUserSubject
 		};
+
 		var createResult = await createHandler.Handle(createCommand, CancellationToken.None);
 		var noteId = createResult.Id;
 		var originalCreatedAt = createResult.CreatedAt;
@@ -268,13 +296,15 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 
 		// Update note
 		var updateHandler = new UpdateNoteHandler(context, aiService);
+
 		var updateCommand = new UpdateNoteCommand
 		{
-			Id = noteId,
-			Title = "Updated Title",
-			Content = "Updated content",
-			UserId = TestUserId
+				Id = noteId,
+				Title = "Updated Title",
+				Content = "Updated content",
+				UserSubject = _testUserSubject
 		};
+
 		var updateResult = await updateHandler.Handle(updateCommand, CancellationToken.None);
 
 		// Assert
@@ -287,27 +317,29 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 	public async Task CompleteWorkflow_WithAiEnhancements_StoresAllData()
 	{
 		// Arrange
-		using var context = _fixture.CreateNewContext();
-		var aiService = CreateMockAiService();
+		await using var context = _fixture.CreateNewContext();
+		var aiService = MockAiServiceHelper.CreateMockAiService();
 
-		// Create note with AI enhancements
+		// Create a note with AI enhancements
 		var createHandler = new CreateNoteHandler(context, aiService);
+
 		var createCommand = new CreateNoteCommand
 		{
-			Title = "AI Enhanced Note",
-			Content = "This is a test note that will be enhanced by AI services.",
-			UserId = TestUserId
+				Title = "AI Enhanced Note",
+				Content = "This is a test note that will be enhanced by AI services.",
+				UserSubject = _testUserSubject
 		};
+
 		var createResult = await createHandler.Handle(createCommand, CancellationToken.None);
 		var noteId = createResult.Id;
 
 		// Verify AI data was stored
 		var readHandler = new GetNoteDetailsHandler(context);
-		var readQuery = new GetNoteDetailsQuery { Id = noteId, UserId = TestUserId };
+		var readQuery = new GetNoteDetailsQuery { Id = noteId, UserSubject = _testUserSubject };
 		var readResult = await readHandler.Handle(readQuery, CancellationToken.None);
 
 		readResult.Should().NotBeNull();
-		readResult!.AiSummary.Should().Be("Test summary");
+		readResult.AiSummary.Should().Be("Test summary");
 		readResult.Tags.Should().Be("test,tag");
 
 		// Verify embedding is stored
@@ -316,15 +348,4 @@ public class NotesCrudWorkflowTests : IClassFixture<DatabaseFixture>
 		note.Embedding.Should().HaveCountGreaterThan(0);
 	}
 
-	private static IAiService CreateMockAiService()
-	{
-		var aiService = Substitute.For<IAiService>();
-		aiService.GenerateSummaryAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-				.Returns("Test summary");
-		aiService.GenerateTagsAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<CancellationToken>())
-				.Returns("test,tag");
-		aiService.GenerateEmbeddingAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-				.Returns(new float[] { 0.1f, 0.2f, 0.3f, 0.4f, 0.5f });
-		return aiService;
-	}
 }

@@ -13,81 +13,81 @@ Blazor component rendering and interaction tests using **BUnit 2.x**
 
 - **MainLayout** - 13 tests
 
-  - Rendering with authenticated/anonymous users
-  - Navigation menu integration
-  - CSS class application
-  - Error handling
+    - Rendering with authenticated/anonymous users
+    - Navigation menu integration
+    - CSS class application
+    - Error handling
 
 - **NavMenu** - 14 tests
 
-  - Navigation link rendering
-  - Active route highlighting
-  - Authentication-based visibility
-  - Mobile menu toggle
+    - Navigation link rendering
+    - Active route highlighting
+    - Authentication-based visibility
+    - Mobile menu toggle
 
 - **ReconnectModal** - 20 tests
-  - Connection state changes (disconnected, reconnecting, failed)
-  - User notifications and UI states
-  - Reload functionality
-  - CSS animations and transitions
+    - Connection state changes (disconnected, reconnecting, failed)
+    - User notifications and UI states
+    - Reload functionality
+    - CSS animations and transitions
 
 #### Page Components (25 tests)
 
 - **Auth** - 10 tests
 
-  - Login/Register form rendering
-  - Authentication state changes
-  - Redirect after login
-  - Error handling
+    - Login/Register form rendering
+    - Authentication state changes
+    - Redirect after login
+    - Error handling
 
 - **Home** - 5 tests
 
-  - Landing page rendering
-  - Welcome message display
-  - Navigation links
+    - Landing page rendering
+    - Welcome message display
+    - Navigation links
 
 - **NotFound** - 10 tests
 
-  - 404 page rendering
-  - Error message display
-  - Return to home link
+    - 404 page rendering
+    - Error message display
+    - Return to home link
 
 #### Notes Feature Components (72 tests)
 
 - **NoteDetails** - 13 tests
 
-  - Note content display
-  - Tags and metadata
-  - Edit/Delete actions
-  - Related notes integration
-  - Authentication checks
+    - Note content display
+    - Tags and metadata
+    - Edit/Delete actions
+    - Related notes integration
+    - Authentication checks
 
 - **NoteEditor** - 19 tests
 
-  - Create/Update forms
-  - Title and content validation
-  - Rich text editor integration
-  - Tag management
-  - AI summary generation
-  - Save/Cancel actions
+    - Create/Update forms
+    - Title and content validation
+    - Rich text editor integration
+    - Tag management
+    - AI summary generation
+    - Save/Cancel actions
 
 - **NotesList** - 19 tests
 
-  - Note list rendering
-  - Sorting and filtering
-  - Search functionality
-  - Empty state handling
-  - Pagination
-  - Authentication checks
+    - Note list rendering
+    - Sorting and filtering
+    - Search functionality
+    - Empty state handling
+    - Pagination
+    - Authentication checks
 
 - **RelatedNotes** - 21 tests
-  - AI-powered related notes display
-  - Loading states
-  - Parameter validation
-  - Navigation to related notes
-  - Empty state handling
-  - AI summary rendering
-  - Error handling
+    - AI-powered related notes display
+    - Loading states
+    - Parameter validation
+    - Navigation to related notes
+    - Empty state handling
+    - AI summary rendering
+    - Error handling
 
 ### Unit Tests (35 tests) ⚡
 
@@ -96,41 +96,41 @@ Fast, isolated tests for handlers and services
 #### Data Models (7 tests)
 
 - **Note Model** - 7 tests
-  - Property validation
-  - Default values
-  - Navigation properties
-  - Entity relationships
+    - Property validation
+    - Default values
+    - Navigation properties
+    - Entity relationships
 
 #### Feature Handlers (27 tests)
 
 - **CreateNote Handler** - 5 tests
 
-  - Note creation
-  - User ownership
-  - Timestamp generation
-  - Database persistence
+    - Note creation
+    - User ownership
+    - Timestamp generation
+    - Database persistence
 
 - **UpdateNote Handler** - 5 tests
 
-  - Note updates
-  - User authorization
-  - Timestamp updates
-  - Not found handling
+    - Note updates
+    - User authorization
+    - Timestamp updates
+    - Not found handling
 
 - **ListNotes Handler** - 7 tests
-  - Note retrieval
-  - User filtering
-  - Sorting options
-  - Empty results
+    - Note retrieval
+    - User filtering
+    - Sorting options
+    - Empty results
 
 #### AI Services (8 tests)
 
 - **OpenAiService** - 8 tests
-  - Embedding generation
-  - Summary creation
-  - Tag generation
-  - API error handling
-  - Configuration validation
+    - Embedding generation
+    - Summary creation
+    - Tag generation
+    - API error handling
+    - Configuration validation
 
 ### Integration Tests (8 tests) 🔗
 
@@ -138,14 +138,14 @@ Database operations and data persistence
 
 - **Notes CRUD Operations** - 5 tests
 
-  - Create, Read, Update, Delete
-  - Database transactions
-  - Concurrency handling
+    - Create, Read, Update, Delete
+    - Database transactions
+    - Concurrency handling
 
 - **User Note Relationships** - 3 tests
-  - User ownership validation
-  - Multi-user scenarios
-  - Authorization checks
+    - User ownership validation
+    - Multi-user scenarios
+    - Authorization checks
 
 ### Architecture Tests (10 tests) 🏗️
 
@@ -153,21 +153,21 @@ Enforce design patterns and coding standards using **NetArchTest.Rules**
 
 - **Dependency Rules** - 3 tests
 
-  - Layer dependencies
-  - No circular references
-  - Proper abstractions
+    - Layer dependencies
+    - No circular references
+    - Proper abstractions
 
 - **Naming Conventions** - 4 tests
 
-  - Handler naming
-  - Command/Query suffixes
-  - Response DTO naming
-  - File organization
+    - Handler naming
+    - Command/Query suffixes
+    - Response DTO naming
+    - File organization
 
 - **CQRS Pattern** - 3 tests
-  - Command/Query separation
-  - Handler implementation
-  - Single responsibility
+    - Command/Query separation
+    - Handler implementation
+    - Single responsibility
 
 ## Test Technologies
 

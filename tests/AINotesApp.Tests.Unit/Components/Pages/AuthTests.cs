@@ -1,8 +1,22 @@
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     AuthTests.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp.Tests.Unit
+// =======================================================
+
 using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
+
 using AINotesApp.Components.Pages;
+using AINotesApp.Tests.Unit.Fakes;
+
 using Bunit;
+
 using FluentAssertions;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -11,21 +25,22 @@ using Microsoft.Extensions.DependencyInjection;
 namespace AINotesApp.Tests.Unit.Components.Pages;
 
 /// <summary>
-/// Unit tests for Auth component using BUnit 2.x
+///   Unit tests for an Auth component using BUnit 2.x
 /// </summary>
 [ExcludeFromCodeCoverage]
 public class AuthTests : BunitContext
 {
-	private readonly TestAuthStateProvider _authProvider;
+
+	private readonly FakeAuthenticationStateProvider _authProvider;
 
 	/// <summary>
-	/// Initializes a new instance of the <see cref="AuthTests"/> class
+	///   Initializes a new instance of the <see cref="AuthTests" /> class
 	/// </summary>
 	public AuthTests()
 	{
-		_authProvider = new TestAuthStateProvider();
+		_authProvider = new FakeAuthenticationStateProvider();
 
-		// Register authentication state provider
+		// Register an authentication state provider
 		Services.AddSingleton<AuthenticationStateProvider>(_authProvider);
 
 		// Register fake authorization services
@@ -34,15 +49,16 @@ public class AuthTests : BunitContext
 	}
 
 	/// <summary>
-	/// Renders a component with authentication context
+	///   Renders a component with authentication context
 	/// </summary>
 	/// <typeparam name="TComponent">The component type to render</typeparam>
 	/// <returns>The rendered component</returns>
 	private IRenderedComponent<TComponent> RenderWithAuth<TComponent>() where TComponent : IComponent
 	{
 		var authStateTask = _authProvider.GetAuthenticationStateAsync();
+
 		return Render<TComponent>(ps => ps
-			.AddCascadingValue(authStateTask)
+				.AddCascadingValue(authStateTask)
 		);
 	}
 
@@ -113,6 +129,7 @@ public class AuthTests : BunitContext
 
 		// Assert
 		cut.Markup.Should().Contain("Hello");
+
 		// Component should still render without errors
 		cut.Should().NotBeNull();
 	}
@@ -128,7 +145,7 @@ public class AuthTests : BunitContext
 
 		// Assert
 		// PageTitle is rendered by the framework, not in component markup
-		// Check that the component renders successfully with page title directive
+		// Check that the component renders successfully with the page title directive
 		cut.Markup.Should().NotBeNullOrEmpty();
 	}
 
@@ -190,148 +207,4 @@ public class AuthTests : BunitContext
 		h1.TextContent.Trim().Should().Be("You are authenticated");
 	}
 
-	/// <summary>
-	/// Helper class for fake authentication state provider
-	/// </summary>
-	public class TestAuthStateProvider : AuthenticationStateProvider
-	{
-		private bool _isAuthenticated = false;
-		private string _userName = string.Empty;
-		private bool _hasName = true;
-
-		/// <summary>
-		/// Sets the authentication state to authorized with a user name
-		/// </summary>
-		/// <param name="userName">The user name to use</param>
-		public void SetAuthorized(string userName)
-		{
-			_isAuthenticated = true;
-			_userName = userName;
-			_hasName = true;
-			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-		}
-
-		/// <summary>
-		/// Sets the authentication state to authorized without a user name
-		/// </summary>
-		public void SetAuthorizedWithoutName()
-		{
-			_isAuthenticated = true;
-			_userName = string.Empty;
-			_hasName = false;
-			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-		}
-
-		/// <summary>
-		/// Sets the authentication state to not authorized
-		/// </summary>
-		public void SetNotAuthorized()
-		{
-			_isAuthenticated = false;
-			_userName = string.Empty;
-			_hasName = true;
-			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-		}
-
-		/// <summary>
-		/// Gets the authentication state
-		/// </summary>
-		/// <returns>The authentication state</returns>
-		public override Task<AuthenticationState> GetAuthenticationStateAsync()
-		{
-			ClaimsIdentity identity;
-
-			if (_isAuthenticated)
-			{
-				var claims = new List<Claim>();
-				if (_hasName && !string.IsNullOrEmpty(_userName))
-				{
-					claims.Add(new Claim(ClaimTypes.Name, _userName));
-					claims.Add(new Claim(ClaimTypes.NameIdentifier, _userName));
-				}
-				identity = new ClaimsIdentity(claims, "TestAuth");
-			}
-			else
-			{
-				identity = new ClaimsIdentity();
-			}
-
-			var user = new ClaimsPrincipal(identity);
-			return Task.FromResult(new AuthenticationState(user));
-		}
-	}
-
-	/// <summary>
-	/// Fake authorization service for testing
-	/// </summary>
-	private class FakeAuthorizationService : IAuthorizationService
-	{
-		/// <summary>
-		/// Authorizes the user based on requirements
-		/// </summary>
-		/// <param name="user">The user principal</param>
-		/// <param name="resource">The resource to authorize</param>
-		/// <param name="requirements">The authorization requirements</param>
-		/// <returns>Authorization result</returns>
-		public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object? resource, IEnumerable<IAuthorizationRequirement> requirements)
-		{
-			// Check if user is authenticated
-			if (user?.Identity?.IsAuthenticated == true)
-			{
-				return Task.FromResult(AuthorizationResult.Success());
-			}
-			return Task.FromResult(AuthorizationResult.Failed());
-		}
-
-		/// <summary>
-		/// Authorizes the user based on policy name
-		/// </summary>
-		/// <param name="user">The user principal</param>
-		/// <param name="resource">The resource to authorize</param>
-		/// <param name="policyName">The policy name</param>
-		/// <returns>Authorization result</returns>
-		public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object? resource, string policyName)
-		{
-			// Check if user is authenticated
-			if (user?.Identity?.IsAuthenticated == true)
-			{
-				return Task.FromResult(AuthorizationResult.Success());
-			}
-			return Task.FromResult(AuthorizationResult.Failed());
-		}
-	}
-
-	/// <summary>
-	/// Fake authorization policy provider for testing
-	/// </summary>
-	private class FakeAuthorizationPolicyProvider : IAuthorizationPolicyProvider
-	{
-		/// <summary>
-		/// Gets the default authorization policy
-		/// </summary>
-		/// <returns>The default authorization policy</returns>
-		public Task<AuthorizationPolicy> GetDefaultPolicyAsync()
-		{
-			return Task.FromResult(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
-		}
-
-		/// <summary>
-		/// Gets the authorization policy by name
-		/// </summary>
-		/// <param name="policyName">The policy name</param>
-		/// <returns>The authorization policy</returns>
-		public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
-		{
-			return Task.FromResult<AuthorizationPolicy?>(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
-		}
-
-		/// <summary>
-		/// Gets the fallback authorization policy
-		/// </summary>
-		/// <returns>The fallback authorization policy</returns>
-		public Task<AuthorizationPolicy?> GetFallbackPolicyAsync()
-		{
-			return Task.FromResult<AuthorizationPolicy?>(null);
-		}
-	}
 }

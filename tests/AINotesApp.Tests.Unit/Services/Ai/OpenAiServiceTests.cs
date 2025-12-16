@@ -1,286 +1,303 @@
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     OpenAiServiceTests.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp.Tests.Unit
+// =======================================================
+
 using System.Diagnostics.CodeAnalysis;
+
 using AINotesApp.Data;
+using AINotesApp.Services;
 using AINotesApp.Services.Ai;
+
 using FluentAssertions;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace AINotesApp.Tests.Unit.Services.Ai;
 
 /// <summary>
-/// Unit tests for OpenAiService - focusing on internal logic and edge cases.
-/// Note: These tests don't make actual API calls to OpenAI.
+///   Unit tests for OpenAiService - focusing on internal logic and edge cases.
+///   Note: These tests don't make actual API calls to OpenAI.
 /// </summary>
 [ExcludeFromCodeCoverage]
 public class OpenAiServiceTests
 {
-    private readonly ApplicationDbContext _context;
-    private readonly AiServiceOptions _options;
 
-    public OpenAiServiceTests()
-    {
-        var dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
+	private readonly ApplicationDbContext _context;
 
-        _context = new ApplicationDbContext(dbOptions);
+	private readonly AiServiceOptions _options;
 
-        _options = new AiServiceOptions
-        {
-            ApiKey = "test-api-key",
-            ChatModel = "gpt-4o-mini",
-            EmbeddingModel = "text-embedding-3-small",
-            MaxSummaryTokens = 150,
-            RelatedNotesCount = 5,
-            SimilarityThreshold = 0.7
-        };
-    }
+	public OpenAiServiceTests()
+	{
+		var dbOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+				.UseInMemoryDatabase(Guid.NewGuid().ToString())
+				.Options;
 
-    [Fact]
-    public async Task FindRelatedNotesAsync_EmptyEmbedding_ReturnsEmptyList()
-    {
-        // Given
-        var service = new OpenAiService(Options.Create(_options), _context);
-        var emptyEmbedding = Array.Empty<float>();
-        var userId = "user-123";
+		_context = new ApplicationDbContext(dbOptions);
 
-        // When
-        var result = await service.FindRelatedNotesAsync(emptyEmbedding, userId);
+		_options = new AiServiceOptions
+		{
+				ApiKey = "test-api-key",
+				ChatModel = "gpt-4o-mini",
+				EmbeddingModel = "text-embedding-3-small",
+				MaxSummaryTokens = 150,
+				RelatedNotesCount = 5,
+				SimilarityThreshold = 0.7
+		};
+	}
 
-        // Then
-        result.Should().BeEmpty();
-    }
+	[Fact]
+	public async Task FindRelatedNotesAsync_EmptyEmbedding_ReturnsEmptyList()
+	{
+		// Given
+		var service = new OpenAiService(Options.Create(_options), _context);
+		var emptyEmbedding = Array.Empty<float>();
+		var userSubject = "user-123";
 
-    [Fact]
-    public async Task FindRelatedNotesAsync_NullEmbedding_ReturnsEmptyList()
-    {
-        // Given
-        var service = new OpenAiService(Options.Create(_options), _context);
-        float[]? nullEmbedding = null;
-        var userId = "user-123";
+		// When
+		var result = await service.FindRelatedNotesAsync(emptyEmbedding, userSubject);
 
-        // When
-        var result = await service.FindRelatedNotesAsync(nullEmbedding!, userId);
+		// Then
+		result.Should().BeEmpty();
+	}
 
-        // Then
-        result.Should().BeEmpty();
-    }
+	[Fact]
+	public async Task FindRelatedNotesAsync_NullEmbedding_ReturnsEmptyList()
+	{
+		// Given
+		var service = new OpenAiService(Options.Create(_options), _context);
+		float[]? nullEmbedding = null;
+		var userSubject = "user-123";
 
-    [Fact]
-    public async Task FindRelatedNotesAsync_NoNotesInDatabase_ReturnsEmptyList()
-    {
-        // Given
-        var service = new OpenAiService(Options.Create(_options), _context);
-        var embedding = new float[] { 0.1f, 0.2f, 0.3f };
-        var userId = "user-123";
+		// When
+		var result = await service.FindRelatedNotesAsync(nullEmbedding!, userSubject);
 
-        // When
-        var result = await service.FindRelatedNotesAsync(embedding, userId);
+		// Then
+		result.Should().BeEmpty();
+	}
 
-        // Then
-        result.Should().BeEmpty();
-    }
+	[Fact]
+	public async Task FindRelatedNotesAsync_NoNotesInDatabase_ReturnsEmptyList()
+	{
+		// Given
+		var service = new OpenAiService(Options.Create(_options), _context);
+		var embedding = new [] { 0.1f, 0.2f, 0.3f };
+		var userSubject = "user-123";
 
-    [Fact]
-    public async Task FindRelatedNotesAsync_WithMatchingNotes_ReturnsRelatedNotes()
-    {
-        // Given
-        var userId = "user-123";
-        var queryEmbedding = new float[] { 1.0f, 0.0f, 0.0f };
+		// When
+		var result = await service.FindRelatedNotesAsync(embedding, userSubject);
 
-        var note1 = new Note
-        {
-            Id = Guid.NewGuid(),
-            Title = "Similar Note",
-            Content = "Content",
-            UserId = userId,
-            Embedding = new float[] { 0.9f, 0.1f, 0.0f }, // High similarity
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+		// Then
+		result.Should().BeEmpty();
+	}
 
-        var note2 = new Note
-        {
-            Id = Guid.NewGuid(),
-            Title = "Different Note",
-            Content = "Content",
-            UserId = userId,
-            Embedding = new float[] { 0.0f, 1.0f, 0.0f }, // Low similarity
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+	[Fact]
+	public async Task FindRelatedNotesAsync_WithMatchingNotes_ReturnsRelatedNotes()
+	{
+		// Given
+		var userSubject = "user-123";
+		var queryEmbedding = new [] { 1.0f, 0.0f, 0.0f };
 
-        _context.Notes.AddRange(note1, note2);
-        await _context.SaveChangesAsync();
+		var note1 = new Note
+		{
+				Id = Guid.NewGuid(),
+				Title = "Similar Note",
+				Content = "Content",
+				OwnerSubject = userSubject,
+				Embedding = [ 0.9f, 0.1f, 0.0f ], // High similarity
+				CreatedAt = DateTime.UtcNow,
+				UpdatedAt = DateTime.UtcNow
+		};
 
-        var service = new OpenAiService(Options.Create(_options), _context);
+		var note2 = new Note
+		{
+				Id = Guid.NewGuid(),
+				Title = "Different Note",
+				Content = "Content",
+				OwnerSubject = userSubject,
+				Embedding = [ 0.0f, 1.0f, 0.0f ], // Low similarity
+				CreatedAt = DateTime.UtcNow,
+				UpdatedAt = DateTime.UtcNow
+		};
 
-        // When
-        var result = await service.FindRelatedNotesAsync(queryEmbedding, userId);
+		_context.Notes.AddRange(note1, note2);
+		await _context.SaveChangesAsync();
 
-        // Then
-        result.Should().NotBeEmpty();
-        result.Should().Contain(note1.Id);
-    }
+		var service = new OpenAiService(Options.Create(_options), _context);
 
-    [Fact]
-    public async Task FindRelatedNotesAsync_ExcludesCurrentNote_WhenSpecified()
-    {
-        // Given
-        var userId = "user-123";
-        var currentNoteId = Guid.NewGuid();
-        var queryEmbedding = new float[] { 1.0f, 0.0f };
+		// When
+		var result = await service.FindRelatedNotesAsync(queryEmbedding, userSubject);
 
-        var currentNote = new Note
-        {
-            Id = currentNoteId,
-            Title = "Current Note",
-            Content = "Content",
-            UserId = userId,
-            Embedding = new float[] { 1.0f, 0.0f }, // Perfect match
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+		// Then
+		result.Should().NotBeEmpty();
+		result.Should().Contain(note1.Id);
+	}
 
-        var otherNote = new Note
-        {
-            Id = Guid.NewGuid(),
-            Title = "Other Note",
-            Content = "Content",
-            UserId = userId,
-            Embedding = new float[] { 0.9f, 0.1f }, // High similarity
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+	[Fact]
+	public async Task FindRelatedNotesAsync_ExcludesCurrentNote_WhenSpecified()
+	{
+		// Given
+		var userSubject = "user-123";
+		var currentNoteId = Guid.NewGuid();
+		var queryEmbedding = new [] { 1.0f, 0.0f };
 
-        _context.Notes.AddRange(currentNote, otherNote);
-        await _context.SaveChangesAsync();
+		var currentNote = new Note
+		{
+				Id = currentNoteId,
+				Title = "Current Note",
+				Content = "Content",
+				OwnerSubject = userSubject,
+				Embedding = [ 1.0f, 0.0f ], // Perfect match
+				CreatedAt = DateTime.UtcNow,
+				UpdatedAt = DateTime.UtcNow
+		};
 
-        var service = new OpenAiService(Options.Create(_options), _context);
+		var otherNote = new Note
+		{
+				Id = Guid.NewGuid(),
+				Title = "Other Note",
+				Content = "Content",
+				OwnerSubject = userSubject,
+				Embedding = [ 0.9f, 0.1f ], // High similarity
+				CreatedAt = DateTime.UtcNow,
+				UpdatedAt = DateTime.UtcNow
+		};
 
-        // When
-        var result = await service.FindRelatedNotesAsync(queryEmbedding, userId, currentNoteId);
+		_context.Notes.AddRange(currentNote, otherNote);
+		await _context.SaveChangesAsync();
 
-        // Then
-        result.Should().NotContain(currentNoteId);
-        result.Should().Contain(otherNote.Id);
-    }
+		var service = new OpenAiService(Options.Create(_options), _context);
 
-    [Fact]
-    public async Task FindRelatedNotesAsync_OnlyReturnsUserNotes_NotOtherUsers()
-    {
-        // Given
-        var userId1 = "user-1";
-        var userId2 = "user-2";
-        var queryEmbedding = new float[] { 1.0f, 0.0f };
+		// When
+		var result = await service.FindRelatedNotesAsync(queryEmbedding, userSubject, currentNoteId);
 
-        var user1Note = new Note
-        {
-            Id = Guid.NewGuid(),
-            Title = "User 1 Note",
-            Content = "Content",
-            UserId = userId1,
-            Embedding = new float[] { 1.0f, 0.0f },
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+		// Then
+		result.Should().NotContain(currentNoteId);
+		result.Should().Contain(otherNote.Id);
+	}
 
-        var user2Note = new Note
-        {
-            Id = Guid.NewGuid(),
-            Title = "User 2 Note",
-            Content = "Content",
-            UserId = userId2,
-            Embedding = new float[] { 1.0f, 0.0f },
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+	[Fact]
+	public async Task FindRelatedNotesAsync_OnlyReturnsUserNotes_NotOtherUsers()
+	{
+		// Given
+		var ownerSubject1 = "user-1";
+		var ownerSubject2 = "user-2";
+		var queryEmbedding = new [] { 1.0f, 0.0f };
 
-        _context.Notes.AddRange(user1Note, user2Note);
-        await _context.SaveChangesAsync();
+		var user1Note = new Note
+		{
+				Id = Guid.NewGuid(),
+				Title = "User 1 Note",
+				Content = "Content",
+				OwnerSubject = ownerSubject1,
+				Embedding = [ 1.0f, 0.0f ],
+				CreatedAt = DateTime.UtcNow,
+				UpdatedAt = DateTime.UtcNow
+		};
 
-        var service = new OpenAiService(Options.Create(_options), _context);
+		var user2Note = new Note
+		{
+				Id = Guid.NewGuid(),
+				Title = "User 2 Note",
+				Content = "Content",
+				OwnerSubject = ownerSubject2,
+				Embedding = [ 1.0f, 0.0f ],
+				CreatedAt = DateTime.UtcNow,
+				UpdatedAt = DateTime.UtcNow
+		};
 
-        // When
-        var result = await service.FindRelatedNotesAsync(queryEmbedding, userId1);
+		_context.Notes.AddRange(user1Note, user2Note);
+		await _context.SaveChangesAsync();
 
-        // Then
-        result.Should().Contain(user1Note.Id);
-        result.Should().NotContain(user2Note.Id);
-    }
+		var service = new OpenAiService(Options.Create(_options), _context);
 
-    [Fact]
-    public async Task FindRelatedNotesAsync_RespectsTopNParameter()
-    {
-        // Given
-        var userId = "user-123";
-        var queryEmbedding = new float[] { 1.0f };
+		// When
+		var result = await service.FindRelatedNotesAsync(queryEmbedding, ownerSubject1);
 
-        // Add 10 notes with high similarity
-        for (int i = 0; i < 10; i++)
-        {
-            _context.Notes.Add(new Note
-            {
-                Id = Guid.NewGuid(),
-                Title = $"Note {i}",
-                Content = "Content",
-                UserId = userId,
-                Embedding = new float[] { 0.95f },
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            });
-        }
-        await _context.SaveChangesAsync();
+		// Then
+		result.Should().Contain(user1Note.Id);
+		result.Should().NotContain(user2Note.Id);
+	}
 
-        var service = new OpenAiService(Options.Create(_options), _context);
-        var topN = 3;
+	[Fact]
+	public async Task FindRelatedNotesAsync_RespectsTopNParameter()
+	{
+		// Given
+		var userSubject = "user-123";
+		var queryEmbedding = new [] { 1.0f };
 
-        // When
-        var result = await service.FindRelatedNotesAsync(queryEmbedding, userId, topN: topN);
+		// Add 10 notes with high similarity
+		for (var i = 0; i < 10; i++)
+		{
+			_context.Notes.Add(new Note
+			{
+					Id = Guid.NewGuid(),
+					Title = $"Note {i}",
+					Content = "Content",
+					OwnerSubject = userSubject,
+					Embedding = [ 0.95f ],
+					CreatedAt = DateTime.UtcNow,
+					UpdatedAt = DateTime.UtcNow
+			});
+		}
 
-        // Then
-        result.Should().HaveCount(topN);
-    }
+		await _context.SaveChangesAsync();
 
-    [Fact]
-    public async Task FindRelatedNotesAsync_SkipsNotesWithoutEmbeddings()
-    {
-        // Given
-        var userId = "user-123";
-        var queryEmbedding = new float[] { 1.0f };
+		var service = new OpenAiService(Options.Create(_options), _context);
+		var topN = 3;
 
-        var noteWithEmbedding = new Note
-        {
-            Id = Guid.NewGuid(),
-            Title = "Note with embedding",
-            Content = "Content",
-            UserId = userId,
-            Embedding = new float[] { 0.9f },
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+		// When
+		var result = await service.FindRelatedNotesAsync(queryEmbedding, userSubject, topN: topN);
 
-        var noteWithoutEmbedding = new Note
-        {
-            Id = Guid.NewGuid(),
-            Title = "Note without embedding",
-            Content = "Content",
-            UserId = userId,
-            Embedding = null,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+		// Then
+		result.Should().HaveCount(topN);
+	}
 
-        _context.Notes.AddRange(noteWithEmbedding, noteWithoutEmbedding);
-        await _context.SaveChangesAsync();
+	[Fact]
+	public async Task FindRelatedNotesAsync_SkipsNotesWithoutEmbeddings()
+	{
+		// Given
+		var userSubject = "user-123";
+		var queryEmbedding = new [] { 1.0f };
 
-        var service = new OpenAiService(Options.Create(_options), _context);
+		var noteWithEmbedding = new Note
+		{
+				Id = Guid.NewGuid(),
+				Title = "Note with embedding",
+				Content = "Content",
+				OwnerSubject = userSubject,
+				Embedding = [ 0.9f ],
+				CreatedAt = DateTime.UtcNow,
+				UpdatedAt = DateTime.UtcNow
+		};
 
-        // When
-        var result = await service.FindRelatedNotesAsync(queryEmbedding, userId);
+		var noteWithoutEmbedding = new Note
+		{
+				Id = Guid.NewGuid(),
+				Title = "Note without embedding",
+				Content = "Content",
+				OwnerSubject = userSubject,
+				Embedding = null,
+				CreatedAt = DateTime.UtcNow,
+				UpdatedAt = DateTime.UtcNow
+		};
 
-        // Then
-        result.Should().Contain(noteWithEmbedding.Id);
-        result.Should().NotContain(noteWithoutEmbedding.Id);
-    }
+		_context.Notes.AddRange(noteWithEmbedding, noteWithoutEmbedding);
+		await _context.SaveChangesAsync();
+
+		var service = new OpenAiService(Options.Create(_options), _context);
+
+		// When
+		var result = await service.FindRelatedNotesAsync(queryEmbedding, userSubject);
+
+		// Then
+		result.Should().Contain(noteWithEmbedding.Id);
+		result.Should().NotContain(noteWithoutEmbedding.Id);
+	}
+
 }

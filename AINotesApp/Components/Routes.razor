@@ -1,20 +1,28 @@
-﻿@using AINotesApp.Components.Account.Shared
-
-@* Add global render mode *@
+﻿@* Add global render mode *@
 @rendermode InteractiveServer
 
 <CascadingAuthenticationState>
-    <Router AppAssembly="typeof(Program).Assembly">
-        <Found Context="routeData">
-            <AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)">
-                <NotAuthorized>
-                    <RedirectToLogin />
-                </NotAuthorized>
-                <Authorizing>
-                    <div class="main">Please wait...</div>
-                </Authorizing>
-            </AuthorizeRouteView>
-            <FocusOnNavigate RouteData="routeData" Selector="h1" />
-        </Found>
-    </Router>
+	<Router AppAssembly="typeof(Program).Assembly">
+		<Found Context="routeData">
+			<AuthorizeRouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)">
+				<NotAuthorized Context="_">
+					<AuthorizeView Context="authState">
+						<Authorized>
+							<AccessDenied/>
+						</Authorized>
+						<NotAuthorized>
+							<Login/>
+						</NotAuthorized>
+					</AuthorizeView>
+				</NotAuthorized>
+				<Authorizing>
+					<div class="main">Authorizing...</div>
+				</Authorizing>
+			</AuthorizeRouteView>
+			<FocusOnNavigate RouteData="routeData" Selector="h1"/>
+		</Found>
+		<NotFound>
+			<NotFound/>
+		</NotFound>
+	</Router>
 </CascadingAuthenticationState>

@@ -1,16 +1,29 @@
+// =======================================================
+// Copyright (c) 2025. All rights reserved.
+// File Name :     NotFoundTests.cs
+// Company :       mpaulosky
+// Author :        Matthew Paulosky
+// Solution Name : AINotesApp
+// Project Name :  AINotesApp.Tests.Unit
+// =======================================================
+
 using System.Diagnostics.CodeAnalysis;
+
 using AINotesApp.Components.Pages;
+
 using Bunit;
+
 using FluentAssertions;
 
 namespace AINotesApp.Tests.Unit.Components.Pages;
 
 /// <summary>
-/// Unit tests for NotFound component using BUnit 2.x
+///   Unit tests for the NotFound component using BUnit 2.x
 /// </summary>
 [ExcludeFromCodeCoverage]
 public class NotFoundTests : BunitContext
 {
+
 	[Fact]
 	public void NotFound_ShouldRender_WithoutErrors()
 	{
@@ -130,4 +143,5 @@ public class NotFoundTests : BunitContext
 		cut.Markup.Should().Contain("Not Found");
 		cut.Markup.Should().Contain("Sorry, the content you are looking for does not exist.");
 	}
+
 }

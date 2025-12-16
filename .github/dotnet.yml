@@ -11,12 +11,12 @@ permissions:
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
     paths:
       - "src/**"
       - "tests/**"
   pull_request:
-    branches: ["*"]
+    branches: [ "*" ]
     paths:
       - "src/**"
       - "tests/**"

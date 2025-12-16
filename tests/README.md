@@ -1,6 +1,7 @@
 # AINotesApp Test Suite
 
-This directory contains comprehensive test coverage for the AINotesApp project, organized into different test types following industry best practices.
+This directory contains comprehensive test coverage for the AINotesApp project, organized into different test types
+following industry best practices.
 
 ## Test Projects
 
@@ -13,26 +14,26 @@ Unit tests for handlers, services, and Blazor component tests.
 **Component Tests (144 tests)** - Blazor UI components using BUnit:
 
 - Layout components:
-  - MainLayout - 13 tests
-  - NavMenu - 14 tests
-  - ReconnectModal - 20 tests
+    - MainLayout - 13 tests
+    - NavMenu - 14 tests
+    - ReconnectModal - 20 tests
 - Page components:
-  - Auth - 10 tests
-  - Home - 5 tests
-  - NotFound - 10 tests
+    - Auth - 10 tests
+    - Home - 5 tests
+    - NotFound - 10 tests
 - Notes feature components:
-  - NoteDetails - 13 tests
-  - NoteEditor - 19 tests
-  - NotesList - 19 tests
-  - RelatedNotes - 21 tests
+    - NoteDetails - 13 tests
+    - NoteEditor - 19 tests
+    - NotesList - 19 tests
+    - RelatedNotes - 21 tests
 
 **Unit Tests (35 tests)** - Handlers and services:
 
 - Data models (Note) - 7 tests
 - Feature handlers:
-  - CreateNote - 5 tests
-  - UpdateNote - 5 tests
-  - ListNotes - 7 tests
+    - CreateNote - 5 tests
+    - UpdateNote - 5 tests
+    - ListNotes - 7 tests
 - Services (OpenAiService) - 8 tests
 - Additional handler tests - 3 tests
 
@@ -137,11 +138,11 @@ dotnet test tests/AINotesApp.Tests.Unit --filter "FullyQualifiedName~NotesListTe
 ## Test Summary
 
 | Test Type    | Count   | Status          | Description                                |
-| ------------ | ------- | --------------- | ------------------------------------------ |
-| Component    | 144     | ✅ Passing      | Blazor component rendering and interaction |
-| Unit         | 35      | ✅ Passing      | Fast, isolated tests for handlers/services |
-| Integration  | 8       | ✅ Passing      | Database and handler integration           |
-| Architecture | 10      | ✅ Passing      | Enforce design patterns and rules          |
+|--------------|---------|-----------------|--------------------------------------------|
+| Component    | 144     | ✅ Passing       | Blazor component rendering and interaction |
+| Unit         | 35      | ✅ Passing       | Fast, isolated tests for handlers/services |
+| Integration  | 8       | ✅ Passing       | Database and handler integration           |
+| Architecture | 10      | ✅ Passing       | Enforce design patterns and rules          |
 | **Total**    | **197** | **197 Passing** | **Comprehensive coverage**                 |
 
 ## Test Structure
@@ -189,7 +190,9 @@ These tests are designed to run in CI/CD pipelines:
 
 - No external dependencies required
 - InMemory database for fast execution
+
 <!-- E2E tests were previously skipped by default; E2E tests are no longer present in this project. -->
+
 - All tests are deterministic and repeatable
 
 ## Code Coverage
