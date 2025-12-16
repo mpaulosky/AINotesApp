@@ -7,8 +7,17 @@
 // Project Name :  AINotesApp
 // =======================================================
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+// using Microsoft.EntityFrameworkCore; (duplicate removed)
 using AINotesApp.Data;
-using AINotesApp.Services.Ai;
+using AINotesApp.Services;
 
 using MediatR;
 
@@ -79,25 +88,28 @@ public class UpdateNoteHandler : IRequestHandler<UpdateNoteCommand, UpdateNoteRe
 		var embeddingTask = _aiService.GenerateEmbeddingAsync(request.Content, cancellationToken);
 
 		await Task.WhenAll(summaryTask, tagsTask, embeddingTask);
+		var summary = await summaryTask;
+		var tags = await tagsTask;
+		var embedding = await embeddingTask;
 
 		note.Title = request.Title;
 		note.Content = request.Content;
-		note.AiSummary = await summaryTask;
-		note.Tags = await tagsTask;
-		note.Embedding = await embeddingTask;
-		note.UpdatedAt = DateTime.UtcNow;
+		note.AiSummary = summary;
+		note.Tags = tags;
+		note.Embedding = embedding;
+		note.UpdatedAt = System.DateTime.UtcNow;
 
 		await _context.SaveChangesAsync(cancellationToken);
 
 		return new UpdateNoteResponse
 		{
-				Success = true,
-				Id = note.Id,
-				Title = note.Title,
-				Content = note.Content,
-				AiSummary = note.AiSummary,
-				Tags = note.Tags,
-				UpdatedAt = note.UpdatedAt
+			Success = true,
+			Id = note.Id,
+			Title = note.Title,
+			Content = note.Content,
+			AiSummary = note.AiSummary,
+			Tags = note.Tags,
+			UpdatedAt = note.UpdatedAt
 		};
 	}
 
@@ -122,7 +134,7 @@ public record UpdateNoteResponse
 	/// <summary>
 	///   Gets the ID of the updated note.
 	/// </summary>
-	public Guid Id { get; init; }
+	public System.Guid Id { get; init; }
 
 	/// <summary>
 	///   Gets the title of the note.
@@ -147,6 +159,6 @@ public record UpdateNoteResponse
 	/// <summary>
 	///   Gets the update timestamp.
 	/// </summary>
-	public DateTime UpdatedAt { get; init; }
+	public System.DateTime UpdatedAt { get; init; }
 
 }

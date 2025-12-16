@@ -7,8 +7,17 @@
 // Project Name :  AINotesApp
 // =======================================================
 
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using AINotesApp.Data;
-using AINotesApp.Services.Ai;
+using AINotesApp.Services;
 
 using MediatR;
 
@@ -64,18 +73,21 @@ public class CreateNoteHandler : IRequestHandler<CreateNoteCommand, CreateNoteRe
 		var embeddingTask = _aiService.GenerateEmbeddingAsync(request.Content, cancellationToken);
 
 		await Task.WhenAll(summaryTask, tagsTask, embeddingTask);
+		var summary = await summaryTask;
+		var tags = await tagsTask;
+		var embedding = await embeddingTask;
 
 		var note = new Note
 		{
-				Id = Guid.NewGuid(),
-				Title = request.Title,
-				Content = request.Content,
-				AiSummary = await summaryTask,
-				Tags = await tagsTask,
-				Embedding = await embeddingTask,
-				OwnerSubject = request.UserSubject,
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
+			Id = System.Guid.NewGuid(),
+			Title = request.Title,
+			Content = request.Content,
+			AiSummary = summary,
+			Tags = tags,
+			Embedding = embedding,
+			OwnerSubject = request.UserSubject,
+			CreatedAt = System.DateTime.UtcNow,
+			UpdatedAt = System.DateTime.UtcNow
 		};
 
 		_context.Notes.Add(note);
@@ -83,12 +95,12 @@ public class CreateNoteHandler : IRequestHandler<CreateNoteCommand, CreateNoteRe
 
 		return new CreateNoteResponse
 		{
-				Id = note.Id,
-				Title = note.Title,
-				Content = note.Content,
-				AiSummary = note.AiSummary,
-				Tags = note.Tags,
-				CreatedAt = note.CreatedAt
+			Id = note.Id,
+			Title = note.Title,
+			Content = note.Content,
+			AiSummary = note.AiSummary,
+			Tags = note.Tags,
+			CreatedAt = note.CreatedAt
 		};
 	}
 
@@ -103,7 +115,7 @@ public record CreateNoteResponse
 	/// <summary>
 	///   Gets the ID of the created note.
 	/// </summary>
-	public Guid Id { get; init; }
+	public System.Guid Id { get; init; }
 
 	/// <summary>
 	///   Gets the title of the note.
@@ -128,6 +140,6 @@ public record CreateNoteResponse
 	/// <summary>
 	///   Gets the creation timestamp.
 	/// </summary>
-	public DateTime CreatedAt { get; init; }
+	public System.DateTime CreatedAt { get; init; }
 
 }

@@ -7,8 +7,15 @@
 // Project Name :  AINotesApp
 // =======================================================
 
+using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+// using Microsoft.EntityFrameworkCore; (duplicate removed)
 using AINotesApp.Data;
-using AINotesApp.Services.Ai;
+using AINotesApp.Services;
 
 using MediatR;
 

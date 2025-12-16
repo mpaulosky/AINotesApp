@@ -7,8 +7,19 @@
 // Project Name :  AINotesApp
 // =======================================================
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+// using Microsoft.EntityFrameworkCore; (duplicate removed)
 using AINotesApp.Data;
-using AINotesApp.Services.Ai;
+using AINotesApp.Services;
 
 using MediatR;
 
@@ -72,11 +83,11 @@ public class GetRelatedNotesHandler : IRequestHandler<GetRelatedNotesQuery, GetR
 
 		// Find related notes using AI service
 		var relatedNoteIds = await _aiService.FindRelatedNotesAsync(
-				currentNote.Embedding,
-				request.UserSubject,
-				request.NoteId,
-				request.TopN,
-				cancellationToken);
+			currentNote.Embedding,
+			request.UserSubject,
+			(System.Guid?)request.NoteId,
+			request.TopN,
+			cancellationToken);
 
 		if (!relatedNoteIds.Any())
 		{
@@ -85,26 +96,26 @@ public class GetRelatedNotesHandler : IRequestHandler<GetRelatedNotesQuery, GetR
 
 		// Get the related notes with details
 		var relatedNotes = await _context.Notes
-				.AsNoTracking()
-				.Where(n => relatedNoteIds.Contains(n.Id))
-				.Select(n => new RelatedNoteItem
-				{
-						Id = n.Id,
-						Title = n.Title,
-						AiSummary = n.AiSummary,
-						UpdatedAt = n.UpdatedAt
-				})
-				.ToListAsync(cancellationToken);
+			.AsNoTracking()
+			.Where((System.Linq.Expressions.Expression<Func<Note, bool>>)(n => relatedNoteIds.Contains(n.Id)))
+			.Select((System.Linq.Expressions.Expression<Func<Note, RelatedNoteItem>>)(n => new RelatedNoteItem
+			{
+				Id = n.Id,
+				Title = n.Title,
+				AiSummary = n.AiSummary,
+				UpdatedAt = n.UpdatedAt
+			}))
+			.ToListAsync<RelatedNoteItem>(cancellationToken);
 
 		// Sort by the order returned from AI service (by similarity)
 		var sortedNotes = relatedNoteIds
-				.Select(id => relatedNotes.FirstOrDefault(n => n.Id == id))
-				.Where(n => n != null)
-				.ToList();
+			.Select(id => relatedNotes.FirstOrDefault(n => n.Id == id))
+			.Where(n => n != null)
+			.ToList();
 
 		return new GetRelatedNotesResponse
 		{
-				RelatedNotes = sortedNotes!
+			RelatedNotes = sortedNotes!
 		};
 	}
 
