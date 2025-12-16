@@ -78,7 +78,7 @@ an excellent reference for building scalable .NET applications with AI capabilit
 
 - **AI-Powered Intelligence**: Automatic note summarization, smart tagging, and semantic search using OpenAI
 - **Rich Text Editing**: Blazor-based text editor for creating and formatting notes
-- **Secure Authentication**: Built-in user authentication and authorization with ASP.NET Core Identity
+- **Secure Authentication**: Enterprise-grade OAuth 2.0 and OpenID Connect authentication via Auth0
 - **Semantic Search**: Find related notes using AI embeddings and vector similarity
 - **User Isolation**: Complete data separation between users for privacy
 - **Modern UI**: Responsive Blazor Server interface with real-time updates
@@ -90,7 +90,7 @@ an excellent reference for building scalable .NET applications with AI capabilit
 
 - **.NET 10.0** – Latest .NET Framework with C# 14.0
 - **Blazor Server** - Interactive server-side rendering
-- **ASP.NET Core Identity** – Authentication and authorization
+- **Auth0 Authentication** – OAuth 2.0 and OpenID Connect authentication
 - **Entity Framework Core 10.0** – ORM with SQL Server
 - **MediatR** - Command/Query mediator pattern
 - **OpenAI API** – AI text generation and embeddings
@@ -134,6 +134,7 @@ Each operation contains its Command/Query, Response DTO, and Handler in a single
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
 - [SQL Server Express](https://www.microsoft.com/sql-server/sql-server-downloads) or SQL Server LocalDB
 - [Git](https://git-scm.com/downloads)
+- [Auth0 Account](https://auth0.com/signup) - Free tier available (required for authentication)
 - OpenAI API key (for AI features)
 
 ### Installation
@@ -145,39 +146,112 @@ Each operation contains its Command/Query, Response DTO, and Handler in a single
    cd AINotesApp
    ```
 
-2. Configure the database connection in `AINotesApp/appsettings.json`:
+2. **Configure Auth0 Authentication:**
+
+   a. Create an Auth0 tenant at [auth0.com](https://auth0.com/signup) (free tier available)
+
+   b. Create a Regular Web Application in Auth0:
+      - Navigate to Applications → Create Application
+      - Choose "Regular Web Applications"
+      - Note your Domain and Client ID
+
+   c. Configure Application Settings:
+      - **Allowed Callback URLs**: `https://localhost:5001/auth/callback`
+      - **Allowed Logout URLs**: `https://localhost:5001/`
+      - **Allowed Web Origins**: `https://localhost:5001`
+      - Save Changes
+
+   d. Create an API in Auth0:
+      - Navigate to Applications → APIs → Create API
+      - Name: `AINotesApp API`
+      - Identifier: `https://api.ainotesapp.local` (or your preferred identifier)
+      - Signing Algorithm: RS256
+      - Enable RBAC and "Add Permissions in the Access Token"
+
+   e. (Optional) Create roles:
+      - Navigate to User Management → Roles → Create Role
+      - Create role: `notes.admin` for administrative features
+      - Assign permissions to the role if needed
+
+3. Configure `AINotesApp/appsettings.json` with your Auth0 settings:
 
    ```json
    {
+     "Auth0": {
+       "Domain": "your-tenant.us.auth0.com",
+       "ClientId": "your-client-id-from-auth0",
+       "Audience": "https://api.ainotesapp.local",
+       "CallbackPath": "/auth/callback",
+       "LogoutPath": "/auth/logout"
+     },
      "ConnectionStrings": {
        "DefaultConnection": "Server=localhost\\SQLEXPRESS;Database=AINotesAppDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
      }
    }
    ```
 
-3. Configure OpenAI (using User Secrets):
+4. **Configure Auth0 Client Secret** (NEVER commit to source control):
 
    ```bash
    cd AINotesApp
    dotnet user-secrets init
+   dotnet user-secrets set "Auth0:ClientSecret" "your-client-secret-from-auth0"
+   ```
+
+5. Configure OpenAI (using User Secrets):
+
+   ```bash
    dotnet user-secrets set "AiService:ApiKey" "your-openai-api-key"
    dotnet user-secrets set "AiService:ModelName" "gpt-4o"
    ```
 
-4. Apply database migrations:
+6. Apply database migrations:
 
    ```bash
    dotnet ef database update --project AINotesApp
    ```
 
-5. Run the application:
+7. Run the application:
 
    ```bash
    cd AINotesApp
    dotnet run
    ```
 
-6. Open your browser and navigate to `https://localhost:5001`
+8. Open your browser and navigate to `https://localhost:5001`
+
+9. Click **Login** and authenticate using Auth0 Universal Login
+
+> [!NAuth0 Authentication
+
+The application uses Auth0 for secure authentication. Configuration is split between `appsettings.json` (non-secret settings) and User Secrets (secret settings).
+
+**Required `appsettings.json` settings:**
+
+```json
+{
+  "Auth0": {
+    "Domain": "your-tenant.us.auth0.com",
+    "ClientId": "your-client-id",
+    "Audience": "https://api.ainotesapp.local",
+    "CallbackPath": "/auth/callback",
+    "LogoutPath": "/auth/logout"
+  }
+}
+```
+
+**Required User Secrets (NEVER in appsettings.json):**
+
+```bash
+dotnet user-secrets set "Auth0:ClientSecret" "your-client-secret"
+```
+
+For production deployments, use environment variables:
+- Azure App Service: Set `Auth0__ClientSecret` in Application Settings
+- Docker: Use environment variables with `Auth0__ClientSecret` format
+
+#### OTE]
+> On first run, you may need to create a user account in Auth0. The application will automatically create user records when you first authenticate.
 
 ### Configuration
 
@@ -299,6 +373,8 @@ see [.GitHub/copilot-instructions.md](.github/copilot-instructions.md).
 
 - [.NET 10.0 Documentation](https://learn.microsoft.com/dotnet/)
 - [Blazor Documentation](https://learn.microsoft.com/aspnet/core/blazor)
+- [Auth0 Documentation](https://auth0.com/docs)
+- [Auth0 ASP.NET Core SDK](https://auth0.com/docs/quickstart/webapp/aspnet-core)
 - [Entity Framework Core](https://learn.microsoft.com/ef/core/)
 - [MediatR Documentation](https://github.com/jbogard/MediatR)
 - [OpenAI API Documentation](https://platform.openai.com/docs)
@@ -335,3 +411,29 @@ dotnet ef database update --project AINotesApp
 2. Check User Secrets: `dotnet user-secrets list --project AINotesApp`
 3. Ensure you have sufficient OpenAI API credits
 4. Check application logs for API errors
+
+### Authentication Issues
+
+If you cannot log in:
+
+1. **Verify Auth0 Configuration:**
+   ```bash
+   # Check that all secrets are configured
+   dotnet user-secrets list --project AINotesApp
+   ```
+   Should show: `Auth0:ClientSecret`
+
+2. **Check Auth0 Application Settings:**
+   - Allowed Callback URLs must include `https://localhost:5001/auth/callback`
+   - Allowed Logout URLs must include `https://localhost:5001/`
+   - Application type should be "Regular Web Application"
+
+3. **Verify appsettings.json:**
+   - `Auth0:Domain` matches your Auth0 tenant
+   - `Auth0:ClientId` matches your Auth0 application
+   - `Auth0:Audience` matches your Auth0 API identifier
+
+4. **Check browser console and application logs** for specific error messages
+
+> [!WARNING]
+> Never commit `Auth0:ClientSecret` to version control. Always use User Secrets for local development and environment variables for production.
