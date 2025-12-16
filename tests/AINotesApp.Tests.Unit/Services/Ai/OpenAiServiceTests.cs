@@ -10,6 +10,7 @@
 using System.Diagnostics.CodeAnalysis;
 
 using AINotesApp.Data;
+using AINotesApp.Services;
 using AINotesApp.Services.Ai;
 
 using FluentAssertions;

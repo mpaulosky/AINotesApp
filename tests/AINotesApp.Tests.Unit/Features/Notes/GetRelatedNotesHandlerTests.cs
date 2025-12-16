@@ -9,7 +9,7 @@
 
 using AINotesApp.Data;
 using AINotesApp.Features.Notes.GetRelatedNotes;
-using AINotesApp.Services.Ai;
+using AINotesApp.Services;
 
 using FluentAssertions;
 

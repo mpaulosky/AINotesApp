@@ -8,10 +8,10 @@
 // =======================================================
 
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Claims;
 
 using AINotesApp.Components.Pages.Notes;
 using AINotesApp.Features.Notes.SearchNotes;
+using AINotesApp.Tests.Unit.Fakes;
 
 using Bunit;
 
@@ -35,7 +35,7 @@ namespace AINotesApp.Tests.Unit.Components.Pages.Notes;
 public class NotesListTests : BunitContext
 {
 
-	private readonly TestAuthStateProvider _authProvider;
+	private readonly FakeAuthenticationStateProvider _authProvider;
 
 	private readonly IMediator _mediator;
 
@@ -47,7 +47,7 @@ public class NotesListTests : BunitContext
 	public NotesListTests()
 	{
 		_mediator = Substitute.For<IMediator>();
-		_authProvider = new TestAuthStateProvider();
+		_authProvider = new FakeAuthenticationStateProvider();
 		_navigation = Substitute.For<NavigationManager>();
 
 		// Register services
@@ -607,123 +607,6 @@ public class NotesListTests : BunitContext
 				CreatedAt = DateTime.Now.AddDays(-2),
 				UpdatedAt = DateTime.Now.AddDays(-1)
 		};
-	}
-
-	/// <summary>
-	///   Helper class for fake authentication state provider
-	/// </summary>
-	private			class TestAuthStateProvider : AuthenticationStateProvider
-	{
-
-		private bool _isAuthenticated  ;
-
-		private string _userId = string.Empty;
-
-		private string _userName = string.Empty;
-
-		/// <summary>
-		///   Sets the authentication state to authorize with a username
-		/// </summary>
-		public void SetAuthorized(string userName, string? userId = null)
-		{
-			_isAuthenticated = true;
-			_userName = userName;
-			_userId = userId ?? userName;
-			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-		}
-
-		/// <summary>
-		///   Sets the authentication state to not authorized
-		/// </summary>
-		public void SetNotAuthorized()
-		{
-			_isAuthenticated = false;
-			_userName = string.Empty;
-			_userId = string.Empty;
-			NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-		}
-
-		/// <summary>
-		///   Gets the authentication state
-		/// </summary>
-		public override Task<AuthenticationState> GetAuthenticationStateAsync()
-		{
-			ClaimsIdentity identity;
-
-			if (_isAuthenticated)
-			{
-				var claims = new List<Claim>
-				{
-						new (ClaimTypes.Name, _userName),
-						new (ClaimTypes.NameIdentifier, _userId)
-				};
-
-				identity = new ClaimsIdentity(claims, "TestAuth");
-			}
-			else
-			{
-				identity = new ClaimsIdentity();
-			}
-
-			var user = new ClaimsPrincipal(identity);
-
-			return Task.FromResult(new AuthenticationState(user));
-		}
-
-	}
-
-	/// <summary>
-	///   Fake authorization service for testing
-	/// </summary>
-	private class FakeAuthorizationService : IAuthorizationService
-	{
-
-		public Task<AuthorizationResult> AuthorizeAsync(
-				ClaimsPrincipal user,
-				object? resource,
-				IEnumerable<IAuthorizationRequirement> requirements)
-		{
-			if (user?.Identity?.IsAuthenticated == true)
-			{
-				return Task.FromResult(AuthorizationResult.Success());
-			}
-
-			return Task.FromResult(AuthorizationResult.Failed());
-		}
-
-		public Task<AuthorizationResult> AuthorizeAsync(ClaimsPrincipal user, object? resource, string policyName)
-		{
-			if (user?.Identity?.IsAuthenticated == true)
-			{
-				return Task.FromResult(AuthorizationResult.Success());
-			}
-
-			return Task.FromResult(AuthorizationResult.Failed());
-		}
-
-	}
-
-	/// <summary>
-	///   Fake authorization policy provider for testing
-	/// </summary>
-	private class FakeAuthorizationPolicyProvider : IAuthorizationPolicyProvider
-	{
-
-		public Task<AuthorizationPolicy> GetDefaultPolicyAsync()
-		{
-			return Task.FromResult(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
-		}
-
-		public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
-		{
-			return Task.FromResult<AuthorizationPolicy?>(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
-		}
-
-		public Task<AuthorizationPolicy?> GetFallbackPolicyAsync()
-		{
-			return Task.FromResult<AuthorizationPolicy?>(null);
-		}
-
 	}
 
 }

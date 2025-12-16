@@ -8,11 +8,11 @@
 // =======================================================
 
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Claims;
 
 using AINotesApp.Components.Pages.Admin;
 using AINotesApp.Features.Notes.BackfillTags;
 using AINotesApp.Features.Notes.SeedNotes;
+using AINotesApp.Tests.Unit.Fakes;
 
 using Bunit;
 
@@ -34,7 +34,7 @@ namespace AINotesApp.Tests.Unit.Components.Pages.Admin;
 public class SeedNotesTests : BunitContext
 {
 
-	private readonly TestAuthStateProvider _authProvider = new();
+	private readonly FakeAuthenticationStateProvider _authProvider = new();
 
 	private readonly Mock<IMediator> _mediator = new();
 
@@ -120,30 +120,6 @@ public class SeedNotesTests : BunitContext
 
 		// Assert
 		cut.Markup.Should().Contain("Successfully generated tags for 3 notes!");
-	}
-
-	private class TestAuthStateProvider : AuthenticationStateProvider
-	{
-
-		private Task<AuthenticationState> _state =
-				Task.FromResult(new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity())));
-
-		public override Task<AuthenticationState> GetAuthenticationStateAsync()
-		{
-			return _state;
-		}
-
-		public void SetAuthorized(string userId)
-		{
-			var identity = new ClaimsIdentity([
-					new Claim(ClaimTypes.Name, userId),
-					new Claim(ClaimTypes.NameIdentifier, userId)
-			], "Test");
-
-			_state = Task.FromResult(new AuthenticationState(new ClaimsPrincipal(identity)));
-			NotifyAuthenticationStateChanged(_state);
-		}
-
 	}
 
 }

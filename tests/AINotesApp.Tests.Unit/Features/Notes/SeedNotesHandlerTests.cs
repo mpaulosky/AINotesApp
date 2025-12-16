@@ -11,7 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using AINotesApp.Data;
 using AINotesApp.Features.Notes.SeedNotes;
-using AINotesApp.Services.Ai;
+using AINotesApp.Services;
 
 using FluentAssertions;
 

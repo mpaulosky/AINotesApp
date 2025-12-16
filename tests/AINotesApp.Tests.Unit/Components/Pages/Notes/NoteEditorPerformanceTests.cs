@@ -8,9 +8,9 @@
 // =======================================================
 
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Claims;
 
 using AINotesApp.Components.Pages.Notes;
+using AINotesApp.Tests.Unit.Fakes;
 
 using Bunit;
 
@@ -34,7 +34,7 @@ namespace AINotesApp.Tests.Unit.Components.Pages.Notes;
 public class NoteEditorPerformanceTests : BunitContext
 {
 
-	private readonly TestAuthStateProvider _authProvider;
+	private readonly FakeAuthenticationStateProvider _authProvider;
 
 	private readonly IMediator _mediator;
 
@@ -43,7 +43,8 @@ public class NoteEditorPerformanceTests : BunitContext
 	public NoteEditorPerformanceTests()
 	{
 		_mediator = Substitute.For<IMediator>();
-		_authProvider = new TestAuthStateProvider();
+		_authProvider = new FakeAuthenticationStateProvider();
+		_authProvider.SetAuthorized("test-user", "test-user-id");
 		_navigation = Substitute.For<NavigationManager>();
 
 		// Register services
@@ -210,86 +211,6 @@ public class NoteEditorPerformanceTests : BunitContext
 			ps.AddCascadingValue(authStateTask);
 			parameters?.Invoke(ps);
 		});
-	}
-
-}
-
-/// <summary>
-///   Test authentication state provider
-/// </summary>
-public class TestAuthStateProvider : AuthenticationStateProvider
-{
-
-	private readonly ClaimsPrincipal _user;
-
-	public TestAuthStateProvider()
-	{
-		var claims = new[]
-		{
-				new Claim(ClaimTypes.NameIdentifier, "test-user-id"),
-				new Claim(ClaimTypes.Name, "test-user")
-		};
-
-		var identity = new ClaimsIdentity(claims, "Test");
-		_user = new ClaimsPrincipal(identity);
-	}
-
-	public override Task<AuthenticationState> GetAuthenticationStateAsync()
-	{
-		return Task.FromResult(new AuthenticationState(_user));
-	}
-
-}
-
-/// <summary>
-///   Fake authorization service for testing
-/// </summary>
-public class FakeAuthorizationService : IAuthorizationService
-{
-
-	public Task<AuthorizationResult> AuthorizeAsync(
-			ClaimsPrincipal user,
-			object? resource,
-			IEnumerable<IAuthorizationRequirement> requirements)
-	{
-		return Task.FromResult(AuthorizationResult.Success());
-	}
-
-	public Task<AuthorizationResult> AuthorizeAsync(
-			ClaimsPrincipal user,
-			object? resource,
-			string policyName)
-	{
-		return Task.FromResult(AuthorizationResult.Success());
-	}
-
-}
-
-/// <summary>
-///   Fake authorization policy provider for testing
-/// </summary>
-public class FakeAuthorizationPolicyProvider : IAuthorizationPolicyProvider
-{
-
-	public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
-	{
-		var policy = new AuthorizationPolicyBuilder()
-				.RequireAuthenticatedUser()
-				.Build();
-
-		return Task.FromResult<AuthorizationPolicy?>(policy);
-	}
-
-	public Task<AuthorizationPolicy> GetDefaultPolicyAsync()
-	{
-		return Task.FromResult(new AuthorizationPolicyBuilder()
-				.RequireAuthenticatedUser()
-				.Build());
-	}
-
-	public Task<AuthorizationPolicy?> GetFallbackPolicyAsync()
-	{
-		return Task.FromResult<AuthorizationPolicy?>(null);
 	}
 
 }

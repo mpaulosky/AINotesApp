@@ -11,6 +11,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Security.Claims;
 
 using AINotesApp.Components;
+using AINotesApp.Tests.Unit.Fakes;
 
 using Bunit;
 
@@ -30,11 +31,11 @@ namespace AINotesApp.Tests.Unit.Components;
 public class RoutesTests : BunitContext
 {
 
-	private readonly TestAuthStateProvider _authProvider;
+	private readonly FakeAuthenticationStateProvider _authProvider;
 
 	public RoutesTests()
 	{
-		_authProvider = new TestAuthStateProvider();
+		_authProvider = new FakeAuthenticationStateProvider();
 		Services.AddSingleton<AuthenticationStateProvider>(_authProvider);
 
 		// Provide required authorization services for AuthorizeRouteView
@@ -55,30 +56,6 @@ public class RoutesTests : BunitContext
 		// Assert - verify that Home content is rendered through routing
 		cut.Markup.Should().Contain("Hello, world!");
 		cut.Markup.Should().Contain("Welcome to your new app.");
-	}
-
-	private class TestAuthStateProvider : AuthenticationStateProvider
-	{
-
-		private Task<AuthenticationState> _stateTask = Task.FromResult(new AuthenticationState(new ClaimsPrincipal()));
-
-		public override Task<AuthenticationState> GetAuthenticationStateAsync()
-		{
-			return _stateTask;
-		}
-
-		public void SetAuthorized(string name)
-		{
-			var identity = new ClaimsIdentity([
-					new Claim(ClaimTypes.Name, name),
-					new Claim(ClaimTypes.NameIdentifier, name)
-			], "test");
-
-			var principal = new ClaimsPrincipal(identity);
-			_stateTask = Task.FromResult(new AuthenticationState(principal));
-			NotifyAuthenticationStateChanged(_stateTask);
-		}
-
 	}
 
 	private sealed class AllowAllAuthorizationService : IAuthorizationService
