@@ -13,9 +13,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 using OpenAI.Chat;
-using OpenAI.Embeddings;
 
-namespace AINotesApp.Services.Ai;
+using OpenAI.Embeddings;
+using AINotesApp.Services.Ai;
+
+namespace AINotesApp.Services;
 
 /// <summary>
 ///   Implementation of AI service using OpenAI API.

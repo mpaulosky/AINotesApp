@@ -7,7 +7,9 @@
 // Project Name :  AINotesApp
 // =======================================================
 
-namespace AINotesApp.Services.Ai;
+using System.Threading;
+
+namespace AINotesApp.Services;
 
 /// <summary>
 ///   Service interface for AI operations using OpenAI API.
