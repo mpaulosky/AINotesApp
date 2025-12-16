@@ -1,34 +1,41 @@
-﻿<nav class="sidebar">
-	<div class="brand-row">
-		<a class="navbar-brand" href="/">AI Notes</a>
+﻿
+<nav class="sidebar">
+	<div class="top-row container-fluid">
+		<div class="brand-row">
+			<a class="navbar-brand" href="/">AINotesApp</a>
+		</div>
+		<input class="navbar-toggler" type="checkbox" />
 	</div>
-
-	<div class="nav-links">
-		<NavLink class="nav-link" href="/" Match="NavLinkMatch.All">Home</NavLink>
-		<NavLink class="nav-link" href="/auth">Auth Required</NavLink>
-
-		<AuthorizeView Context="authState">
-			<Authorized>
-				<div class="user-info">Signed in as @GetUserName(authState.User)</div>
-				<NavLink class="nav-link" href="/notes">My Notes</NavLink>
-				<NavLink class="nav-link" href="/notes/create">Create Note</NavLink>
-				<NavLink class="nav-link" href="/admin/seed">Seed Demo Notes</NavLink>
-				<Logout/>
-			</Authorized>
-			<NotAuthorized>
-				<Login/>
-			</NotAuthorized>
-		</AuthorizeView>
+	<div class="nav-scrollable">
+		<div class="nav-links">
+			<NavLink class="nav-link" href="/" Match="NavLinkMatch.All">Home</NavLink>
+			<NavLink class="nav-link" href="/auth">Auth Required</NavLink>
+			<AuthorizeView Context="authState">
+				<Authorized>
+					<div class="user-info">Signed in as @GetUserName(authState.User)</div>
+					<NavLink class="nav-link" href="/notes">My Notes</NavLink>
+					<NavLink class="nav-link" href="/notes/create">Create Note</NavLink>
+					<NavLink class="nav-link" href="/admin/seed">Seed Demo Notes</NavLink>
+					<NavLink class="nav-link" href="/manage">Manage</NavLink>
+					<button class="btn btn-link" blazor:onclick="Logout">Logout</button>
+				</Authorized>
+				<NotAuthorized>
+					<button class="btn btn-primary" blazor:onclick="Login">Login</button>
+				</NotAuthorized>
+			</AuthorizeView>
+		</div>
 	</div>
 </nav>
 
+@implements IDisposable
 @code {
+   // Implement IDisposable for test
+   public void Dispose() { }
 
-	private static string GetUserName(ClaimsPrincipal principal)
-	{
-		return principal.Identity?.Name
-					 ?? principal.FindFirst("name")?.Value
-					 ?? "user";
-	}
-
+   private static string GetUserName(ClaimsPrincipal principal)
+   {
+	   return principal.Identity?.Name
+		   ?? principal.FindFirst("name")?.Value
+		   ?? "user";
+   }
 }
