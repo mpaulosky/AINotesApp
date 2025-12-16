@@ -18,10 +18,12 @@ AINotesApp implements the following security measures:
 
 ### Authentication & Authorization
 
-- **ASP.NET Core Identity** - User authentication and password management
+- **Auth0 Authentication** - Enterprise-grade OAuth 2.0 and OpenID Connect authentication
+- **Auth0 Universal Login** - Secure, centralized login experience with MFA support
+- **Role-Based Access Control (RBAC)** - Auth0 roles for authorization (e.g., `notes.admin`)
 - **Per-user data isolation** - Users can only access their own notes
-- **Authorization checks** - All CQRS handlers verify user ownership
-- **Secure password storage** - Passwords are hashed using Identity's default algorithms
+- **Authorization checks** - All CQRS handlers verify user ownership using Auth0 subject (`sub` claim)
+- **Secure session management** - OIDC tokens with configurable expiration
 
 ### Data Protection
 
@@ -38,9 +40,68 @@ AINotesApp implements the following security measures:
 
 ### Database Security
 
-- **User isolation** - Database queries filtered by UserId
+- **User isolation** - Database queries filtered by Auth0 subject (`OwnerSubject`)
 - **Migration safety** - Code-first migrations with version control
 - **Connection string security** - Stored in appsettings.json (excluded from source control for production)
+
+### Auth0 Configuration
+
+AINotesApp requires proper Auth0 tenant configuration for secure authentication:
+
+#### Required Configuration
+
+The following settings must be configured in `appsettings.json`:
+
+```json
+"Auth0": {
+  "Domain": "your-tenant.us.auth0.com",
+  "ClientId": "your-client-id",
+  "Audience": "https://api.yourapp.com",
+  "CallbackPath": "/auth/callback",
+  "LogoutPath": "/auth/logout"
+}
+```
+
+#### Required User Secrets
+
+The Auth0 Client Secret **MUST NOT** be stored in `appsettings.json`. Use one of these secure methods:
+
+**Local Development - User Secrets:**
+```bash
+dotnet user-secrets set "Auth0:ClientSecret" "your-client-secret"
+```
+
+**Production - Environment Variables:**
+```bash
+# Linux/Mac
+export Auth0__ClientSecret="your-client-secret"
+
+# Windows PowerShell
+$env:Auth0__ClientSecret = "your-client-secret"
+
+# Azure App Service - Set in Configuration > Application Settings
+Auth0__ClientSecret = your-client-secret
+```
+
+#### Auth0 Tenant Setup
+
+1. **Create Auth0 Application:**
+   - Type: Regular Web Application
+   - Allowed Callback URLs: `https://your-domain.com/auth/callback`
+   - Allowed Logout URLs: `https://your-domain.com/`
+
+2. **Configure API:**
+   - Create an API in Auth0 with identifier matching `Auth0:Audience`
+   - Enable RBAC
+   - Enable "Add Permissions in the Access Token"
+
+3. **Configure Roles (Optional):**
+   - Create role: `notes.admin` for administrative access
+   - Assign to users requiring admin features
+
+4. **Configure Token Settings:**
+   - Token Expiration: 86400 seconds (24 hours) recommended
+   - Refresh Tokens: Enable for seamless re-authentication
 
 ## Reporting a Vulnerability
 
@@ -54,9 +115,20 @@ If you discover a security vulnerability in AINotesApp, please report it respons
 **Please do NOT open a public GitHub issue for security vulnerabilities.**
 
 ### What to Include
+  - **Required:** `Auth0:ClientSecret` must be stored in user secrets
+  - Command: `dotnet user-secrets set "Auth0:ClientSecret" "your-secret"`
+- Use **Environment Variables** for production (e.g., Azure App Service Configuration)
+  - Format: `Auth0__ClientSecret` (double underscore)
+- Use **Azure Key Vault** or similar for production secrets management
+- Never commit `appsettings.Production.json` with secrets
+- Never commit `appsettings.Development.json` with Auth0:ClientSecret
+- Add sensitive files to `.gitignore`
 
-When reporting a security vulnerability, please include:
-
+**Security Check:**
+```bash
+# Verify no secrets in version control
+git grep -i "clientsecret" -- "*.json"  # Should return no results
+``
 1. **Description** - Clear description of the vulnerability
 2. **Impact** - Potential security impact and severity
 3. **Steps to Reproduce** - Detailed steps to reproduce the vulnerability
@@ -118,17 +190,22 @@ When contributing to AINotesApp, please follow these security guidelines:
 - Add sensitive files to `.gitignore`
 
 ### Data Validation
-
-- Validate all user input in CQRS handlers
+Auth0 Free Tier** - Free tier has limits (7,000 active users, 2 social connections)
+- **No rate limiting** - Consider implementing rate limiting for production
+- **No audit logging** - User actions are not currently logged (consider Auth0 Logs for authentication events)
 - Use parameterized queries (Entity Framework Core does this automatically)
 - Sanitize data before rendering in Blazor components (Blazor does this automatically)
-
-## Known Security Considerations
-
-### Current Limitations
-
-- **OpenAI API calls** - Notes content is sent to OpenAI for AI features (embeddings, summaries, tags)
-- **Local development** - Uses SQL Server Express with Trusted Connection
+ (required for Auth0)
+2. **Secure connection strings** - Use Azure Key Vault or similar
+3. **Secure Auth0 secrets** - Store `Auth0:ClientSecret` in Azure Key Vault or environment variables
+4. **Enable Auth0 MFA** - Require multi-factor authentication for sensitive accounts
+5. **Monitor Auth0 Logs** - Enable and monitor authentication logs in Auth0 dashboard
+6. **Enable logging** - Add application security event logging
+7. **Rate limiting** - Implement API rate limiting (consider Auth0 Anomaly Detection)
+8. **Regular updates** - Keep .NET, Auth0 SDK, and dependencies updated
+9. **Security headers** - Add security headers (CSP, X-Frame-Options, etc.)
+10. **Monitor dependencies** - Use GitHub Dependabot for security alerts
+11. **Auth0 Attack Protection** - Enable brute-force protection and suspicious IP throttlingon
 - **No rate limiting** - Consider implementing rate limiting for production
 - **No audit logging** - User actions are not currently logged
 
@@ -143,6 +220,9 @@ When contributing to AINotesApp, please follow these security guidelines:
 7. **Monitor dependencies** - Use GitHub Dependabot for security alerts
 
 ## Security Resources
+- [Auth0 Security Best Practices](https://auth0.com/docs/secure)
+- [Auth0 Attack Protection](https://auth0.com/docs/secure/attack-protection)
+- [OpenID Connect Security](https://openid.net/specs/openid-connect-core-1_0.html#Security)
 
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [ASP.NET Core Security Best Practices](https://learn.microsoft.com/aspnet/core/security/)
