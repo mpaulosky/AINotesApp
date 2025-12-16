@@ -7,10 +7,18 @@
 // Project Name :  AINotesApp
 // =======================================================
 
+
+using System;
 using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
 
 using AINotesApp.Components;
 using AINotesApp.Data;
+using AINotesApp.Services;
 using AINotesApp.Services.Ai;
 
 using Auth0.AspNetCore.Authentication;

@@ -15,7 +15,6 @@
         <PackageReference Include="MediatR" Version="14.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.1"/>
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="10.0.1"/>
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.1"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.1"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.1">
             <PrivateAssets>all</PrivateAssets>
@@ -24,5 +23,6 @@
         <PackageReference Include="Microsoft.Build.Tasks.Core" Version="18.0.2"/>
         <PackageReference Include="OpenAI" Version="2.7.0"/>
     </ItemGroup>
+
 
 </Project>
