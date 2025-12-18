@@ -24,24 +24,26 @@ namespace AINotesApp.Tests.Unit.Helpers;
 public static class TestAuthHelper
 {
 
-	/// <summary>
-	///   Registers a test authentication provider for bUnit tests.
-	/// </summary>
-	/// <param name="services">The service collection to register with.</param>
-	/// <param name="userName">The test username.</param>
-	/// <param name="roles">The roles for the test user.</param>
-	public static void RegisterTestAuthentication(IServiceCollection services, string userName, string[] roles)
+    /// <summary>
+    ///   Registers a test authentication provider for bUnit tests.
+    /// </summary>
+    /// <param name="services">The service collection to register with.</param>
+    /// <param name="userName">The test username.</param>
+    /// <param name="roles">The roles for the test user.</param>
+    [ExcludeFromCodeCoverage]
+    public static void RegisterTestAuthentication(IServiceCollection services, string userName, string[] roles)
 	{
 		services.AddSingleton<AuthenticationStateProvider>(
 				new FakeAuthenticationStateProvider(userName, roles));
 	}
 
-	/// <summary>
-	///   Registers a test authentication provider for bUnit tests with dynamic state management.
-	/// </summary>
-	/// <param name="services">The service collection to register with.</param>
-	/// <returns>The registered FakeAuthenticationStateProvider instance for dynamic configuration.</returns>
-	public static FakeAuthenticationStateProvider RegisterDynamicTestAuthentication(IServiceCollection services)
+    /// <summary>
+    ///   Registers a test authentication provider for bUnit tests with dynamic state management.
+    /// </summary>
+    /// <param name="services">The service collection to register with.</param>
+    /// <returns>The registered FakeAuthenticationStateProvider instance for dynamic configuration.</returns>
+    [ExcludeFromCodeCoverage]
+    public static FakeAuthenticationStateProvider RegisterDynamicTestAuthentication(IServiceCollection services)
 	{
 		var provider = new FakeAuthenticationStateProvider();
 		services.AddSingleton<AuthenticationStateProvider>(provider);
