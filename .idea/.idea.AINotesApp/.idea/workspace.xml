@@ -8,18 +8,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4ba46e9-e6fc-47de-86a4-194fadf10d99" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AINotesApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AINotesApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/NoteEditor.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/NoteEditor.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/SearchNotes/SearchNotes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/SearchNotes/SearchNotes.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Admin/SeedNotesTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Admin/SeedNotesTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NoteEditorTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NoteEditorTests.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NotesListTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NotesListTests.cs" afterDir="false" />
-    </list>
+    <list default="true" id="e4ba46e9-e6fc-47de-86a4-194fadf10d99" name="Changes" comment="Add unit tests for AI service and authentication provider&#10;&#10;- Implement unit tests for AiServiceOptions class&#10;- Add tests for Auth0AuthenticationStateProvider functionality&#10;- Ensure test coverage for various scenarios and edge cases&#10;- Exclude test classes from code coverage analysis" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+      <option value="repository" />
+    </option>
   </component>
   <component name="EmbeddingIndexingInfo">
     <option name="cachedIndexableFilesCount" value="11" />
@@ -40,6 +39,11 @@
     &quot;accountId&quot;: &quot;f433ebf4-4a3a-4904-aad9-23b2400aa3f6&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="mock://E:/github/AINotesApp/AINotesApp/Components/Pages/Notes/NoteEditor.razor" root0="SKIP_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
+    <setting file="mock://E:/github/AINotesApp/tests/AINotesApp.Tests.Unit/Components/Pages/Admin/SeedNotesTests.cs" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 5
@@ -112,7 +116,41 @@
       <updated>1765986242238</updated>
       <workItem from="1765986250332" duration="2072000" />
       <workItem from="1766032634054" duration="1839000" />
+      <workItem from="1766042985286" duration="186000" />
     </task>
+    <task id="LOCAL-00001" summary="Add unit tests and test coverage configuration&#10;&#10;- Introduced ApplicationDbContextTests for database context validation&#10;- Added AppUserTests to verify AppUser entity behavior&#10;- Created ComponentTestHelper for shared BUnit testing utilities&#10;- Implemented FakeNavigationManager for BUnit test compatibility&#10;- Configured run settings for code coverage reporting">
+      <option name="closed" value="true" />
+      <created>1766043044188</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1766043044188</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Refactor NoteEditor component for improved clarity&#10;&#10;- Rename variables for consistency and clarity&#10;- Update error and success message handling&#10;- Ensure model is initialized in OnInitializedAsync&#10;- Adjust loading state management">
+      <option name="closed" value="true" />
+      <created>1766043083900</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1766043083900</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Update workspace configuration for test coverage&#10;&#10;- Adjusted coverage settings for improved reporting&#10;- Updated recent branch and highlighting settings&#10;- Modified paths for test files in the workspace">
+      <option name="closed" value="true" />
+      <created>1766043124385</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1766043124385</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Add unit tests for AI service and authentication provider&#10;&#10;- Implement unit tests for AiServiceOptions class&#10;- Add tests for Auth0AuthenticationStateProvider functionality&#10;- Ensure test coverage for various scenarios and edge cases&#10;- Exclude test classes from code coverage analysis">
+      <option name="closed" value="true" />
+      <created>1766043147074</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1766043147074</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -176,7 +214,15 @@
       <select />
     </coverage-tree-state>
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add unit tests and test coverage configuration&#10;&#10;- Introduced ApplicationDbContextTests for database context validation&#10;- Added AppUserTests to verify AppUser entity behavior&#10;- Created ComponentTestHelper for shared BUnit testing utilities&#10;- Implemented FakeNavigationManager for BUnit test compatibility&#10;- Configured run settings for code coverage reporting" />
+    <MESSAGE value="Refactor NoteEditor component for improved clarity&#10;&#10;- Rename variables for consistency and clarity&#10;- Update error and success message handling&#10;- Ensure model is initialized in OnInitializedAsync&#10;- Adjust loading state management" />
+    <MESSAGE value="Update workspace configuration for test coverage&#10;&#10;- Adjusted coverage settings for improved reporting&#10;- Updated recent branch and highlighting settings&#10;- Modified paths for test files in the workspace" />
+    <MESSAGE value="Add unit tests for AI service and authentication provider&#10;&#10;- Implement unit tests for AiServiceOptions class&#10;- Add tests for Auth0AuthenticationStateProvider functionality&#10;- Ensure test coverage for various scenarios and edge cases&#10;- Exclude test classes from code coverage analysis" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add unit tests for AI service and authentication provider&#10;&#10;- Implement unit tests for AiServiceOptions class&#10;- Add tests for Auth0AuthenticationStateProvider functionality&#10;- Ensure test coverage for various scenarios and edge cases&#10;- Exclude test classes from code coverage analysis" />
+  </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
       <option value=".github/instructions" />
