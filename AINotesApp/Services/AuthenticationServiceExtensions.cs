@@ -7,6 +7,7 @@
 // Project Name :  AINotesApp
 // =======================================================
 
+using System.Diagnostics.CodeAnalysis;
 using Auth0.AspNetCore.Authentication;
 
 using Microsoft.AspNetCore.Components.Authorization;
@@ -16,6 +17,8 @@ namespace AINotesApp.Services;
 /// <summary>
 ///   Extension methods for configuring authentication and authorization services.
 /// </summary>
+[ExcludeFromCodeCoverage]
+
 public static class AuthenticationServiceExtensions
 {
 
