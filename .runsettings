@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="XPlat Code Coverage">
+        <Configuration>
+          <Format>opencover,cobertura</Format>
+          
+          <!-- Exclude test assemblies -->
+          <Exclude>
+            [AINotesApp.Tests.Unit]*
+            [AINotesApp.Tests.Integration]*
+            [AINotesApp.Tests.Architecture]*
+          </Exclude>
+          
+          <!-- Exclude specific file patterns -->
+          <ExcludeByFile>
+            <!-- Test files -->
+            **/tests/**/*.cs
+            
+            <!-- Generated files -->
+            **/Migrations/**/*.cs
+            **/*.Designer.cs
+            **/*.g.cs
+            **/*.designer.cs
+            
+            <!-- Program.cs (optional - remove if you want to cover it) -->
+            **/Program.cs
+          </ExcludeByFile>
+          
+          <!-- Only include the main application project -->
+          <IncludeDirectory>../AINotesApp/</IncludeDirectory>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+  
+  <RunConfiguration>
+    <ResultsDirectory>./TestResults</ResultsDirectory>
+  </RunConfiguration>
+</RunSettings>
