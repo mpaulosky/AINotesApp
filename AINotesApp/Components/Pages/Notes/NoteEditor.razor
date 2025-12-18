@@ -14,116 +14,116 @@
 <PageTitle>@(IsEditMode ? "Edit Note" : "Create Note")</PageTitle>
 
 <div class="container mt-4">
-	<div class="row">
-		<div class="col-lg-8">
-			<div class="d-flex justify-content-between align-items-center mb-4">
-				<h1>@(IsEditMode ? "Edit Note" : "Create New Note")</h1>
-				<a href="/notes" class="btn btn-outline-secondary">
-					<i class="bi bi-arrow-left"></i> Back to Notes
-				</a>
-			</div>
+   <div class="row">
+	   <div class="col-lg-8">
+		   <div class="d-flex justify-content-between align-items-center mb-4">
+			   <h1>@(IsEditMode ? "Edit Note" : "Create New Note")</h1>
+			   <a href="/notes" class="btn btn-outline-secondary">
+				   <i class="bi bi-arrow-left"></i> Back to Notes
+			   </a>
+		   </div>
 
-			@if (!string.IsNullOrEmpty(errorMessage))
-			{
-				<div class="alert alert-danger alert-dismissible fade show" role="alert">
-					<i class="bi bi-exclamation-triangle"></i> @errorMessage
-					<button type="button" class="btn-close" @onclick="() => errorMessage = null"></button>
-				</div>
-			}
+		   @if (!string.IsNullOrEmpty(_errorMessage))
+		   {
+			   <div class="alert alert-danger alert-dismissible fade show" role="alert">
+				   <i class="bi bi-exclamation-triangle"></i> @_errorMessage
+				   <button type="button" class="btn-close" @onclick="() => _errorMessage = null"></button>
+			   </div>
+		   }
 
-			@if (!string.IsNullOrEmpty(successMessage))
-			{
-				<div class="alert alert-success alert-dismissible fade show" role="alert">
-					<i class="bi bi-check-circle"></i> @successMessage
-					<button type="button" class="btn-close" @onclick="() => successMessage = null"></button>
-				</div>
-			}
+		   @if (!string.IsNullOrEmpty(_successMessage))
+		   {
+			   <div class="alert alert-success alert-dismissible fade show" role="alert">
+				   <i class="bi bi-check-circle"></i> @_successMessage
+				   <button type="button" class="btn-close" @onclick="() => _successMessage = null"></button>
+			   </div>
+		   }
 
-			@if (isLoading)
-			{
-				<div class="text-center py-5">
-					<div class="spinner-border text-primary" role="status">
-						<span class="visually-hidden">Loading...</span>
-					</div>
-					<p class="mt-2">Loading note...</p>
-				</div>
-			}
-			else
-			{
-				<EditForm Model="@model" OnValidSubmit="HandleSubmitAsync" FormName="noteEditor">
-					<DataAnnotationsValidator/>
-					<ValidationSummary class="alert alert-danger"/>
+		   @if (_isLoading)
+		   {
+			   <div class="text-center py-5">
+				   <div class="spinner-border text-primary" role="status">
+					   <span class="visually-hidden">Loading...</span>
+				   </div>
+				   <p class="mt-2">Loading note...</p>
+			   </div>
+		   }
+		   else
+		   {
+			   <EditForm Model="@Model" OnValidSubmit="HandleSubmitAsync" FormName="noteEditor">
+				   <DataAnnotationsValidator/>
+				   <ValidationSummary class="alert alert-danger"/>
 
-					<div class="mb-3">
-						<label for="title" class="form-label">Title</label>
-						<InputText id="title" class="form-control" @bind-Value="model!.Title" placeholder="Enter note title"
+				   <div class="mb-3">
+					   <label for="title" class="form-label">Title</label>
+					   <InputText id="title" class="form-control" @bind-Value="Model!.Title" placeholder="Enter note title"
 											 maxlength="200"/>
-						<ValidationMessage For="@(() => model.Title)"/>
-					</div>
+					   <ValidationMessage For="@(() => Model.Title)"/>
+				   </div>
 
-					<div class="mb-3">
-						<label for="content" class="form-label">Content</label>
-						<InputTextArea id="content" class="form-control" @bind-Value="model.Content" rows="15"
-													 placeholder="Write your note here..."/>
-						<ValidationMessage For="@(() => model.Content)"/>
-					</div>
+				   <div class="mb-3">
+					   <label for="content" class="form-label">Content</label>
+					   <InputTextArea id="content" class="form-control" @bind-Value="Model.Content" rows="15"
+													placeholder="Write your note here..."/>
+					   <ValidationMessage For="@(() => Model.Content)"/>
+				   </div>
 
-					@if (!string.IsNullOrEmpty(aiSummary))
-					{
-						<div class="alert alert-info" role="alert">
-							<strong><i class="bi bi-stars"></i> AI Summary:</strong>
-							<p class="mb-0 mt-2">@aiSummary</p>
-						</div>
-					}
+				   @if (!string.IsNullOrEmpty(_aiSummary))
+				   {
+					   <div class="alert alert-info" role="alert">
+						   <strong><i class="bi bi-stars"></i> AI Summary:</strong>
+						   <p class="mb-0 mt-2">@_aiSummary</p>
+					   </div>
+				   }
 
-					@if (!string.IsNullOrEmpty(tags))
-					{
-						<div class="mb-3">
-							<strong><i class="bi bi-tags-fill"></i> Tags:</strong>
-							<div class="mt-2">
-								@foreach (var tag in tags.Split(',', StringSplitOptions.RemoveEmptyEntries |
-																										 StringSplitOptions.TrimEntries))
-								{
-									<span class="badge bg-primary me-1 mb-1">@tag</span>
-								}
-							</div>
-						</div>
-					}
+				   @if (!string.IsNullOrEmpty(_tags))
+				   {
+					   <div class="mb-3">
+						   <strong><i class="bi bi-tags-fill"></i> Tags:</strong>
+						   <div class="mt-2">
+							   @foreach (var tag in _tags.Split(',', StringSplitOptions.RemoveEmptyEntries |
+																								 StringSplitOptions.TrimEntries))
+							   {
+								   <span class="badge bg-primary me-1 mb-1">@tag</span>
+							   }
+						   </div>
+					   </div>
+				   }
 
-					<div class="d-flex justify-content-between align-items-center">
-						<button type="submit" class="btn btn-primary" disabled="@isSaving">
-							@if (isSaving)
-							{
-								<span class="spinner-border spinner-border-sm me-2" role="status"></span>
-								<span>Saving...</span>
-							}
-							else
-							{
-								<i class="bi bi-save me-2"></i>
-								<span>@(IsEditMode ? "Update Note" : "Create Note")</span>
-							}
-						</button>
+				   <div class="d-flex justify-content-between align-items-center">
+					   <button type="submit" class="btn btn-primary" disabled="@_isSaving">
+						   @if (_isSaving)
+						   {
+							   <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+							   <span>Saving...</span>
+						   }
+						   else
+						   {
+							   <i class="bi bi-save me-2"></i>
+							   <span>@(IsEditMode ? "Update Note" : "Create Note")</span>
+						   }
+					   </button>
 
-						@if (IsEditMode)
-						{
-							<div class="text-muted">
-								<small>
-									Created: @createdAt.ToLocalTime().ToString("g")<br/>
-									Updated: @updatedAt.ToLocalTime().ToString("g")
-								</small>
-							</div>
-						}
-					</div>
-				</EditForm>
-			}
+					   @if (IsEditMode)
+					   {
+						   <div class="text-muted">
+							   <small>
+								   Created: @_createdAt.ToLocalTime().ToString("g")<br/>
+								   Updated: @_updatedAt.ToLocalTime().ToString("g")
+							   </small>
+						   </div>
+					   }
+				   </div>
+			   </EditForm>
+		   }
 		</div>
 
 		<!-- Related Notes Sidebar (only in edit mode) -->
-		@if (IsEditMode && Id.HasValue && !isLoading)
+		@if (IsEditMode && Id.HasValue && !_isLoading)
 		{
 			<div class="col-lg-4">
 				<div class="sticky-top" style="top: 20px;">
-					<RelatedNotes NoteId="@Id.Value" UserSubject="@userSubject" HasEmbedding="true" TopN="5"/>
+					<RelatedNotes NoteId="@Id.Value" UserSubject="@_userSubject" HasEmbedding="true" TopN="5"/>
 				</div>
 			</div>
 		}
@@ -134,30 +134,36 @@
 
 	[Parameter] public Guid? Id { get; set; }
 
-	[SupplyParameterFromForm] private NoteEditorModel? model { get; set; }
 
-	private bool isLoading  ;
+	[SupplyParameterFromForm] private NoteEditorModel? Model { get; set; }
 
-	private bool isSaving  ;
+	private bool _isLoading;
 
-	private string? errorMessage;
+	private bool _isSaving;
 
-	private string? successMessage;
+	private string? _errorMessage;
 
-	private string userSubject = string.Empty;
+	private string? _successMessage;
 
-	private string? aiSummary;
+	private string _userSubject = string.Empty;
 
-	private string? tags;
+	private string? _aiSummary;
 
-	private DateTimeOffset createdAt;
+	private string? _tags;
 
-	private DateTimeOffset updatedAt;
+	private DateTimeOffset _createdAt;
+
+	private DateTimeOffset _updatedAt;
 
 	private bool IsEditMode => Id.HasValue && Id.Value != Guid.Empty;
 
 	protected override async Task OnInitializedAsync()
 	{
+		// Always ensure model is initialized
+		if (Model == null)
+		{
+			Model = new NoteEditorModel();
+		}
 		try
 		{
 			var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -165,23 +171,17 @@
 
 			if (user.Identity?.IsAuthenticated == true)
 			{
-				userSubject = user.FindFirst("sub")?.Value ?? string.Empty;
+				_userSubject = user.FindFirst("sub")?.Value ?? string.Empty;
 
 				if (IsEditMode)
 				{
 					await LoadNoteAsync();
 				}
 			}
-
-			// Ensure model is initialized if not set by form
-			if (model == null)
-			{
-				model = new NoteEditorModel();
-			}
 		}
 		catch (Exception ex)
 		{
-			errorMessage = $"Error initializing: {ex.Message}";
+			_errorMessage = $"Error initializing: {ex.Message}";
 		}
 	}
 
@@ -192,42 +192,42 @@
 
 		try
 		{
-			isLoading = true;
-			errorMessage = null;
+			_isLoading = true;
+			_errorMessage = null;
 
 			var query = new GetNoteDetailsQuery
 			{
 				Id = Id.Value,
-				UserSubject = userSubject
+				UserSubject = _userSubject
 			};
 
 			var response = await Mediator.Send(query);
 
 			if (response == null)
 			{
-				errorMessage = "Note not found or access denied.";
+				_errorMessage = "Note not found or access denied.";
 
 				return;
 			}
 
-			model = new NoteEditorModel
+			Model = new NoteEditorModel
 			{
 				Title = response.Title,
 				Content = response.Content
 			};
 
-			aiSummary = response.AiSummary;
-			tags = response.Tags;
-			createdAt = response.CreatedAt;
-			updatedAt = response.UpdatedAt;
+			_aiSummary = response.AiSummary;
+			_tags = response.Tags;
+			_createdAt = response.CreatedAt;
+			_updatedAt = response.UpdatedAt;
 		}
 		catch (Exception ex)
 		{
-			errorMessage = $"Error loading note: {ex.Message}";
+			_errorMessage = $"Error loading note: {ex.Message}";
 		}
 		finally
 		{
-			isLoading = false;
+			_isLoading = false;
 		}
 	}
 
@@ -235,9 +235,9 @@
 	{
 		try
 		{
-			isSaving = true;
-			errorMessage = null;
-			successMessage = null;
+			_isSaving = true;
+			_errorMessage = null;
+			_successMessage = null;
 
 			if (IsEditMode)
 			{
@@ -250,11 +250,11 @@
 		}
 		catch (Exception ex)
 		{
-			errorMessage = $"Error saving note: {ex.Message}";
+			_errorMessage = $"Error saving note: {ex.Message}";
 		}
 		finally
 		{
-			isSaving = false;
+			_isSaving = false;
 		}
 	}
 
@@ -262,14 +262,14 @@
 	{
 		var command = new CreateNoteCommand
 		{
-			Title = model!.Title,
-			Content = model!.Content,
-			UserSubject = userSubject
+			Title = Model!.Title,
+			Content = Model!.Content,
+			UserSubject = _userSubject
 		};
 
 		var response = await Mediator.Send(command);
 
-		successMessage = "Note created successfully!";
+		_successMessage = "Note created successfully!";
 
 		// Navigate to the edit page of the newly created note
 		await Task.Delay(1000); // Brief delay to show success message
@@ -284,23 +284,23 @@
 		var command = new UpdateNoteCommand
 		{
 			Id = Id.Value,
-			Title = model!.Title,
-			Content = model!.Content,
-			UserSubject = userSubject
+			Title = Model!.Title,
+			Content = Model!.Content,
+			UserSubject = _userSubject
 		};
 
 		var response = await Mediator.Send(command);
 
 		if (response.Success)
 		{
-			successMessage = "Note updated successfully with AI summary and tags!";
-			aiSummary = response.AiSummary;
-			tags = response.Tags;
-			updatedAt = response.UpdatedAt;
+			_successMessage = "Note updated successfully with AI summary and tags!";
+			_aiSummary = response.AiSummary;
+			_tags = response.Tags;
+			_updatedAt = response.UpdatedAt;
 		}
 		else
 		{
-			errorMessage = response.Message;
+			_errorMessage = response.Message;
 		}
 	}
 
