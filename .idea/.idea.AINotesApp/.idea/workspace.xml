@@ -8,28 +8,24 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="507721ca-0ec0-4ff1-8e76-4e073f2568c4" name="Changes" comment="" />
+    <list default="true" id="e4ba46e9-e6fc-47de-86a4-194fadf10d99" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.AINotesApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AINotesApp/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/NoteEditor.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Pages/Notes/NoteEditor.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Features/Notes/SearchNotes/SearchNotes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Features/Notes/SearchNotes/SearchNotes.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Admin/SeedNotesTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Admin/SeedNotesTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NoteEditorTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NoteEditorTests.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NotesListTests.cs" beforeDir="false" afterPath="$PROJECT_DIR$/tests/AINotesApp.Tests.Unit/Components/Pages/Notes/NotesListTests.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ChangesViewManager">
-    <option name="groupingKeys">
-      <option value="directory" />
-      <option value="repository" />
-    </option>
-  </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="12" />
+    <option name="cachedIndexableFilesCount" value="11" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="wip/manage" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -42,63 +38,38 @@
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/mpaulosky/AINotesApp.git&quot;,
     &quot;accountId&quot;: &quot;f433ebf4-4a3a-4904-aad9-23b2400aa3f6&quot;
-  },
-  &quot;recentNewPullRequestHead&quot;: {
-    &quot;server&quot;: {
-      &quot;useHttp&quot;: false,
-      &quot;host&quot;: &quot;github.com&quot;,
-      &quot;port&quot;: null,
-      &quot;suffix&quot;: null
-    },
-    &quot;owner&quot;: &quot;mpaulosky&quot;,
-    &quot;repository&quot;: &quot;AINotesApp&quot;
   }
 }</component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$USER_HOME$/AppData/Local/JetBrains/Shared/vAny/SourcesCache/f9d49be92b3b88e740e4eee89510813725cedfc749b39af6cfc97a236eaa51/CascadingAuthenticationStateServiceCollectionExtensions.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$USER_HOME$/AppData/Roaming/Microsoft/UserSecrets/aspnet-AINotesApp-41c588d7-01bb-4a12-8a64-3e6c8198e9a3/secrets.json" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../teqsl/.nuget/packages/microsoft.net.test.sdk/18.0.1/build/net8.0/Microsoft.NET.Test.Sdk.Program.cs" root0="SKIP_HIGHLIGHTING" />
-  </component>
-  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
-  </component>
   <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 5
 }</component>
-  <component name="ProjectId" id="36nYDXQ3euQC9J8D1DHNFHV9TBK" />
+  <component name="ProjectId" id="36ykXG2SecOdVM6ok9pELaiqNnR" />
   <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
     <option name="autoscrollToSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
-    <option name="sortKey" value="BY_TIME_DESCENDING" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "feature/convert-to-auth0",
-    "junie.onboarding.icon.badge.shown": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.github.copilot.settings.customization.CustomizationConfigurable",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;wip/add-test-coverage&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="QodanaReportsService">
-    <option name="descriptions">
-      <ReportDescription localRun="true" path="C:\Users\teqsl\AppData\Local\Temp\qodana_output1\qodana.sarif.json" reportGuid="96f7f3e6-b75e-46a7-8856-bd09c28abf40" reportId="AINotesApp/qodana/2025-12-13" />
-      <ReportDescription localRun="true" path="C:\Users\teqsl\AppData\Local\Temp\qodana_output\qodana.sarif.json" reportGuid="46ad522a-3f58-426d-828e-ab69f75f032f" reportId="AINotesApp/qodana/2025-12-13" />
-    </option>
-  </component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.AINotesApp: https">
+  <component name="RunManager" selected=".NET Launch Settings Profile.AINotesApp: http">
     <configuration name="AINotesApp: http" type="LaunchSettings" factoryName=".NET Launch Settings Profile">
       <option name="LAUNCH_PROFILE_PROJECT_FILE_PATH" value="$PROJECT_DIR$/AINotesApp/AINotesApp.csproj" />
       <option name="LAUNCH_PROFILE_TFM" value="net10.0" />
@@ -134,277 +105,78 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="507721ca-0ec0-4ff1-8e76-4e073f2568c4" name="Changes" comment="" />
-      <created>1700008006853</created>
+      <changelist id="e4ba46e9-e6fc-47de-86a4-194fadf10d99" name="Changes" comment="" />
+      <created>1765986242238</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1700008006853</updated>
-      <workItem from="1765643688493" duration="2125000" />
-      <workItem from="1765646721468" duration="2737000" />
-      <workItem from="1765668183472" duration="4629000" />
-      <workItem from="1765678910954" duration="685000" />
-      <workItem from="1765820533903" duration="12471000" />
+      <updated>1765986242238</updated>
+      <workItem from="1765986250332" duration="2072000" />
+      <workItem from="1766032634054" duration="1839000" />
     </task>
-    <task id="LOCAL-00001" summary="Add initial project configuration files&#10;&#10;- Create .gitignore to exclude IDE and local files&#10;- Add XML files for migration state services&#10;- Include index layout and version control settings">
-      <option name="closed" value="true" />
-      <created>1765676456091</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676456091</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Add integration tests for note backfilling and CRUD operations&#10;&#10;- Implement tests for backfilling tags for multiple users.&#10;- Add tests for periodic saving during tag backfilling.&#10;- Create integration tests for complete CRUD workflow of notes.&#10;- Ensure proper handling of updates and deletions in tests.">
-      <option name="closed" value="true" />
-      <created>1765676477048</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676477048</updated>
-    </task>
-    <task id="LOCAL-00003" summary="Add unit tests for SeedNotes and NoteEditor components&#10;&#10;- Implement tests for seeding notes and backfilling tags.&#10;- Verify error handling for unauthenticated users.&#10;- Ensure successful creation and processing of notes.&#10;- Add performance tests for NoteEditor component.">
-      <option name="closed" value="true" />
-      <created>1765676498782</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676498782</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Add unit tests for OpenAI edge cases in `FindRelatedNotesAsync`&#10;&#10;- Add tests for null, zero, and invalid embeddings.&#10;- Test behavior with empty user ID and no notes in the database.&#10;- Validate ordering by similarity and TopN parameter handling.&#10;- Ensure filtering by user ID and exclusion of current notes.&#10;- Add test coverage for embeddings with null values.">
-      <option name="closed" value="true" />
-      <created>1765676549842</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676549842</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Add unit tests for BackfillTagsHandler&#10;&#10;- Implement tests for processing notes with and without tags.&#10;- Ensure exception handling for AI service failures.&#10;- Validate correct processing counts and error reporting.">
-      <option name="closed" value="true" />
-      <created>1765676567733</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676567733</updated>
-    </task>
-    <task id="LOCAL-00006" summary="Add seed data generation and related tests&#10;&#10;- Introduce structured prompts for autonomy implementation and generation.&#10;- Implement SeedNotesHandler with methods for creating notes.&#10;- Add unit tests for SeedNotesHandler to verify functionality.&#10;- Ensure AI service methods are called correctly and handle failures gracefully.">
-      <option name="closed" value="true" />
-      <created>1765676586630</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676586630</updated>
-    </task>
-    <task id="LOCAL-00007" summary="Add DotSettings for WPF resource dictionary&#10;&#10;Creates a new DotSettings file to define WPF resource dictionary&#10;settings for user dictionary entry indexing.">
-      <option name="closed" value="true" />
-      <created>1765676603437</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676603437</updated>
-    </task>
-    <task id="LOCAL-00008" summary="Add Qodana configuration file&#10;&#10;Creates a new qodana.yaml file to configure Qodana analysis.&#10;Sets up inspection profiles and quality gate thresholds for CI/CD.">
-      <option name="closed" value="true" />
-      <created>1765676623288</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676623288</updated>
-    </task>
-    <task id="LOCAL-00009" summary="Update README with testing instructions and project details&#10;&#10;- Added detailed instructions for running tests&#10;- Improved formatting and clarity in project structure section&#10;- Updated technology stack descriptions for consistency&#10;- Enhanced user isolation explanation for clarity">
-      <option name="closed" value="true" />
-      <created>1765676646970</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676646970</updated>
-    </task>
-    <task id="LOCAL-00010" summary="Organize project structure into folders&#10;&#10;- Created a folder for source files under /SRC/&#10;- Created a folder for test files under /Tests/&#10;- Updated project paths in the solution file accordingly">
-      <option name="closed" value="true" />
-      <created>1765676677318</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676677318</updated>
-    </task>
-    <task id="LOCAL-00011" summary="Add ExcludeFromCodeCoverage attribute to test classes&#10;&#10;- Mark test classes with [ExcludeFromCodeCoverage] to improve coverage reports.&#10;- Ensure that architecture and integration tests are excluded from coverage metrics.&#10;- Update namespaces for consistency across test files.">
-      <option name="closed" value="true" />
-      <created>1765676705248</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676705248</updated>
-    </task>
-    <task id="LOCAL-00012" summary="Refactor routing and update navigation menu&#10;&#10;- Change namespace for IdentityComponentsEndpointRouteBuilderExtensions.&#10;- Update NavMenu to include a link for seeding demo notes.&#10;- Adjust MediatR registration to use the correct assembly reference.">
-      <option name="closed" value="true" />
-      <created>1765676726166</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1765676726166</updated>
-    </task>
-    <task id="LOCAL-00013" summary="Implement Auth0 authentication components&#10;&#10;- Add Login, Logout, and AccessDenied Razor components&#10;- Update NavMenu to use Auth0 components and display user info&#10;- Replace Identity references with Auth0 in routing and layout&#10;- Introduce AppUser entity for Auth0 subject tracking">
-      <option name="closed" value="true" />
-      <created>1765833086305</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1765833086305</updated>
-    </task>
-    <task id="LOCAL-00014" summary="Integrate Auth0 authentication and update layout&#10;&#10;- Implement Auth0 authentication components and services&#10;- Update MainLayout and NavMenu for new authentication flow&#10;- Modify appsettings for Auth0 configuration&#10;- Refactor note-related commands to use Auth0 user subject&#10;- Enhance error handling and user experience in UI components">
-      <option name="closed" value="true" />
-      <created>1765833267698</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1765833267698</updated>
-    </task>
-    <task id="LOCAL-00015" summary="Refactor documentation for clarity and consistency&#10;&#10;- Adjust indentation and formatting in CONTRIBUTING.md&#10;- Improve readability in GITHUB-NUGET-TROUBLESHOOTING.md&#10;- Enhance structure and clarity in REFERENCES.md&#10;- Standardize formatting in SECURITY.md">
-      <option name="closed" value="true" />
-      <created>1765833285165</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1765833285165</updated>
-    </task>
-    <task id="LOCAL-00016" summary="Refactor test files for consistency and clarity&#10;&#10;- Update copyright headers in test files&#10;- Improve documentation comments for clarity&#10;- Standardize variable names for user identification&#10;- Ensure consistent formatting and spacing across files">
-      <option name="closed" value="true" />
-      <created>1765833410566</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1765833410566</updated>
-    </task>
-    <task id="LOCAL-00017" summary="Update workspace configuration for Auth0 integration&#10;&#10;- Added new paths for Auth0 authentication components&#10;- Updated recent branch and highlighting settings&#10;- Adjusted cached indexable files count">
-      <option name="closed" value="true" />
-      <created>1765833447457</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1765833447457</updated>
-    </task>
-    <task id="LOCAL-00018" summary="Update ResourceDictionary formatting in settings&#10;&#10;- Adjust XML formatting for better readability&#10;- Ensure xml:space attribute is correctly positioned">
-      <option name="closed" value="true" />
-      <created>1765833505568</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1765833505568</updated>
-    </task>
-    <task id="LOCAL-00019" summary="Update documentation and prompts for clarity&#10;&#10;- Refactor `4.1-Beast.agent.md` for improved instructions&#10;- Streamline `copilot-instructions.md` for better readability&#10;- Enhance `build-repair.prompt.md` with additional testing steps&#10;- Revise `copyright-header-update-prompt.md` for clarity&#10;- Update `create-readme.prompt.md` for better structure&#10;- Improve `csharp-docs.prompt.md` with clearer guidelines&#10;- Refine `xunit.prompt.md` for better testing practices">
-      <option name="closed" value="true" />
-      <created>1765833816728</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1765833816728</updated>
-    </task>
-    <task id="LOCAL-00020" summary="Organize solution structure and update configuration files&#10;&#10;- Added project structure to AINotesApp.slnx&#10;- Reformatted global.json for consistency&#10;- Cleaned up nuget.config for better readability&#10;- Improved formatting in README.md for clarity">
-      <option name="closed" value="true" />
-      <created>1765833843039</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1765833843039</updated>
-    </task>
-    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="UnitTestsCoverage.Settings">
-    <option name="coveragePercentColumnWidth" value="75" />
+    <option name="coveragePercentColumnWidth" value="188" />
     <option name="sortOrder" value="DESCENDING" />
     <option name="sortedColumn" value="1" />
-    <option name="symbolColumnWidth" value="435" />
+    <option name="symbolColumnWidth" value="521" />
     <coverage-tree-state>
       <expand>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 4% 2922/3058" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 7% 1865/2015" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 4% 2922/3058" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="SRC 5% 2808/2944" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 7% 1865/2015" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="SRC 8% 1751/1901" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 4% 2922/3058" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="SRC 5% 2808/2944" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="AINotesApp 5% 2808/2944" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 7% 1865/2015" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="SRC 8% 1751/1901" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AINotesApp 8% 1751/1901" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 4% 2922/3058" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="SRC 5% 2808/2944" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="AINotesApp 5% 2808/2944" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="AINotesApp 5% 2691/2827" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 7% 1865/2015" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="SRC 8% 1751/1901" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AINotesApp 8% 1751/1901" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AINotesApp 8% 1705/1855" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
         <path>
           <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
-          <item name="Total 4% 2922/3058" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="SRC 5% 2808/2944" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="AINotesApp 5% 2808/2944" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="AINotesApp 5% 2691/2827" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
-          <item name="Services.Ai 0% 99/99" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Total 7% 1865/2015" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="SRC 8% 1751/1901" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AINotesApp 8% 1751/1901" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AINotesApp 8% 1705/1855" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Data 88% 4/34" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 7% 1865/2015" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="SRC 8% 1751/1901" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AINotesApp 8% 1751/1901" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AINotesApp 8% 1705/1855" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Components 0% 548/548" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+        </path>
+        <path>
+          <item name="rootNode" type="c53c71d1:RiderDotCoverCoverageTreeModel$RootNode" />
+          <item name="Total 7% 1865/2015" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="SRC 8% 1751/1901" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AINotesApp 8% 1751/1901" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="AINotesApp 8% 1705/1855" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Components 0% 548/548" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
+          <item name="Pages 0% 531/531" type="8b8fad3a:RiderDotCoverCoverageTreeNode" />
         </path>
       </expand>
       <select />
     </coverage-tree-state>
   </component>
-  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
-  <component name="VcsManagerConfiguration">
-    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-    <MESSAGE value="Add initial project configuration files&#10;&#10;- Create .gitignore to exclude IDE and local files&#10;- Add XML files for migration state services&#10;- Include index layout and version control settings" />
-    <MESSAGE value="Add integration tests for note backfilling and CRUD operations&#10;&#10;- Implement tests for backfilling tags for multiple users.&#10;- Add tests for periodic saving during tag backfilling.&#10;- Create integration tests for complete CRUD workflow of notes.&#10;- Ensure proper handling of updates and deletions in tests." />
-    <MESSAGE value="Add unit tests for SeedNotes and NoteEditor components&#10;&#10;- Implement tests for seeding notes and backfilling tags.&#10;- Verify error handling for unauthenticated users.&#10;- Ensure successful creation and processing of notes.&#10;- Add performance tests for NoteEditor component." />
-    <MESSAGE value="Add unit tests for OpenAI edge cases in `FindRelatedNotesAsync`&#10;&#10;- Add tests for null, zero, and invalid embeddings.&#10;- Test behavior with empty user ID and no notes in the database.&#10;- Validate ordering by similarity and TopN parameter handling.&#10;- Ensure filtering by user ID and exclusion of current notes.&#10;- Add test coverage for embeddings with null values." />
-    <MESSAGE value="Add unit tests for BackfillTagsHandler&#10;&#10;- Implement tests for processing notes with and without tags.&#10;- Ensure exception handling for AI service failures.&#10;- Validate correct processing counts and error reporting." />
-    <MESSAGE value="Add seed data generation and related tests&#10;&#10;- Introduce structured prompts for autonomy implementation and generation.&#10;- Implement SeedNotesHandler with methods for creating notes.&#10;- Add unit tests for SeedNotesHandler to verify functionality.&#10;- Ensure AI service methods are called correctly and handle failures gracefully." />
-    <MESSAGE value="Add DotSettings for WPF resource dictionary&#10;&#10;Creates a new DotSettings file to define WPF resource dictionary&#10;settings for user dictionary entry indexing." />
-    <MESSAGE value="Add Qodana configuration file&#10;&#10;Creates a new qodana.yaml file to configure Qodana analysis.&#10;Sets up inspection profiles and quality gate thresholds for CI/CD." />
-    <MESSAGE value="Update README with testing instructions and project details&#10;&#10;- Added detailed instructions for running tests&#10;- Improved formatting and clarity in project structure section&#10;- Updated technology stack descriptions for consistency&#10;- Enhanced user isolation explanation for clarity" />
-    <MESSAGE value="Organize project structure into folders&#10;&#10;- Created a folder for source files under /SRC/&#10;- Created a folder for test files under /Tests/&#10;- Updated project paths in the solution file accordingly" />
-    <MESSAGE value="Add ExcludeFromCodeCoverage attribute to test classes&#10;&#10;- Mark test classes with [ExcludeFromCodeCoverage] to improve coverage reports.&#10;- Ensure that architecture and integration tests are excluded from coverage metrics.&#10;- Update namespaces for consistency across test files." />
-    <MESSAGE value="Refactor routing and update navigation menu&#10;&#10;- Change namespace for IdentityComponentsEndpointRouteBuilderExtensions.&#10;- Update NavMenu to include a link for seeding demo notes.&#10;- Adjust MediatR registration to use the correct assembly reference." />
-    <MESSAGE value="Implement Auth0 authentication components&#10;&#10;- Add Login, Logout, and AccessDenied Razor components&#10;- Update NavMenu to use Auth0 components and display user info&#10;- Replace Identity references with Auth0 in routing and layout&#10;- Introduce AppUser entity for Auth0 subject tracking" />
-    <MESSAGE value="Integrate Auth0 authentication and update layout&#10;&#10;- Implement Auth0 authentication components and services&#10;- Update MainLayout and NavMenu for new authentication flow&#10;- Modify appsettings for Auth0 configuration&#10;- Refactor note-related commands to use Auth0 user subject&#10;- Enhance error handling and user experience in UI components" />
-    <MESSAGE value="Refactor documentation for clarity and consistency&#10;&#10;- Adjust indentation and formatting in CONTRIBUTING.md&#10;- Improve readability in GITHUB-NUGET-TROUBLESHOOTING.md&#10;- Enhance structure and clarity in REFERENCES.md&#10;- Standardize formatting in SECURITY.md" />
-    <MESSAGE value="Refactor test files for consistency and clarity&#10;&#10;- Update copyright headers in test files&#10;- Improve documentation comments for clarity&#10;- Standardize variable names for user identification&#10;- Ensure consistent formatting and spacing across files" />
-    <MESSAGE value="Update workspace configuration for Auth0 integration&#10;&#10;- Added new paths for Auth0 authentication components&#10;- Updated recent branch and highlighting settings&#10;- Adjusted cached indexable files count" />
-    <MESSAGE value="Update ResourceDictionary formatting in settings&#10;&#10;- Adjust XML formatting for better readability&#10;- Ensure xml:space attribute is correctly positioned" />
-    <MESSAGE value="Update documentation and prompts for clarity&#10;&#10;- Refactor `4.1-Beast.agent.md` for improved instructions&#10;- Streamline `copilot-instructions.md` for better readability&#10;- Enhance `build-repair.prompt.md` with additional testing steps&#10;- Revise `copyright-header-update-prompt.md` for clarity&#10;- Update `create-readme.prompt.md` for better structure&#10;- Improve `csharp-docs.prompt.md` with clearer guidelines&#10;- Refine `xunit.prompt.md` for better testing practices" />
-    <MESSAGE value="Organize solution structure and update configuration files&#10;&#10;- Added project structure to AINotesApp.slnx&#10;- Reformatted global.json for consistency&#10;- Cleaned up nuget.config for better readability&#10;- Improved formatting in README.md for clarity" />
-    <option name="LAST_COMMIT_MESSAGE" value="Organize solution structure and update configuration files&#10;&#10;- Added project structure to AINotesApp.slnx&#10;- Reformatted global.json for consistency&#10;- Cleaned up nuget.config for better readability&#10;- Improved formatting in README.md for clarity" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
-          <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
-          <option name="timeStamp" value="1" />
-        </breakpoint>
-        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
-          <properties exception="System.Threading.Tasks.TaskCanceledException" breakIfHandledByOtherCode="false" displayValue="System.Threading.Tasks.TaskCanceledException" />
-          <option name="timeStamp" value="2" />
-        </breakpoint>
-        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
-          <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
-          <option name="timeStamp" value="3" />
-        </breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/AINotesApp/Components/Account/Logout.razor</url>
-          <line>3</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
-  <component name="XSLT-Support.FileAssociations.UIState">
-    <expand />
-    <select />
-  </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
       <option value=".github/instructions" />
