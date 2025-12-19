@@ -17,12 +17,9 @@
 					<NavLink class="nav-link" href="/notes/create">Create Note</NavLink>
 					<NavLink class="nav-link" href="/admin/seed">Seed Demo Notes</NavLink>
 					<NavLink class="nav-link" href="/manage">Manage</NavLink>
-					<button class="btn btn-link" blazor:onclick="Logout">Logout</button>
 				</Authorized>
-				<NotAuthorized>
-					<button class="btn btn-primary" blazor:onclick="Login">Login</button>
-				</NotAuthorized>
 			</AuthorizeView>
+			<LoginComponent />
 		</div>
 	</div>
 </nav>

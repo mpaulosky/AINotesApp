@@ -8,14 +8,11 @@
 // =======================================================
 
 using AINotesApp.Data;
-
+using AINotesApp.Services.Ai;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-
 using OpenAI.Chat;
-
 using OpenAI.Embeddings;
-using AINotesApp.Services.Ai;
 
 namespace AINotesApp.Services;
 
@@ -25,31 +22,37 @@ namespace AINotesApp.Services;
 public class OpenAiService : IAiService
 {
 
-	private readonly ChatClient _chatClient;
+	private readonly IChatClientWrapper _chatClient;
 
 	private readonly ApplicationDbContext _context;
 
-	private readonly EmbeddingClient _embeddingClient;
+	private readonly IEmbeddingClientWrapper _embeddingClient;
 
 	private readonly AiServiceOptions _options;
 
-    /// <summary>
-    ///   Initializes a new instance of the <see cref="OpenAiService" /> class.
-    /// </summary>
-    /// <param name="options">AI service configuration options.</param>
-    /// <param name="context">Database context for querying notes.</param>
-    public OpenAiService(IOptions<AiServiceOptions> options, ApplicationDbContext context)
+	/// <summary>
+	///   Initializes a new instance of the <see cref="OpenAiService" /> class.
+	/// </summary>
+	/// <param name="options">AI service configuration options.</param>
+	/// <param name="context">Database context for querying notes.</param>
+	/// <param name="chatClient">Chat client for AI completions.</param>
+	/// <param name="embeddingClient">Embedding client for vector generation.</param>
+	public OpenAiService(
+	IOptions<AiServiceOptions> options,
+	ApplicationDbContext context,
+	IChatClientWrapper chatClient,
+	IEmbeddingClientWrapper embeddingClient)
 	{
 		_options = options.Value;
 		_context = context;
-		_chatClient = new ChatClient(_options.ChatModel, _options.ApiKey);
-		_embeddingClient = new EmbeddingClient(_options.EmbeddingModel, _options.ApiKey);
+		_chatClient = chatClient ?? throw new ArgumentNullException(nameof(chatClient));
+		_embeddingClient = embeddingClient ?? throw new ArgumentNullException(nameof(embeddingClient));
 	}
 
-    /// <summary>
-    ///   Generates a concise summary for the given note content.
-    /// </summary>
-    public async Task<string> GenerateSummaryAsync(string content, CancellationToken cancellationToken = default)
+	/// <summary>
+	///   Generates a concise summary for the given note content.
+	/// </summary>
+	public async Task<string> GenerateSummaryAsync(string content, CancellationToken cancellationToken = default)
 	{
 		if (string.IsNullOrWhiteSpace(content))
 		{
@@ -67,8 +70,8 @@ public class OpenAiService : IAiService
 
 			var completionOptions = new ChatCompletionOptions
 			{
-					MaxOutputTokenCount = _options.MaxSummaryTokens,
-					Temperature = 0.5f
+				MaxOutputTokenCount = _options.MaxSummaryTokens,
+				Temperature = 0.5f
 			};
 
 			var completion = await _chatClient.CompleteChatAsync(messages, completionOptions, cancellationToken);
@@ -84,10 +87,10 @@ public class OpenAiService : IAiService
 		}
 	}
 
-    /// <summary>
-    ///   Generates embeddings for semantic search and similarity matching.
-    /// </summary>
-    public async Task<float[]> GenerateEmbeddingAsync(string text, CancellationToken cancellationToken = default)
+	/// <summary>
+	///   Generates embeddings for semantic search and similarity matching.
+	/// </summary>
+	public async Task<float[]> GenerateEmbeddingAsync(string text, CancellationToken cancellationToken = default)
 	{
 		if (string.IsNullOrWhiteSpace(text))
 		{
@@ -109,13 +112,13 @@ public class OpenAiService : IAiService
 		}
 	}
 
-    /// <summary>
-    ///   Generates relevant tags for the given note title and content.
-    /// </summary>
-    public async Task<string> GenerateTagsAsync(
-			string title,
-			string content,
-			CancellationToken cancellationToken = default)
+	/// <summary>
+	///   Generates relevant tags for the given note title and content.
+	/// </summary>
+	public async Task<string> GenerateTagsAsync(
+		string title,
+		string content,
+		CancellationToken cancellationToken = default)
 	{
 		if (string.IsNullOrWhiteSpace(title) && string.IsNullOrWhiteSpace(content))
 		{
@@ -135,8 +138,8 @@ public class OpenAiService : IAiService
 
 			var completionOptions = new ChatCompletionOptions
 			{
-					MaxOutputTokenCount = 50,
-					Temperature = 0.3f
+				MaxOutputTokenCount = 50,
+				Temperature = 0.3f
 			};
 
 			var completion = await _chatClient.CompleteChatAsync(messages, completionOptions, cancellationToken);
@@ -156,15 +159,15 @@ public class OpenAiService : IAiService
 		}
 	}
 
-    /// <summary>
-    ///   Finds related notes based on semantic similarity using embeddings.
-    /// </summary>
-    public async Task<List<Guid>> FindRelatedNotesAsync(
-			float[] embedding,
-			string userSubject,
-			Guid? currentNoteId = null,
-			int? topN = null,
-			CancellationToken cancellationToken = default)
+	/// <summary>
+	///   Finds related notes based on semantic similarity using embeddings.
+	/// </summary>
+	public async Task<List<Guid>> FindRelatedNotesAsync(
+		float[] embedding,
+		string userSubject,
+		Guid? currentNoteId = null,
+		int? topN = null,
+		CancellationToken cancellationToken = default)
 	{
 		if (embedding == null || embedding.Length == 0)
 		{
@@ -188,8 +191,8 @@ public class OpenAiService : IAiService
 			var similarities = notes
 					.Select(note => new
 					{
-							NoteId = note.Id,
-							Similarity = CalculateCosineSimilarity(embedding, note.Embedding!)
+						NoteId = note.Id,
+						Similarity = CalculateCosineSimilarity(embedding, note.Embedding!)
 					})
 					.Where(x => x.Similarity >= _options.SimilarityThreshold)
 					.OrderByDescending(x => x.Similarity)
@@ -208,13 +211,13 @@ public class OpenAiService : IAiService
 		}
 	}
 
-    /// <summary>
-    ///   Calculates the cosine similarity between two vectors.
-    /// </summary>
-    /// <param name="vectorA">First vector.</param>
-    /// <param name="vectorB">Second vector.</param>
-    /// <returns>Similarity score between 0 and 1.</returns>
-    private static double CalculateCosineSimilarity(float[] vectorA, float[] vectorB)
+	/// <summary>
+	///   Calculates the cosine similarity between two vectors.
+	/// </summary>
+	/// <param name="vectorA">First vector.</param>
+	/// <param name="vectorB">Second vector.</param>
+	/// <returns>Similarity score between 0 and 1.</returns>
+	private static double CalculateCosineSimilarity(float[] vectorA, float[] vectorB)
 	{
 		if (vectorA.Length != vectorB.Length)
 		{
