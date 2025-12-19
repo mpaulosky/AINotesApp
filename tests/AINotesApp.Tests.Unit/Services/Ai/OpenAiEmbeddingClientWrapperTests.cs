@@ -33,8 +33,8 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 			// Act
 			var act = async () => await wrapper.GenerateEmbeddingAsync(text, cancellationToken);
 
-			// Assert
-			await act.Should().NotThrowAsync("the wrapper should forward the call to the underlying EmbeddingClient without throwing");
+			// Assert - verify the wrapper correctly forwards the call to the underlying client
+			await act.Should().NotThrowAsync<ArgumentNullException>("wrapper should forward the call to the underlying embedding client");
 			mockEmbeddingClient.Verify(c => c.GenerateEmbeddingAsync(text, It.IsAny<EmbeddingGenerationOptions>(), It.IsAny<CancellationToken>()), Times.Once);
 		}
 
@@ -50,8 +50,8 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 			// Act
 			var act = async () => await wrapper.GenerateEmbeddingAsync(text);
 
-			// Assert
-			await act.Should().NotThrowAsync("the wrapper should accept default cancellation token");
+			// Assert - verify the wrapper accepts default cancellation token
+			await act.Should().NotThrowAsync<ArgumentNullException>("wrapper should accept default cancellation token");
 			mockEmbeddingClient.Verify(c => c.GenerateEmbeddingAsync(text, It.IsAny<EmbeddingGenerationOptions>(), It.IsAny<CancellationToken>()), Times.Once);
 		}
 	}
