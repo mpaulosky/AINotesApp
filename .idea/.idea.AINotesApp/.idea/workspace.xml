@@ -8,7 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4ba46e9-e6fc-47de-86a4-194fadf10d99" name="Changes" comment="Update settings for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests">
+    <list default="true" id="e4ba46e9-e6fc-47de-86a4-194fadf10d99" name="Changes" comment="Update workspace configuration for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests">
       <change beforePath="$PROJECT_DIR$/build-log.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -120,7 +120,7 @@
       <workItem from="1766032634054" duration="1839000" />
       <workItem from="1766042985286" duration="186000" />
       <workItem from="1766086330599" duration="4767000" />
-      <workItem from="1766164565772" duration="676000" />
+      <workItem from="1766164565772" duration="804000" />
     </task>
     <task id="LOCAL-00001" summary="Add unit tests and test coverage configuration&#10;&#10;- Introduced ApplicationDbContextTests for database context validation&#10;- Added AppUserTests to verify AppUser entity behavior&#10;- Created ComponentTestHelper for shared BUnit testing utilities&#10;- Implemented FakeNavigationManager for BUnit test compatibility&#10;- Configured run settings for code coverage reporting">
       <option name="closed" value="true" />
@@ -202,7 +202,15 @@
       <option name="project" value="LOCAL" />
       <updated>1766165221459</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Update workspace configuration for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests">
+      <option name="closed" value="true" />
+      <created>1766165266229</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1766165266229</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -278,7 +286,8 @@
     <MESSAGE value="Add profile and login components with authorization&#10;&#10;- Create Profile.razor to display user information and claims&#10;- Implement LoginComponent.razor for login/logout functionality&#10;- Add RedirectToLogin.razor to handle navigation to login page" />
     <MESSAGE value="Refactor authentication components and services&#10;&#10;- Replace direct Logout and Login buttons with LoginComponent&#10;- Update Routes to use LoginComponent instead of Login&#10;- Improve OpenAiService constructor to use wrappers for clients&#10;- Clean up unused using directives in multiple files&#10;- Add authentication and authorization configuration in Program.cs" />
     <MESSAGE value="Update settings for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update settings for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests" />
+    <MESSAGE value="Update workspace configuration for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update workspace configuration for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
