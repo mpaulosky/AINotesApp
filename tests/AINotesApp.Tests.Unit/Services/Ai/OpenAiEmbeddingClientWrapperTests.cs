@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using AINotesApp.Services.Ai;
+using FluentAssertions;
 using Moq;
 using OpenAI.Embeddings;
 using Xunit;
@@ -29,16 +30,11 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 
 			var wrapper = new OpenAiEmbeddingClientWrapper(mockEmbeddingClient.Object);
 
-			// Act & Assert
-			try
-			{
-				await wrapper.GenerateEmbeddingAsync(text, cancellationToken);
-			}
-			catch
-			{
-				// Expected - mock returns null which causes exception, but we've verified the call works
-			}
+			// Act
+			var act = async () => await wrapper.GenerateEmbeddingAsync(text, cancellationToken);
 
+			// Assert
+			await act.Should().NotThrowAsync("the wrapper should forward the call to the underlying EmbeddingClient without throwing");
 			mockEmbeddingClient.Verify(c => c.GenerateEmbeddingAsync(text, It.IsAny<EmbeddingGenerationOptions>(), It.IsAny<CancellationToken>()), Times.Once);
 		}
 
@@ -51,16 +47,11 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 
 			var wrapper = new OpenAiEmbeddingClientWrapper(mockEmbeddingClient.Object);
 
-			// Act & Assert
-			try
-			{
-				await wrapper.GenerateEmbeddingAsync(text);
-			}
-			catch
-			{
-				// Expected - mock returns null which causes exception, but we've verified the call works
-			}
+			// Act
+			var act = async () => await wrapper.GenerateEmbeddingAsync(text);
 
+			// Assert
+			await act.Should().NotThrowAsync("the wrapper should accept default cancellation token");
 			mockEmbeddingClient.Verify(c => c.GenerateEmbeddingAsync(text, It.IsAny<EmbeddingGenerationOptions>(), It.IsAny<CancellationToken>()), Times.Once);
 		}
 	}
