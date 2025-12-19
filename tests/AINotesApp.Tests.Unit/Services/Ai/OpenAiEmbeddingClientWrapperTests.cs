@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using AINotesApp.Services.Ai;
+using FluentAssertions;
 using Moq;
 using OpenAI.Embeddings;
 using Xunit;
@@ -29,17 +30,16 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 
 			var wrapper = new OpenAiEmbeddingClientWrapper(mockEmbeddingClient.Object);
 
-			// Act & Assert
-			try
-			{
-				await wrapper.GenerateEmbeddingAsync(text, cancellationToken);
-			}
-			catch
-			{
-				// Expected - mock returns null which causes exception, but we've verified the call works
-			}
+			// Act
+			var act = async () => await wrapper.GenerateEmbeddingAsync(text, cancellationToken);
 
-			mockEmbeddingClient.Verify(c => c.GenerateEmbeddingAsync(text, It.IsAny<EmbeddingGenerationOptions>(), It.IsAny<CancellationToken>()), Times.Once);
+			// Assert - The wrapper should forward the call and not throw ArgumentNullException or ArgumentException
+			// Note: The mock may throw other exceptions due to null returns, which is expected mock behavior
+			await act.Should().NotThrowAsync<ArgumentNullException>();
+			await act.Should().NotThrowAsync<ArgumentException>();
+
+			// Verify the mock was called (at least once due to multiple FluentAssertions checks above)
+			mockEmbeddingClient.Verify(c => c.GenerateEmbeddingAsync(text, It.IsAny<EmbeddingGenerationOptions>(), It.IsAny<CancellationToken>()), Times.AtLeastOnce);
 		}
 
 		[Fact]
@@ -51,17 +51,16 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 
 			var wrapper = new OpenAiEmbeddingClientWrapper(mockEmbeddingClient.Object);
 
-			// Act & Assert
-			try
-			{
-				await wrapper.GenerateEmbeddingAsync(text);
-			}
-			catch
-			{
-				// Expected - mock returns null which causes exception, but we've verified the call works
-			}
+			// Act
+			var act = async () => await wrapper.GenerateEmbeddingAsync(text);
 
-			mockEmbeddingClient.Verify(c => c.GenerateEmbeddingAsync(text, It.IsAny<EmbeddingGenerationOptions>(), It.IsAny<CancellationToken>()), Times.Once);
+			// Assert - The wrapper should forward the call and not throw ArgumentNullException or ArgumentException
+			// Note: The mock may throw other exceptions due to null returns, which is expected mock behavior
+			await act.Should().NotThrowAsync<ArgumentNullException>();
+			await act.Should().NotThrowAsync<ArgumentException>();
+
+			// Verify the mock was called (at least once due to multiple FluentAssertions checks above)
+			mockEmbeddingClient.Verify(c => c.GenerateEmbeddingAsync(text, It.IsAny<EmbeddingGenerationOptions>(), It.IsAny<CancellationToken>()), Times.AtLeastOnce);
 		}
 	}
 }
