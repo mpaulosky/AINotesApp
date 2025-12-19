@@ -52,6 +52,9 @@ public class OpenAiServiceEdgeCasesTests
 		};
 	}
 
+	/// <summary>
+	///   Creates an OpenAiService instance with mock dependencies for testing purposes.
+	/// </summary>
 	private OpenAiService CreateService()
 	{
 		var mockChat = new Mock<IChatClientWrapper>();

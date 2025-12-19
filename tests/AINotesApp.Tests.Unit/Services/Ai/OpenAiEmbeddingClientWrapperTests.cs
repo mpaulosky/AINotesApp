@@ -16,7 +16,7 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 		[Fact]
 		public void Constructor_ThrowsArgumentNullException_WhenEmbeddingClientIsNull()
 		{
-			Assert.Throws<ArgumentNullException>(() => new OpenAiEmbeddingClientWrapper((EmbeddingClient)(object)null!));
+			Assert.Throws<ArgumentNullException>(() => new OpenAiEmbeddingClientWrapper((EmbeddingClient)null!));
 		}
 
 		[Fact]

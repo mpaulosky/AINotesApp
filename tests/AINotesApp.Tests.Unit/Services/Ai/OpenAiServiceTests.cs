@@ -53,6 +53,9 @@ public class OpenAiServiceTests
 		};
 	}
 
+	/// <summary>
+	///   Creates an <see cref="OpenAiService"/> instance with mock dependencies for testing purposes.
+	/// </summary>
 	private OpenAiService CreateService()
 	{
 		var mockChat = new Mock<IChatClientWrapper>();

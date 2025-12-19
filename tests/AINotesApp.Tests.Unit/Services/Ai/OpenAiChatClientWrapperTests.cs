@@ -17,7 +17,7 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 		[Fact]
 		public void Constructor_ThrowsArgumentNullException_WhenChatClientIsNull()
 		{
-			Assert.Throws<ArgumentNullException>(() => new OpenAiChatClientWrapper((ChatClient)(object)null!));
+			Assert.Throws<ArgumentNullException>(() => new OpenAiChatClientWrapper((ChatClient)null!));
 		}
 
 		[Fact]
