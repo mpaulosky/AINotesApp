@@ -8,10 +8,10 @@
 				<NotAuthorized Context="_">
 					<AuthorizeView Context="authState">
 						<Authorized>
-							<AccessDenied/>
+							<AccessDenied />
 						</Authorized>
 						<NotAuthorized>
-							<Login/>
+							<LoginComponent />
 						</NotAuthorized>
 					</AuthorizeView>
 				</NotAuthorized>
@@ -19,10 +19,10 @@
 					<div class="main">Authorizing...</div>
 				</Authorizing>
 			</AuthorizeRouteView>
-			<FocusOnNavigate RouteData="routeData" Selector="h1"/>
+			<FocusOnNavigate RouteData="routeData" Selector="h1" />
 		</Found>
 		<NotFound>
-			<NotFound/>
+			<NotFound />
 		</NotFound>
 	</Router>
 </CascadingAuthenticationState>

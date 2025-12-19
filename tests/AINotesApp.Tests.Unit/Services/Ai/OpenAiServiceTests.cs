@@ -18,6 +18,8 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
+using Moq;
+
 namespace AINotesApp.Tests.Unit.Services.Ai;
 
 /// <summary>
@@ -42,20 +44,30 @@ public class OpenAiServiceTests
 
 		_options = new AiServiceOptions
 		{
-				ApiKey = "test-api-key",
-				ChatModel = "gpt-4o-mini",
-				EmbeddingModel = "text-embedding-3-small",
-				MaxSummaryTokens = 150,
-				RelatedNotesCount = 5,
-				SimilarityThreshold = 0.7
+			ApiKey = "test-api-key",
+			ChatModel = "gpt-4o-mini",
+			EmbeddingModel = "text-embedding-3-small",
+			MaxSummaryTokens = 150,
+			RelatedNotesCount = 5,
+			SimilarityThreshold = 0.7
 		};
+	}
+
+	/// <summary>
+	///   Creates an <see cref="OpenAiService"/> instance with mock dependencies for testing purposes.
+	/// </summary>
+	private OpenAiService CreateService()
+	{
+		var mockChat = new Mock<IChatClientWrapper>();
+		var mockEmbedding = new Mock<IEmbeddingClientWrapper>();
+		return new OpenAiService(Options.Create(_options), _context, mockChat.Object, mockEmbedding.Object);
 	}
 
 	[Fact]
 	public async Task FindRelatedNotesAsync_EmptyEmbedding_ReturnsEmptyList()
 	{
 		// Given
-		var service = new OpenAiService(Options.Create(_options), _context);
+		var service = CreateService();
 		var emptyEmbedding = Array.Empty<float>();
 		var userSubject = "user-123";
 
@@ -70,7 +82,7 @@ public class OpenAiServiceTests
 	public async Task FindRelatedNotesAsync_NullEmbedding_ReturnsEmptyList()
 	{
 		// Given
-		var service = new OpenAiService(Options.Create(_options), _context);
+		var service = CreateService();
 		float[]? nullEmbedding = null;
 		var userSubject = "user-123";
 
@@ -85,8 +97,8 @@ public class OpenAiServiceTests
 	public async Task FindRelatedNotesAsync_NoNotesInDatabase_ReturnsEmptyList()
 	{
 		// Given
-		var service = new OpenAiService(Options.Create(_options), _context);
-		var embedding = new [] { 0.1f, 0.2f, 0.3f };
+		var service = CreateService();
+		var embedding = new[] { 0.1f, 0.2f, 0.3f };
 		var userSubject = "user-123";
 
 		// When
@@ -101,34 +113,34 @@ public class OpenAiServiceTests
 	{
 		// Given
 		var userSubject = "user-123";
-		var queryEmbedding = new [] { 1.0f, 0.0f, 0.0f };
+		var queryEmbedding = new[] { 1.0f, 0.0f, 0.0f };
 
 		var note1 = new Note
 		{
-				Id = Guid.NewGuid(),
-				Title = "Similar Note",
-				Content = "Content",
-				OwnerSubject = userSubject,
-				Embedding = [ 0.9f, 0.1f, 0.0f ], // High similarity
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
+			Id = Guid.NewGuid(),
+			Title = "Similar Note",
+			Content = "Content",
+			OwnerSubject = userSubject,
+			Embedding = [0.9f, 0.1f, 0.0f], // High similarity
+			CreatedAt = DateTime.UtcNow,
+			UpdatedAt = DateTime.UtcNow
 		};
 
 		var note2 = new Note
 		{
-				Id = Guid.NewGuid(),
-				Title = "Different Note",
-				Content = "Content",
-				OwnerSubject = userSubject,
-				Embedding = [ 0.0f, 1.0f, 0.0f ], // Low similarity
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
+			Id = Guid.NewGuid(),
+			Title = "Different Note",
+			Content = "Content",
+			OwnerSubject = userSubject,
+			Embedding = [0.0f, 1.0f, 0.0f], // Low similarity
+			CreatedAt = DateTime.UtcNow,
+			UpdatedAt = DateTime.UtcNow
 		};
 
 		_context.Notes.AddRange(note1, note2);
 		await _context.SaveChangesAsync();
 
-		var service = new OpenAiService(Options.Create(_options), _context);
+		var service = CreateService();
 
 		// When
 		var result = await service.FindRelatedNotesAsync(queryEmbedding, userSubject);
@@ -144,34 +156,34 @@ public class OpenAiServiceTests
 		// Given
 		var userSubject = "user-123";
 		var currentNoteId = Guid.NewGuid();
-		var queryEmbedding = new [] { 1.0f, 0.0f };
+		var queryEmbedding = new[] { 1.0f, 0.0f };
 
 		var currentNote = new Note
 		{
-				Id = currentNoteId,
-				Title = "Current Note",
-				Content = "Content",
-				OwnerSubject = userSubject,
-				Embedding = [ 1.0f, 0.0f ], // Perfect match
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
+			Id = currentNoteId,
+			Title = "Current Note",
+			Content = "Content",
+			OwnerSubject = userSubject,
+			Embedding = [1.0f, 0.0f], // Perfect match
+			CreatedAt = DateTime.UtcNow,
+			UpdatedAt = DateTime.UtcNow
 		};
 
 		var otherNote = new Note
 		{
-				Id = Guid.NewGuid(),
-				Title = "Other Note",
-				Content = "Content",
-				OwnerSubject = userSubject,
-				Embedding = [ 0.9f, 0.1f ], // High similarity
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
+			Id = Guid.NewGuid(),
+			Title = "Other Note",
+			Content = "Content",
+			OwnerSubject = userSubject,
+			Embedding = [0.9f, 0.1f], // High similarity
+			CreatedAt = DateTime.UtcNow,
+			UpdatedAt = DateTime.UtcNow
 		};
 
 		_context.Notes.AddRange(currentNote, otherNote);
 		await _context.SaveChangesAsync();
 
-		var service = new OpenAiService(Options.Create(_options), _context);
+		var service = CreateService();
 
 		// When
 		var result = await service.FindRelatedNotesAsync(queryEmbedding, userSubject, currentNoteId);
@@ -187,34 +199,34 @@ public class OpenAiServiceTests
 		// Given
 		var ownerSubject1 = "user-1";
 		var ownerSubject2 = "user-2";
-		var queryEmbedding = new [] { 1.0f, 0.0f };
+		var queryEmbedding = new[] { 1.0f, 0.0f };
 
 		var user1Note = new Note
 		{
-				Id = Guid.NewGuid(),
-				Title = "User 1 Note",
-				Content = "Content",
-				OwnerSubject = ownerSubject1,
-				Embedding = [ 1.0f, 0.0f ],
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
+			Id = Guid.NewGuid(),
+			Title = "User 1 Note",
+			Content = "Content",
+			OwnerSubject = ownerSubject1,
+			Embedding = [1.0f, 0.0f],
+			CreatedAt = DateTime.UtcNow,
+			UpdatedAt = DateTime.UtcNow
 		};
 
 		var user2Note = new Note
 		{
-				Id = Guid.NewGuid(),
-				Title = "User 2 Note",
-				Content = "Content",
-				OwnerSubject = ownerSubject2,
-				Embedding = [ 1.0f, 0.0f ],
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
+			Id = Guid.NewGuid(),
+			Title = "User 2 Note",
+			Content = "Content",
+			OwnerSubject = ownerSubject2,
+			Embedding = [1.0f, 0.0f],
+			CreatedAt = DateTime.UtcNow,
+			UpdatedAt = DateTime.UtcNow
 		};
 
 		_context.Notes.AddRange(user1Note, user2Note);
 		await _context.SaveChangesAsync();
 
-		var service = new OpenAiService(Options.Create(_options), _context);
+		var service = CreateService();
 
 		// When
 		var result = await service.FindRelatedNotesAsync(queryEmbedding, ownerSubject1);
@@ -229,26 +241,26 @@ public class OpenAiServiceTests
 	{
 		// Given
 		var userSubject = "user-123";
-		var queryEmbedding = new [] { 1.0f };
+		var queryEmbedding = new[] { 1.0f };
 
 		// Add 10 notes with high similarity
 		for (var i = 0; i < 10; i++)
 		{
 			_context.Notes.Add(new Note
 			{
-					Id = Guid.NewGuid(),
-					Title = $"Note {i}",
-					Content = "Content",
-					OwnerSubject = userSubject,
-					Embedding = [ 0.95f ],
-					CreatedAt = DateTime.UtcNow,
-					UpdatedAt = DateTime.UtcNow
+				Id = Guid.NewGuid(),
+				Title = $"Note {i}",
+				Content = "Content",
+				OwnerSubject = userSubject,
+				Embedding = [0.95f],
+				CreatedAt = DateTime.UtcNow,
+				UpdatedAt = DateTime.UtcNow
 			});
 		}
 
 		await _context.SaveChangesAsync();
 
-		var service = new OpenAiService(Options.Create(_options), _context);
+		var service = CreateService();
 		var topN = 3;
 
 		// When
@@ -263,34 +275,34 @@ public class OpenAiServiceTests
 	{
 		// Given
 		var userSubject = "user-123";
-		var queryEmbedding = new [] { 1.0f };
+		var queryEmbedding = new[] { 1.0f };
 
 		var noteWithEmbedding = new Note
 		{
-				Id = Guid.NewGuid(),
-				Title = "Note with embedding",
-				Content = "Content",
-				OwnerSubject = userSubject,
-				Embedding = [ 0.9f ],
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
+			Id = Guid.NewGuid(),
+			Title = "Note with embedding",
+			Content = "Content",
+			OwnerSubject = userSubject,
+			Embedding = [0.9f],
+			CreatedAt = DateTime.UtcNow,
+			UpdatedAt = DateTime.UtcNow
 		};
 
 		var noteWithoutEmbedding = new Note
 		{
-				Id = Guid.NewGuid(),
-				Title = "Note without embedding",
-				Content = "Content",
-				OwnerSubject = userSubject,
-				Embedding = null,
-				CreatedAt = DateTime.UtcNow,
-				UpdatedAt = DateTime.UtcNow
+			Id = Guid.NewGuid(),
+			Title = "Note without embedding",
+			Content = "Content",
+			OwnerSubject = userSubject,
+			Embedding = null,
+			CreatedAt = DateTime.UtcNow,
+			UpdatedAt = DateTime.UtcNow
 		};
 
 		_context.Notes.AddRange(noteWithEmbedding, noteWithoutEmbedding);
 		await _context.SaveChangesAsync();
 
-		var service = new OpenAiService(Options.Create(_options), _context);
+		var service = CreateService();
 
 		// When
 		var result = await service.FindRelatedNotesAsync(queryEmbedding, userSubject);

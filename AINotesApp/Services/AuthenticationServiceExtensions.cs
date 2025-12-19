@@ -8,6 +8,8 @@
 // =======================================================
 
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Claims;
+
 using Auth0.AspNetCore.Authentication;
 
 using Microsoft.AspNetCore.Components.Authorization;
@@ -32,18 +34,29 @@ public static class AuthenticationServiceExtensions
 
 		services.AddHttpContextAccessor();
 
-		services.AddAuth0WebAppAuthentication(options =>
-		{
+		services
+				.AddAuth0WebAppAuthentication(options =>
+				{
+					options.Domain = configuration["Auth0:Domain"] ?? string.Empty;
+					options.ClientId = configuration["Auth0:ClientId"] ?? string.Empty;
+					options.ClientSecret = configuration["Auth0:ClientSecret"] ?? string.Empty;
+					options.Scope = "openid profile email";
+					options.CallbackPath = configuration["Auth0:CallbackPath"] ?? "/auth/callback";
+				})
+				.WithAccessToken(options =>
+				{
+					var audience = configuration["Auth0:Audience"];
 
-			options.Domain = configuration["Auth0:Domain"] ??
-											throw new InvalidOperationException("Auth0:Domain configuration is missing.");
+					if (!string.IsNullOrWhiteSpace(audience))
+					{
+						options.Audience = audience;
+					}
+				});
 
-			options.ClientId = configuration["Auth0:ClientId"] ??
-												throw new InvalidOperationException("Auth0:ClientId configuration is missing.");
-
-			options.Scope = "openid profile email";
-
-		});
+		// Add policy
+		services.AddAuthorizationBuilder()
+				.AddPolicy("NotesAdmin", policy =>
+						policy.RequireClaim(ClaimTypes.Role, "notes.admin"));
 
 		// Configure authentication state services
 		services.AddScoped<AuthenticationStateProvider, Auth0AuthenticationStateProvider>();

@@ -7,8 +7,6 @@
 // Project Name :  AINotesApp
 // =======================================================
 
-using System;
-using System.Collections.Generic;
 namespace AINotesApp.Data;
 
 /// <summary>
