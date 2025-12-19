@@ -1,5 +1,7 @@
 {
   "cSpell.words": [
     "microsoftdocs"
-  ]
+  ],
+  "dotnet-test-explorer.runSettingsPath": "${workspaceFolder}\\.runsettings",
+  "dotnet.unitTests.runSettingsPath": "${workspaceFolder}\\.runsettings"
 }
