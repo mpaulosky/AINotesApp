@@ -7,6 +7,7 @@
 // Project Name :  AINotesApp.Tests.Unit
 // =======================================================
 
+using System.Diagnostics.CodeAnalysis;
 using AINotesApp.Data;
 using AINotesApp.Features.Notes.GetRelatedNotes;
 using AINotesApp.Services;
@@ -19,6 +20,7 @@ using NSubstitute;
 
 namespace AINotesApp.Tests.Unit.Features.Notes;
 
+[ExcludeFromCodeCoverage]
 public class GetRelatedNotesHandlerTests
 {
 
@@ -66,14 +68,22 @@ public class GetRelatedNotesHandlerTests
 
 		var note1 = new Note
 		{
-				Id = Guid.NewGuid(), OwnerSubject = "user1", Embedding = [ 1, 2, 3 ], Title = "A", AiSummary = "S1",
-				UpdatedAt = DateTime.UtcNow
+			Id = Guid.NewGuid(),
+			OwnerSubject = "user1",
+			Embedding = [1, 2, 3],
+			Title = "A",
+			AiSummary = "S1",
+			UpdatedAt = DateTime.UtcNow
 		};
 
 		var note2 = new Note
 		{
-				Id = Guid.NewGuid(), OwnerSubject = "user1", Embedding = [ 2, 3, 4 ], Title = "B", AiSummary = "S2",
-				UpdatedAt = DateTime.UtcNow
+			Id = Guid.NewGuid(),
+			OwnerSubject = "user1",
+			Embedding = [2, 3, 4],
+			Title = "B",
+			AiSummary = "S2",
+			UpdatedAt = DateTime.UtcNow
 		};
 
 		db.Notes.AddRange(note1, note2);

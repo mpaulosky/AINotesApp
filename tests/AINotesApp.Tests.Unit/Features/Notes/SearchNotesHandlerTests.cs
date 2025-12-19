@@ -7,6 +7,8 @@
 // Project Name :  AINotesApp.Tests.Unit
 // =======================================================
 
+using System.Diagnostics.CodeAnalysis;
+
 using AINotesApp.Data;
 using AINotesApp.Features.Notes.SearchNotes;
 
@@ -16,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AINotesApp.Tests.Unit.Features.Notes;
 
+[ExcludeFromCodeCoverage]
 public class SearchNotesHandlerTests
 {
 
@@ -58,7 +61,7 @@ public class SearchNotesHandlerTests
 		var db = CreateDbContext();
 
 		db.Notes.Add(new Note
-				{ Id = Guid.NewGuid(), Title = "Test Note", Content = "Hello world", OwnerSubject = "user1" });
+		{ Id = Guid.NewGuid(), Title = "Test Note", Content = "Hello world", OwnerSubject = "user1" });
 
 		await db.SaveChangesAsync();
 		var handler = new SearchNotesHandler(db);
