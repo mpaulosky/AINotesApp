@@ -27,11 +27,7 @@
 					<div>
 						<h3 class="text-lg mb-2">Roles & Permissions</h3>
 						<div class="space-y-2">
-							@{
-								var roles = context.User.FindAll(ClaimTypes.Role).ToList();
-
-							}
-							@if (roles.Any())
+							@if (_roles.Any())
 							{
 								<p class="font-bold text-gray-900 dark:text-gray-100">
 									<span>Roles:</span>
