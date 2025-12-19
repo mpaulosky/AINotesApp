@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using AINotesApp.Services.Ai;
+using FluentAssertions;
 using Moq;
 using OpenAI.Chat;
 using Xunit;
@@ -31,17 +32,11 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 
 			var wrapper = new OpenAiChatClientWrapper(mockChatClient.Object);
 
-			// Act & Assert - we're testing that the wrapper correctly forwards the call
-			// The mock will throw if the method signature doesn't match
-			try
-			{
-				await wrapper.CompleteChatAsync(messages, options, cancellationToken);
-			}
-			catch
-			{
-				// Expected - mock returns null which causes exception, but we've verified the call works
-			}
+			// Act
+			var act = async () => await wrapper.CompleteChatAsync(messages, options, cancellationToken);
 
+			// Assert - verify the wrapper correctly forwards the call to the underlying client
+			await act.Should().NotThrowAsync<ArgumentNullException>("wrapper should forward the call to the underlying chat client");
 			mockChatClient.Verify(c => c.CompleteChatAsync(messages, options, cancellationToken), Times.Once);
 		}
 
@@ -54,16 +49,11 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 
 			var wrapper = new OpenAiChatClientWrapper(mockChatClient.Object);
 
-			// Act & Assert
-			try
-			{
-				await wrapper.CompleteChatAsync(messages);
-			}
-			catch
-			{
-				// Expected - mock returns null which causes exception, but we've verified the call works
-			}
+			// Act
+			var act = async () => await wrapper.CompleteChatAsync(messages);
 
+			// Assert - verify the wrapper accepts null options and default cancellation token
+			await act.Should().NotThrowAsync<ArgumentNullException>("wrapper should accept null options and default cancellation token");
 			mockChatClient.Verify(c => c.CompleteChatAsync(messages, null, default), Times.Once);
 		}
 	}
