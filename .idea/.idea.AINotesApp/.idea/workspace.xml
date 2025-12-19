@@ -8,15 +8,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4ba46e9-e6fc-47de-86a4-194fadf10d99" name="Changes" comment="Add unit tests for AI service and authentication provider&#10;&#10;- Implement unit tests for AiServiceOptions class&#10;- Add tests for Auth0AuthenticationStateProvider functionality&#10;- Ensure test coverage for various scenarios and edge cases&#10;- Exclude test classes from code coverage analysis">
-      <change afterPath="$PROJECT_DIR$/AINotesApp/Components/LoginComponent.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AINotesApp/Components/RedirectToLogin.razor" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/AINotesApp/Components/User/Profile.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.AINotesApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AINotesApp/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Layout/NavMenu.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Layout/NavMenu.razor" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AINotesApp/Data/AppUser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Data/AppUser.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AINotesApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AINotesApp/Services/AuthenticationServiceExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Services/AuthenticationServiceExtensions.cs" afterDir="false" />
+    <list default="true" id="e4ba46e9-e6fc-47de-86a4-194fadf10d99" name="Changes" comment="Update settings for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests">
+      <change beforePath="$PROJECT_DIR$/build-log.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,7 +23,7 @@
     </option>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="11" />
+    <option name="cachedIndexableFilesCount" value="13" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="Git.Settings">
@@ -49,8 +42,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://E:/github/AINotesApp/AINotesApp/Components/Pages/Notes/NoteEditor.razor" root0="SKIP_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
-    <setting file="mock://E:/github/AINotesApp/tests/AINotesApp.Tests.Unit/Components/Pages/Admin/SeedNotesTests.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://E:/github/AINotesApp/.vscode/settings.json" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -128,6 +120,7 @@
       <workItem from="1766032634054" duration="1839000" />
       <workItem from="1766042985286" duration="186000" />
       <workItem from="1766086330599" duration="4767000" />
+      <workItem from="1766164565772" duration="676000" />
     </task>
     <task id="LOCAL-00001" summary="Add unit tests and test coverage configuration&#10;&#10;- Introduced ApplicationDbContextTests for database context validation&#10;- Added AppUserTests to verify AppUser entity behavior&#10;- Created ComponentTestHelper for shared BUnit testing utilities&#10;- Implemented FakeNavigationManager for BUnit test compatibility&#10;- Configured run settings for code coverage reporting">
       <option name="closed" value="true" />
@@ -161,7 +154,55 @@
       <option name="project" value="LOCAL" />
       <updated>1766043147074</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Add wrappers for OpenAI Chat and Embedding clients&#10;&#10;- Implement IChatClientWrapper and OpenAiChatClientWrapper&#10;- Implement IEmbeddingClientWrapper and OpenAiEmbeddingClientWrapper&#10;- Enable dependency injection and testing for OpenAI services">
+      <option name="closed" value="true" />
+      <created>1766164710842</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1766164710842</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add ExcludeFromCodeCoverage attribute to test classes&#10;&#10;- Added [ExcludeFromCodeCoverage] to 3 test classes&#10;- Ensured test code is excluded from coverage metrics&#10;- Improved code quality and reporting consistency">
+      <option name="closed" value="true" />
+      <created>1766164876313</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1766164876313</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Add profile and login components with authorization&#10;&#10;- Create Profile.razor to display user information and claims&#10;- Implement LoginComponent.razor for login/logout functionality&#10;- Add RedirectToLogin.razor to handle navigation to login page">
+      <option name="closed" value="true" />
+      <created>1766164928394</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1766164928394</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Refactor authentication components and services&#10;&#10;- Replace direct Logout and Login buttons with LoginComponent&#10;- Update Routes to use LoginComponent instead of Login&#10;- Improve OpenAiService constructor to use wrappers for clients&#10;- Clean up unused using directives in multiple files&#10;- Add authentication and authorization configuration in Program.cs">
+      <option name="closed" value="true" />
+      <created>1766165162960</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1766165162960</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Update settings for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests">
+      <option name="closed" value="true" />
+      <created>1766165188650</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1766165188650</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Update settings for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests">
+      <option name="closed" value="true" />
+      <created>1766165221459</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1766165221459</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -232,7 +273,12 @@
     <MESSAGE value="Refactor NoteEditor component for improved clarity&#10;&#10;- Rename variables for consistency and clarity&#10;- Update error and success message handling&#10;- Ensure model is initialized in OnInitializedAsync&#10;- Adjust loading state management" />
     <MESSAGE value="Update workspace configuration for test coverage&#10;&#10;- Adjusted coverage settings for improved reporting&#10;- Updated recent branch and highlighting settings&#10;- Modified paths for test files in the workspace" />
     <MESSAGE value="Add unit tests for AI service and authentication provider&#10;&#10;- Implement unit tests for AiServiceOptions class&#10;- Add tests for Auth0AuthenticationStateProvider functionality&#10;- Ensure test coverage for various scenarios and edge cases&#10;- Exclude test classes from code coverage analysis" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add unit tests for AI service and authentication provider&#10;&#10;- Implement unit tests for AiServiceOptions class&#10;- Add tests for Auth0AuthenticationStateProvider functionality&#10;- Ensure test coverage for various scenarios and edge cases&#10;- Exclude test classes from code coverage analysis" />
+    <MESSAGE value="Add wrappers for OpenAI Chat and Embedding clients&#10;&#10;- Implement IChatClientWrapper and OpenAiChatClientWrapper&#10;- Implement IEmbeddingClientWrapper and OpenAiEmbeddingClientWrapper&#10;- Enable dependency injection and testing for OpenAI services" />
+    <MESSAGE value="Add ExcludeFromCodeCoverage attribute to test classes&#10;&#10;- Added [ExcludeFromCodeCoverage] to 3 test classes&#10;- Ensured test code is excluded from coverage metrics&#10;- Improved code quality and reporting consistency" />
+    <MESSAGE value="Add profile and login components with authorization&#10;&#10;- Create Profile.razor to display user information and claims&#10;- Implement LoginComponent.razor for login/logout functionality&#10;- Add RedirectToLogin.razor to handle navigation to login page" />
+    <MESSAGE value="Refactor authentication components and services&#10;&#10;- Replace direct Logout and Login buttons with LoginComponent&#10;- Update Routes to use LoginComponent instead of Login&#10;- Improve OpenAiService constructor to use wrappers for clients&#10;- Clean up unused using directives in multiple files&#10;- Add authentication and authorization configuration in Program.cs" />
+    <MESSAGE value="Update settings for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update settings for .NET test explorer&#10;&#10;- Add runSettingsPath for dotnet-test-explorer&#10;- Add runSettingsPath for dotnet unit tests" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
