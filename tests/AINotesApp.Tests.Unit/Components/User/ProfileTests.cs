@@ -171,9 +171,9 @@ public class ProfileTests : BunitContext
 
 		// Assert
 		cut.Markup.Should().Contain("Email:");
-		// Should show empty email field
+		// Should show empty email field (h4 tag should be empty)
 		var markup = cut.Markup;
-		markup.Should().Contain("<p class=\"font-bold text-gray-900 dark:text-gray-100\"><span>Email:</span><h4></h4></p>");
+		markup.Should().MatchRegex(@"<p[^>]*>\s*<span>Email:</span>\s*<h4>\s*</h4>\s*</p>");
 	}
 
 	[Fact]
