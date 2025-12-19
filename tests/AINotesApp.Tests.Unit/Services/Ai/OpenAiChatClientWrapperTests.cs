@@ -35,12 +35,11 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 			// Act
 			var act = async () => await wrapper.CompleteChatAsync(messages, options, cancellationToken);
 
-			// Assert - The wrapper should forward the call and not throw ArgumentNullException or ArgumentException
-			// Note: The mock may throw other exceptions due to null returns, which is expected mock behavior
-			await act.Should().NotThrowAsync<ArgumentNullException>();
-			await act.Should().NotThrowAsync<ArgumentException>();
+			// Assert - Verify the wrapper forwards the call and doesn't throw due to wrapper logic issues
+			// Note: The mock may throw NullReferenceException due to null returns, which is expected mock behavior
+			await act.Should().NotThrowAsync<ArgumentNullException>("the wrapper should forward the call to the client");
+			await act.Should().NotThrowAsync<ArgumentException>("the wrapper should not introduce argument validation errors");
 
-			// Verify the mock was called (at least once due to multiple FluentAssertions checks above)
 			mockChatClient.Verify(c => c.CompleteChatAsync(messages, options, cancellationToken), Times.AtLeastOnce);
 		}
 
@@ -56,12 +55,11 @@ namespace AINotesApp.Tests.Unit.Services.Ai
 			// Act
 			var act = async () => await wrapper.CompleteChatAsync(messages);
 
-			// Assert - The wrapper should forward the call and not throw ArgumentNullException or ArgumentException
-			// Note: The mock may throw other exceptions due to null returns, which is expected mock behavior
-			await act.Should().NotThrowAsync<ArgumentNullException>();
-			await act.Should().NotThrowAsync<ArgumentException>();
+			// Assert - Verify the wrapper forwards the call and doesn't throw due to wrapper logic issues
+			// Note: The mock may throw NullReferenceException due to null returns, which is expected mock behavior
+			await act.Should().NotThrowAsync<ArgumentNullException>("the wrapper should forward the call to the client");
+			await act.Should().NotThrowAsync<ArgumentException>("the wrapper should not introduce argument validation errors");
 
-			// Verify the mock was called (at least once due to multiple FluentAssertions checks above)
 			mockChatClient.Verify(c => c.CompleteChatAsync(messages, null, default), Times.AtLeastOnce);
 		}
 	}
