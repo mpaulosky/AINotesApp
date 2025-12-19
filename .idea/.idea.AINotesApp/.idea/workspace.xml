@@ -8,7 +8,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4ba46e9-e6fc-47de-86a4-194fadf10d99" name="Changes" comment="Add unit tests for AI service and authentication provider&#10;&#10;- Implement unit tests for AiServiceOptions class&#10;- Add tests for Auth0AuthenticationStateProvider functionality&#10;- Ensure test coverage for various scenarios and edge cases&#10;- Exclude test classes from code coverage analysis" />
+    <list default="true" id="e4ba46e9-e6fc-47de-86a4-194fadf10d99" name="Changes" comment="Add unit tests for AI service and authentication provider&#10;&#10;- Implement unit tests for AiServiceOptions class&#10;- Add tests for Auth0AuthenticationStateProvider functionality&#10;- Ensure test coverage for various scenarios and edge cases&#10;- Exclude test classes from code coverage analysis">
+      <change afterPath="$PROJECT_DIR$/AINotesApp/Components/LoginComponent.razor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AINotesApp/Components/RedirectToLogin.razor" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/AINotesApp/Components/User/Profile.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.AINotesApp/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.AINotesApp/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Components/Layout/NavMenu.razor" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Components/Layout/NavMenu.razor" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Data/AppUser.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Data/AppUser.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AINotesApp/Services/AuthenticationServiceExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/AINotesApp/Services/AuthenticationServiceExtensions.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -62,13 +71,14 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;wip/add-test-coverage&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;wip/fixing-auth0&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.spelling&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -117,6 +127,7 @@
       <workItem from="1765986250332" duration="2072000" />
       <workItem from="1766032634054" duration="1839000" />
       <workItem from="1766042985286" duration="186000" />
+      <workItem from="1766086330599" duration="4767000" />
     </task>
     <task id="LOCAL-00001" summary="Add unit tests and test coverage configuration&#10;&#10;- Introduced ApplicationDbContextTests for database context validation&#10;- Added AppUserTests to verify AppUser entity behavior&#10;- Created ComponentTestHelper for shared BUnit testing utilities&#10;- Implemented FakeNavigationManager for BUnit test compatibility&#10;- Configured run settings for code coverage reporting">
       <option name="closed" value="true" />
