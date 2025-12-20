@@ -43,9 +43,10 @@ jobs:
       Auth0__ClientSecret: test-client-secret-for-ci
       Auth0__Audience: https://api.test.local
       # Test OpenAI configuration (dummy values)
-      AiService__ApiKey: test-api-key
-      AiService__ChatModel: gpt-4o
-      AiService__EmbeddingModel: text-embedding-3-small
+      # NOTE: Section name is "OpenAI" not "AiService" (see AiServiceOptions.SectionName)
+      OpenAI__ApiKey: test-api-key-for-ci
+      OpenAI__ChatModel: gpt-4o-mini
+      OpenAI__EmbeddingModel: text-embedding-3-small
 
     steps:
       - name: Checkout code

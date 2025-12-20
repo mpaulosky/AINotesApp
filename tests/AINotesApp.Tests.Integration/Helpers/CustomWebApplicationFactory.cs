@@ -43,10 +43,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 				// Use in-memory database for testing
 				["ConnectionStrings:DefaultConnection"] = "DataSource=:memory:",
 
-				// Disable OpenAI for integration tests (can be overridden per test if needed)
-				["AiService:ApiKey"] = "test-api-key",
-				["AiService:ChatModel"] = "gpt-4o",
-				["AiService:EmbeddingModel"] = "text-embedding-3-small"
+				// OpenAI configuration for integration tests
+				// NOTE: Section name is "OpenAI" not "AiService" (see AiServiceOptions.SectionName)
+				["OpenAI:ApiKey"] = "test-api-key-for-integration-tests",
+				["OpenAI:ChatModel"] = "gpt-4o-mini",
+				["OpenAI:EmbeddingModel"] = "text-embedding-3-small"
 			};
 
 			config.AddInMemoryCollection(testConfig);
