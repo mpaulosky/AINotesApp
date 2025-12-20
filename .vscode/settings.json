@@ -3,5 +3,6 @@
     "microsoftdocs"
   ],
   "dotnet-test-explorer.runSettingsPath": "${workspaceFolder}\\.runsettings",
-  "dotnet.unitTests.runSettingsPath": "${workspaceFolder}\\.runsettings"
+  "dotnet.unitTests.runSettingsPath": "${workspaceFolder}\\.runsettings",
+  "editor.fontSize": 16
 }

@@ -28,11 +28,11 @@ agent: agent
 4. **Error & Warning Resolution**
 
 - For each error or warning in the build output:
-    - Identify the affected file and line number.
-    - Research the error/warning code and message.
-    - Apply the recommended fix to the codebase.
-    - Rebuild the solution to verify the fix.
-    - Repeat until the build completes with zero errors and warnings.
+  - Identify the affected file and line number.
+  - Research the error/warning code and message.
+  - Apply the recommended fix to the codebase.
+  - Rebuild the solution to verify the fix.
+  - Repeat until the build completes with zero errors and warnings.
 
 5. **Verification**
 
@@ -47,7 +47,7 @@ agent: agent
 
 7. **Documentation**
 
-- Create a `build-log.txt` file in the solution directory.
+- Create or update the `docs/build-log.txt` file.
 - Log all build outputs, error resolutions, and changes made.
 
 ## Notes
