@@ -5,6 +5,7 @@ using AINotesApp;
 using AINotesApp.Data;
 using AINotesApp.Services;
 using AINotesApp.Services.Ai;
+using AINotesApp.Tests.Integration.Helpers;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -12,11 +13,11 @@ using Xunit;
 namespace AINotesApp.Tests.Integration;
 
 [ExcludeFromCodeCoverage]
-public class ProgramTests : IClassFixture<WebApplicationFactory<Program>>
+public class ProgramTests : IClassFixture<CustomWebApplicationFactory>
 {
-	private readonly WebApplicationFactory<Program> _factory;
+	private readonly CustomWebApplicationFactory _factory;
 
-	public ProgramTests(WebApplicationFactory<Program> factory)
+	public ProgramTests(CustomWebApplicationFactory factory)
 	{
 		_factory = factory;
 	}

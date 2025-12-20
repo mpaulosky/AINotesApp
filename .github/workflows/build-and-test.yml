@@ -36,7 +36,17 @@ jobs:
       fail-fast: false
 
     env:
-      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packag
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+      # Test environment Auth0 configuration (dummy values for integration tests)
+      Auth0__Domain: test-tenant.auth0.com
+      Auth0__ClientId: test-client-id
+      Auth0__ClientSecret: test-client-secret-for-ci
+      Auth0__Audience: https://api.test.local
+      # Test OpenAI configuration (dummy values)
+      # NOTE: Section name is "OpenAI" not "AiService" (see AiServiceOptions.SectionName)
+      OpenAI__ApiKey: test-api-key-for-ci
+      OpenAI__ChatModel: gpt-4o-mini
+      OpenAI__EmbeddingModel: text-embedding-3-small
 
     steps:
       - name: Checkout code
