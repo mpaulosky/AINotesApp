@@ -141,7 +141,7 @@ jobs:
           fail_ci_if_error: false
 
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2.21.0
+        uses: EnricoMi/publish-unit-test-result-action@v2.22.0
         id: test-results
         if: always()
         with:
